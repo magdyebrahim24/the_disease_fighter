@@ -36,7 +36,7 @@ List doctorData = [
     "email": "ckopmann0@constantcontact.com",
     "phone_num": "4001035671",
     "address": "34074 Lillian Street",
-    "doctor_img": "assets/doctors_img/doc1.jpg",
+    "doctor_img": "assets/doctors_img/doc2.jpg",
     "pecialty": "Marketing Assistant",
     "gender": "Female",
     "rate": 5,

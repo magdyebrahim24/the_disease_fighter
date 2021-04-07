@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'layout/splash/splash.dart';
+import 'package:the_disease_fighter/layout/splash/splash.dart';
 
 void main() => runApp(
       MyApp(),

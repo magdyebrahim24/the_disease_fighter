@@ -44,6 +44,7 @@ class _HomeState extends State<Home> {
             snackBarr();
             // ignore: unnecessary_statements
           })
+        // ignore: unnecessary_statements
         : null;
 
     super.initState();

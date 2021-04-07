@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'data/doctor_data.dart';
-import 'layout/doctor-screens/patient-card.dart';
-import 'layout/patient_screens/patient_home/home_widgets/categories.dart';
-import 'layout/patient_screens/view_doctors/view_all_doctors.dart';
-import 'material/bottons/circleBtn.dart';
+
 import 'material/constants.dart';
 
 class Test extends StatefulWidget {
@@ -13,220 +8,157 @@ class Test extends StatefulWidget {
 }
 
 class _TestState extends State<Test> {
-  ScrollController _scrollController = new ScrollController();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  String searchTxt = '';
-
-  // _getSearchText(String searchTxt) {
-  //   setState(() {
-  //     this.searchTxt = searchTxt;
-  //   });
-  // }
-
-  bool showUpButton = false;
-
-  @override
-  void initState() {
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels > 600) {
-        setState(() {
-          showUpButton = true;
-        });
-      } else {
-        setState(() {
-          showUpButton = false;
-        });
-      }
-    });
-    getDoctorData();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      key: _scaffoldKey,
-      appBar: AppBar(
-        elevation: 0,
-        leading: CircleButton(
-          color: darkBlueColor,
-          icn: Icons.drag_handle_outlined,
-          fun: () => _scaffoldKey.currentState.openDrawer(),
-        ),
-        actions: [
-          // SearchBar(inputTextFunction: _getSearchText),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          TransitionAppBar(
+            extent: 250,
+            avatar: Text('DR. Magdy Ebrahim'),
+            // title: Container(
+            //   margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
+            //   decoration: BoxDecoration(
+            //       color: Colors.grey[200],
+            //       borderRadius: BorderRadius.all(Radius.circular(5.0))),
+            //   child: Row(children: <Widget>[
+            //     Padding(
+            //       padding: EdgeInsets.only(left: 20.0, right: 10.0),
+            //       child: Icon(Icons.search),
+            //     ),
+            //     Expanded(
+            //       child: TextFormField(
+            //         keyboardType: TextInputType.text,
+            //         textInputAction: TextInputAction.done,
+            //         cursorColor: Colors.black,
+            //         autofocus: false,
+            //         decoration: InputDecoration(
+            //             filled: true,
+            //             fillColor: Colors.transparent,
+            //             contentPadding:
+            //             EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            //             hintText: "Search",
+            //             border: InputBorder.none,
+            //             disabledBorder: OutlineInputBorder(
+            //               borderSide: new BorderSide(color: Colors.transparent),
+            //               borderRadius: new BorderRadius.circular(2),
+            //             ),
+            //             focusedBorder: OutlineInputBorder(
+            //               borderSide: new BorderSide(color: Colors.transparent),
+            //               borderRadius: new BorderRadius.circular(2),
+            //             )),
+            //       ),
+            //     )
+            //   ]),
+            // ),
+            title: Padding(
+              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                      child: Text(
+                    'Dr. MagdyEbrahim',
+                  )),
+                  IconButton(
+                      icon: Icon(
+                        Icons.favorite_border,
+                        color: darkBlueColor.withOpacity(.7),
+                        size: 18,
+                      ),
+                      onPressed: () {}),
+                ],
+              ),
+            ),
+          ),
+          SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+            return Container(
+                color: Colors.blue,
+                child: ListTile(
+                  title: Text("${index}a"),
+                ));
+          }, childCount: 25))
         ],
-        title: Text('Home'),
-        centerTitle: true,
       ),
-      body: searchTxt == ''
-          ? ListView(
-              controller: _scrollController,
-              children: [
-                Categories(),
-                listHead(),
-                for (var item in doctorsData)
-                  DoctorCard(
-                    item: item,
-                  )
-              ],
-            )
-          : Container(
-              color: Colors.amber,
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-            ),
+    );
+  }
+}
 
-      // body: ListView.builder(
-      //         controller: _scrollController,
-      //         itemCount: doctorsData.length,
-      //         itemBuilder: (ctx, index){
-      //           return index == 0 ? CategoriesBuilder()
-      //               : index == 1 ? listHead():  Container(
-      //             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-      //             margin: EdgeInsets.symmetric(vertical: 8,horizontal: 15),
-      //             decoration: BoxDecoration(
-      //               color: Color(0xffF4F4F4),
-      //               borderRadius: BorderRadius.all(Radius.circular(10)),
-      //               border: Border.all(color: Color(0xffBCE0FD)),
-      //             ),
-      //             child: InkWell(
-      //               onTap: () => Navigator.pushReplacement(
-      //                   context,
-      //                   MaterialPageRoute(
-      //                       builder: (context) => DoctorProfile(
-      //                         data: doctorsData[index],
-      //                       ))),
-      //               child: Row(
-      //                 children: [
-      //                   Container(
-      //                       margin: EdgeInsets.only(right: 13),
-      //                       height: 55,
-      //                       width: 55,
-      //                       decoration: BoxDecoration(
-      //                         color: Colors.grey,
-      //                         shape: BoxShape.circle,
-      //                         image: DecorationImage(
-      //                           image: AssetImage('${doctorsData[index].doctorImg}'),
-      //                           fit: BoxFit.cover,
-      //                         ),
-      //                       )),
-      //                   Expanded(
-      //                     child: Column(
-      //                       crossAxisAlignment: CrossAxisAlignment.start,
-      //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //                       children: [
-      //                         Text(
-      //                           'Dr.${doctorsData[index].doctorName}',
-      //                           style: TextStyle(
-      //                             color: darkBlue,
-      //                             fontSize: 15,
-      //                             fontWeight: FontWeight.bold,
-      //                           ),
-      //                           maxLines: 1,
-      //                           overflow: TextOverflow.ellipsis,
-      //                         ),
-      //                         SizedBox(
-      //                           height: 4,
-      //                         ),
-      //                         Text(
-      //                           '${doctorsData[index].pecialty}',
-      //                           style: TextStyle(
-      //                             color: Color(0xff8A9EAD),
-      //                             fontSize: 14,
-      //                             fontWeight: FontWeight.bold,
-      //                           ),
-      //                           maxLines: 1,
-      //                           overflow: TextOverflow.ellipsis,
-      //                         ),
-      //                         // Text('${data[index].address}',style: TextStyle(color: Color(0xff8A9EAD),fontSize: 14,fontWeight: FontWeight.bold,),maxLines: 1,overflow: TextOverflow.ellipsis,),
-      //                       ],
-      //                     ),
-      //                   ),
-      //                   Column(
-      //                     crossAxisAlignment: CrossAxisAlignment.center,
-      //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //                     children: [
-      //                       Rate(
-      //                         clr: Color(0xff9ADFF7),
-      //                         rateValue: doctorsData[index].rate.toInt(),
-      //                       ),
-      //                       SizedBox(
-      //                         height: 8,
-      //                       ),
-      //                       Text(
-      //                         '(99+)Patients',
-      //                         style:
-      //                         TextStyle(color: Color(0xff8A9EAD), fontSize: 12),
-      //                       ),
-      //                     ],
-      //                   ),
-      //                 ],
-      //               ),
-      //             ),
-      //           );
-      //         },
-      //       ),
-      floatingActionButton: AnimatedOpacity(
-        opacity: showUpButton ? 1 : 0.0,
-        duration: Duration(milliseconds: 500),
-        child: FloatingActionButton(
-            child: FaIcon(
-              FontAwesomeIcons.angleDoubleUp,
-              size: 19,
-            ),
-            onPressed: () {
-              _scrollController.animateTo(
-                _scrollController.position.minScrollExtent,
-                duration: Duration(seconds: 1),
-                curve: Curves.fastOutSlowIn,
-              );
-            }),
-      ),
-      drawer: Drawer(),
+class TransitionAppBar extends StatelessWidget {
+  final Widget avatar;
+  final Widget title;
+  final double extent;
+
+  TransitionAppBar({this.avatar, this.title, this.extent = 250, Key key})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPersistentHeader(
+      pinned: true,
+      delegate: _TransitionAppBarDelegate(
+          avatar: avatar, title: title, extent: extent > 200 ? extent : 200),
+    );
+  }
+}
+
+class _TransitionAppBarDelegate extends SliverPersistentHeaderDelegate {
+  final _avatarMarginTween = EdgeInsetsTween(
+      begin: EdgeInsets.only(bottom: 70, left: 30),
+      end: EdgeInsets.only(left: 0.0, top: 30.0));
+  final _avatarAlignTween =
+      AlignmentTween(begin: Alignment.bottomLeft, end: Alignment.topCenter);
+
+  final Widget avatar;
+  final Widget title;
+  final double extent;
+
+  _TransitionAppBarDelegate({this.avatar, this.title, this.extent = 250})
+      : assert(avatar != null),
+        assert(extent == null || extent >= 200),
+        assert(title != null);
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    double tempVal = 34 * maxExtent / 100;
+    final progress = shrinkOffset > tempVal ? 1.0 : shrinkOffset / tempVal;
+    print("Objechjkf === $progress $shrinkOffset");
+    final avatarMargin = _avatarMarginTween.lerp(progress);
+    final avatarAlign = _avatarAlignTween.lerp(progress);
+    return Stack(
+      children: <Widget>[
+        AnimatedContainer(
+          duration: Duration(milliseconds: 100),
+          height: shrinkOffset * 2,
+          constraints: BoxConstraints(maxHeight: minExtent),
+          color: Colors.redAccent,
+        ),
+        Padding(
+          padding: avatarMargin,
+          child: Align(alignment: avatarAlign, child: avatar),
+        ),
+        Padding(
+          padding: EdgeInsets.only(bottom: 10),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: title,
+          ),
+        )
+      ],
     );
   }
 
-  Widget listHead() {
-    return Padding(
-      padding: EdgeInsets.only(left: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'Top Doctors',
-            style: kHeadStyle,
-          ),
-          MaterialButton(
-            onPressed: () => Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => ViewAllDoctors())),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Column(
-              children: [
-                Text(
-                  'view all',
-                  style: TextStyle(color: subTextColor, fontSize: 14),
-                ),
-                Container(
-                  height: 1.2,
-                  color: subTextColor,
-                  width: 45,
-                  margin: EdgeInsets.only(top: 4),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+  @override
+  double get maxExtent => extent;
+
+  @override
+  double get minExtent => (maxExtent * 68) / 100;
+
+  @override
+  bool shouldRebuild(_TransitionAppBarDelegate oldDelegate) {
+    return avatar != oldDelegate.avatar || title != oldDelegate.title;
   }
 }

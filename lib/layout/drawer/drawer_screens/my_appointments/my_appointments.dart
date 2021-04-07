@@ -82,7 +82,7 @@ class _MyAppointmentsState extends State<MyAppointments> {
                           color: Colors.white),
                       tabs: [
                         tapBarWidget(label: 'My Appointments'),
-                        tapBarWidget(label: 'Previous Appointments'),
+                        tapBarWidget(label: 'Previous'),
                       ],
                     ),
                   ),

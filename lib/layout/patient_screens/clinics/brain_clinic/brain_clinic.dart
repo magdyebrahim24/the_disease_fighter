@@ -36,7 +36,6 @@ class _BrainClinicState extends State<BrainClinic> {
 
   File _pickerImage;
   final ImagePicker _picker = ImagePicker();
-
   void _pickImage(ImageSource src) async {
     final pickedImageFile = await _picker.getImage(source: src);
     if (pickedImageFile != null) {
@@ -72,7 +71,7 @@ class _BrainClinicState extends State<BrainClinic> {
         _progressAnalysisValue += 0.01;
         if (_progressAnalysisValue > 1) {
           t.cancel();
-          _show = 2;
+          _show = 3;
           _diseaseResult();
           return;
         }
@@ -169,29 +168,31 @@ class _BrainClinicState extends State<BrainClinic> {
                   style: kHeadStyle,
                 ),
               ),
-              _show == 0
-                  ? takeImg
-                  : _show == 1
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ArcIndicator(
-                              child: Text(
-                                _progressAnalysisValue < 1
-                                    ? "Analysing ${_dotsValue == 0 ? '.  ' : _dotsValue == 1 ? '.. ' : '...'}"
-                                    : 'Done',
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  color: primaryColor.withOpacity(.6),
+              _show == 3
+                  ? resultInductors
+                  : _show == 1 && _pickerImage != null
+                      ? imagePreview()
+                      : _show == 2 && _pickerImage != null
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ArcIndicator(
+                                  child: Text(
+                                    _progressAnalysisValue < 1
+                                        ? "Analysing ${_dotsValue == 0 ? '.  ' : _dotsValue == 1 ? '.. ' : '...'}"
+                                        : 'Done',
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: primaryColor.withOpacity(.6),
+                                    ),
+                                  ),
+                                  progressValue: _progressAnalysisValue,
+                                  bgColor: lightGreyColor,
+                                  dimensions: 160.0,
                                 ),
-                              ),
-                              progressValue: _progressAnalysisValue,
-                              bgColor: lightGreyColor,
-                              dimensions: 160.0,
-                            ),
-                          ],
-                        )
-                      : resultInductors,
+                              ],
+                            )
+                          : takeImg,
             ],
           ),
         ),
@@ -208,7 +209,7 @@ class _BrainClinicState extends State<BrainClinic> {
           leadingWidth: 135,
           actions: [
             ImgButton(
-              fun: () => Navigator.pushReplacement(
+              fun: () => Navigator.push(
                   context, MaterialPageRoute(builder: (context) => Search())),
               img: 'assets/icons/search1.png',
               imgWidth: 34.0,
@@ -254,18 +255,83 @@ class _BrainClinicState extends State<BrainClinic> {
     );
   }
 
+  Padding imagePreview() {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(25, 5, 25, 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.file(
+                  _pickerImage,
+                  fit: BoxFit.fill,
+                  gaplessPlayback: true,
+                  scale: 1.0,
+                  width: 60,
+                  height: 60,
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                  child: Text(
+                '${_pickerImage.path.split('/').last}',
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              )),
+              CircleButton(
+                icn: FontAwesomeIcons.edit,
+                color: darkBlueColor,
+                fun: () => _showModalBottomSheet(),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          MaterialButton(
+            minWidth: 200,
+            height: 45,
+            color: primaryColor,
+            shape: RoundedRectangleBorder(
+              // side: BorderSide(color: subTextColor),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            onPressed: () {
+              _updateAnalysisProgress();
+              setState(() {
+                _show = 2;
+              });
+            },
+            child: Text(
+              'Analysis',
+              style: TextStyle(fontSize: 15, color: Colors.white),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   Widget get takeImg {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 25),
       child: InkWell(
         onTap: () => _showModalBottomSheet(),
         child: DottedBorder(
-          // dashPattern: [20, 11],
+          dashPattern: [20, 11],
           strokeWidth: 2,
           color: primaryColor.withOpacity(.3),
-          // strokeCap: StrokeCap.round,
-          // borderType: BorderType.RRect,
-          // radius: Radius.circular(10),
+          strokeCap: StrokeCap.round,
+          borderType: BorderType.RRect,
+          radius: Radius.circular(10),
           child: Container(
             height: 170,
             width: MediaQuery.of(context).size.width,
@@ -355,9 +421,7 @@ class _BrainClinicState extends State<BrainClinic> {
                     label: 'Take New Profile Picture',
                     icon: Icons.camera_alt_rounded,
                     fun: () {
-                      // _pickImage(ImageSource.camera);
-                      _updateAnalysisProgress();
-
+                      _pickImage(ImageSource.camera);
                       setState(() {
                         _show = 1;
                       });
@@ -365,10 +429,15 @@ class _BrainClinicState extends State<BrainClinic> {
                     },
                   ),
                   BottomSheetItem(
-                    label: 'Select Picture From Gallery',
-                    icon: Icons.photo_library_outlined,
-                    fun: () => _pickImage(ImageSource.gallery),
-                  ),
+                      label: 'Select Picture From Gallery',
+                      icon: Icons.photo_library_outlined,
+                      fun: () {
+                        _pickImage(ImageSource.gallery);
+                        setState(() {
+                          _show = 1;
+                        });
+                        Navigator.pop(context);
+                      }),
                 ],
               ),
             ),

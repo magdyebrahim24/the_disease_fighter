@@ -20,7 +20,7 @@ class _PreviousAppointmentDetailsState
     "assets/images/file2.jpg",
   ];
 
-  Widget _discribCard() {
+  Widget _discribeCard() {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 130,
@@ -157,9 +157,9 @@ class _PreviousAppointmentDetailsState
                 children: [
                   _appointCard(),
                   _txt("Diagnosis"),
-                  _discribCard(),
+                  _discribeCard(),
                   _txt("Medicines"),
-                  _discribCard(),
+                  _discribeCard(),
                   _txt("Files"),
                   SizedBox(
                     height: ((img.length / 4) * 150).toDouble(),
