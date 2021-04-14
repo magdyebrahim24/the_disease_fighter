@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/data/doctor_data.dart';
-import 'package:the_disease_fighter/layout/patient_screens/doctor_profile/doctor_profile.dart';
+import 'package:the_disease_fighter/layout/patient_screens/doctor_details/doctor_details.dart';
 import 'package:the_disease_fighter/layout/patient_screens/the_appointment/book_appointment.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -48,7 +48,7 @@ class _FavoriteDoctorsState extends State<FavoriteDoctors> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              DoctorProfile(data: doctorsData[0]))),
+                              DoctorDetails(data: doctorsData[0]))),
                   child: Container(
                       margin: EdgeInsets.only(right: 15),
                       height: 92,

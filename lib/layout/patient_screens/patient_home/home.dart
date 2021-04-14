@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_disease_fighter/data/doctor_data.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/my_appointments/my_appointments.dart';
-import 'package:the_disease_fighter/layout/drawer/main_drawer.dart';
+import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/my_appointments/my_appointments.dart';
+import 'package:the_disease_fighter/layout/drawer/patient_MainDrawer.dart';
 import 'package:the_disease_fighter/layout/notification/notification.dart';
 import 'package:the_disease_fighter/layout/patient_screens/view_doctors/view_all_doctors.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
@@ -138,7 +138,7 @@ class _HomeState extends State<Home> {
               );
             }),
       ),
-      drawer: MainDrawer(),
+      drawer: PatientMainDrawer(),
     );
   }
 

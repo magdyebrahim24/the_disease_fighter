@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/favorite_doctors.dart';
-import 'package:the_disease_fighter/layout/patient_screens/doctor_profile/reviews.dart';
+import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/favorite_doctors.dart';
+import 'package:the_disease_fighter/layout/patient_screens/doctor_details/reviews.dart';
 import 'package:the_disease_fighter/layout/patient_screens/the_appointment/book_appointment.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
@@ -9,14 +9,16 @@ import 'package:the_disease_fighter/material/widgets/rate_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // ignore: must_be_immutable
-class DoctorProfile extends StatefulWidget {
+class DoctorDetails extends StatefulWidget {
   final data;
-  DoctorProfile({@required this.data});
+
+  DoctorDetails({@required this.data});
+
   @override
-  _DoctorProfileState createState() => _DoctorProfileState();
+  _DoctorDetailsState createState() => _DoctorDetailsState();
 }
 
-class _DoctorProfileState extends State<DoctorProfile> {
+class _DoctorDetailsState extends State<DoctorDetails> {
   bool isFavorite = false;
 
   snackBarr({text, fun, label = ''}) {

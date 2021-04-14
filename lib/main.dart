@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/splash/splash.dart';
+import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctot_home.dart';
 
 void main() => runApp(
       MyApp(),
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Rubik',
       ),
       debugShowCheckedModeBanner: false,
-      home: Splash(),
+      home: DoctorHome(),
     );
   }
 }

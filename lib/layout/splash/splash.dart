@@ -42,7 +42,13 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
     animation = Tween<double>(begin: 0, end: 300).animate(controller);
     controller.forward();
 
-    Timer(Duration(seconds: 3), () => _getIntroBool());
+    Timer(
+        Duration(seconds: 3),
+        () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => IntroPage(),
+            )));
     super.initState();
   }
 

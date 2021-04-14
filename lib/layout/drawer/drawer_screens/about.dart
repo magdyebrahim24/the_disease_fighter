@@ -4,8 +4,8 @@ import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:core';
-import '../main_drawer.dart';
-import '../terms_of_use.dart';
+import '../patient_MainDrawer.dart';
+import 'terms_of_use.dart';
 
 class About extends StatelessWidget {
   @override

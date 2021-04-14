@@ -4,7 +4,7 @@ import 'package:the_disease_fighter/layout/sign/sign_in/sign_in.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/patient-logo.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../main_drawer.dart';
+import '../../patient_MainDrawer.dart';
 import 'setting_screens/change_password.dart';
 
 class Setting extends StatefulWidget {

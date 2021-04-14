@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/ml_model/model-screen.dart';
+import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_profile/doctor_profile.dart';
 import 'package:the_disease_fighter/material/constants.dart';
-
 import 'drawer_screens/about.dart';
-import 'drawer_screens/favorite_doctors.dart';
-import 'drawer_screens/my_appointments/my_appointments.dart';
-import 'drawer_screens/patient_profile/patient_profile.dart';
 import 'drawer_screens/setting/settings.dart';
 
-class MainDrawer extends StatelessWidget {
+class DoctorMainDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -24,12 +22,8 @@ class MainDrawer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PatientProfile()));
-                  },
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => DoctorProfile())),
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 35),
                     child: Row(
@@ -67,13 +61,6 @@ class MainDrawer extends StatelessWidget {
                                 fontSize: 16,
                               ),
                             ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            Text(
-                              "magdyebrahim224@yahoo.com",
-                              style: TextStyle(color: subTextColor),
-                            )
                           ],
                         ),
                       ],
@@ -96,37 +83,28 @@ class MainDrawer extends StatelessWidget {
                     ),
                   ),
                 ),
-                DrawerTile(
-                    leadingIconColor: primaryColor.withOpacity(.7),
-                    icon: FontAwesomeIcons.calendarCheck,
-                    fun: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MyAppointments())),
-                    tittle: "My Appointments"),
+
                 DrawerTile(
                     leadingIconColor: primaryColor.withOpacity(.7),
                     icon: FontAwesomeIcons.user,
                     fun: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => PatientProfile())),
+                            builder: (context) => DoctorProfile())),
                     tittle: "Profile"),
                 ListTile(
                   contentPadding: EdgeInsets.only(left: 40),
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => FavoriteDoctors())),
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ModelScreen())),
                   tileColor: Colors.white,
                   leading: Image.asset(
-                    "assets/icons/doctorPrimary.png",
-                    width: 20,
-                    height: 25,
+                    "assets/icons/model.png",
+                    width: 30,
+                    height: 30,
                     fit: BoxFit.fill,
                   ),
                   title: Text(
-                    'Favorite Doctors',
+                    'Using AI Model',
                     style: TextStyle(color: darkBlueColor, fontSize: 16),
                   ),
                 ),

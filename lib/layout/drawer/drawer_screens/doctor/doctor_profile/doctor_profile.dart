@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_profile/edit_doctor_info/edit_doctor_info.dart';
+import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_profile/widgets/previous_appointments.dart';
+import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/my_appointments/my_appointments.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
-import 'appointments_screens/appointments.dart';
-import 'appointments_screens/previous_appointments.dart';
 
-class MyAppointments extends StatefulWidget {
+import 'widgets/doc_information.dart';
+
+class DoctorProfile extends StatefulWidget {
   @override
-  _MyAppointmentsState createState() => _MyAppointmentsState();
+  _DoctorProfileState createState() => _DoctorProfileState();
 }
 
-class _MyAppointmentsState extends State<MyAppointments> {
+class _DoctorProfileState extends State<DoctorProfile> {
   Widget patientImage() {
     return Column(
       children: [
@@ -51,10 +54,22 @@ class _MyAppointmentsState extends State<MyAppointments> {
                   elevation: 0.0,
                   leading: CircleButton(
                     icn: Icons.arrow_back,
-                    fun: () => Navigator.pushReplacement(
-                        context, MaterialPageRoute(builder: (ctx) => Home())),
-                    color: darkBlueColor,
+                    fun: () => Navigator.pop(context),
+                    color: primaryColor,
                   ),
+                  actions: [
+                    IconButton(
+                      color: primaryColor,
+                      icon: Icon(
+                        FontAwesomeIcons.solidEdit,
+                        size: 20,
+                      ),
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (ctx) => EditDoctorProfile())),
+                    ),
+                  ],
                   pinned: true,
                   snap: false,
                   floating: true,
@@ -69,7 +84,7 @@ class _MyAppointmentsState extends State<MyAppointments> {
                   ),
                 ),
                 SliverPersistentHeader(
-                  delegate: _SliverAppBarDelegate(
+                  delegate: SliverAppBarDelegate(
                     TabBar(
                       indicatorPadding: EdgeInsets.all(10),
                       indicatorColor: primaryColor,
@@ -81,7 +96,7 @@ class _MyAppointmentsState extends State<MyAppointments> {
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white),
                       tabs: [
-                        tapBarWidget(label: 'My Appointments'),
+                        tapBarWidget(label: 'Information'),
                         tapBarWidget(label: 'Previous'),
                       ],
                     ),
@@ -92,7 +107,7 @@ class _MyAppointmentsState extends State<MyAppointments> {
             },
             body: TabBarView(
               children: [
-                AppointmentsBuilder(),
+                DocInformation(),
                 PreviousAppointments(),
               ],
             ),
@@ -105,33 +120,5 @@ class _MyAppointmentsState extends State<MyAppointments> {
       child: Text(label),
       alignment: Alignment.center,
     );
-  }
-}
-
-class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate(this._tabBar);
-
-  final TabBar _tabBar;
-
-  @override
-  double get minExtent => _tabBar.preferredSize.height;
-
-  @override
-  double get maxExtent => _tabBar.preferredSize.height;
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10),
-      child: _tabBar,
-      decoration: BoxDecoration(
-          color: backGroundColor, borderRadius: BorderRadius.circular(10)),
-    );
-  }
-
-  @override
-  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return false;
   }
 }

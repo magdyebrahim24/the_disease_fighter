@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_disease_fighter/data/doctor_data.dart';
-import 'package:the_disease_fighter/layout/doctor-screens/patient-card.dart';
+import 'package:the_disease_fighter/layout/patient_screens/clinics/doctor-card.dart';
 import 'package:the_disease_fighter/layout/notification/notification.dart';
 import 'package:the_disease_fighter/layout/patient_screens/search/search.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';

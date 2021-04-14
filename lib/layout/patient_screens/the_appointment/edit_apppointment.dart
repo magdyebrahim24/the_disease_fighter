@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/my_appointments/my_appointments.dart';
+import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/my_appointments/my_appointments.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/drop-downlist.dart';

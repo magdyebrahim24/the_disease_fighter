@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:the_disease_fighter/data/doctor_data.dart';
-import 'package:the_disease_fighter/layout/doctor-screens/patient-card.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient_profile/patient_profile.dart';
+import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_profile/edit_doctor_info/edit_doctor_info.dart';
+import 'package:the_disease_fighter/layout/patient_screens/clinics/doctor-card.dart';
 import 'package:the_disease_fighter/layout/notification/notification.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
 import 'package:the_disease_fighter/layout/patient_screens/search/search.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/inductors/arc_inductor.dart';
+import 'package:the_disease_fighter/material/widgets/model_result.dart';
 
 class BrainClinic extends StatefulWidget {
   final clinicTittle;
@@ -25,9 +26,6 @@ class BrainClinic extends StatefulWidget {
 
 class _BrainClinicState extends State<BrainClinic> {
   double _progressAnalysisValue = 0.0;
-  double _firstDiseaseValue = 0.0;
-  double _secondDiseaseValue = 0.0;
-  double _thirdDiseaseValue = 0.0;
 
   int _dotsValue = 0;
   int _show = 0;
@@ -65,14 +63,13 @@ class _BrainClinicState extends State<BrainClinic> {
 
   void _updateAnalysisProgress() {
     const analysisTime = const Duration(milliseconds: 50);
-    const dotTime = const Duration(milliseconds: 8500); //850 second
+    const dotTime = const Duration(milliseconds: 500); //850 second
     Timer.periodic(analysisTime, (Timer t) {
       setState(() {
         _progressAnalysisValue += 0.01;
         if (_progressAnalysisValue > 1) {
           t.cancel();
           _show = 3;
-          _diseaseResult();
           return;
         }
       });
@@ -91,37 +88,6 @@ class _BrainClinicState extends State<BrainClinic> {
             _dotsValue = 3;
           });
         }
-      });
-    });
-  }
-
-  _diseaseResult() {
-    const diseaseResultTime = Duration(milliseconds: 60);
-    new Timer.periodic(diseaseResultTime, (Timer t1) {
-      setState(() {
-        _firstDiseaseValue += 0.01;
-        if (_firstDiseaseValue > 0.81) {
-          t1.cancel();
-        }
-        return;
-      });
-    });
-    new Timer.periodic(diseaseResultTime, (Timer t) {
-      setState(() {
-        _secondDiseaseValue += 0.01;
-        if (_secondDiseaseValue > .48) {
-          t.cancel();
-        }
-        return;
-      });
-    });
-    new Timer.periodic(diseaseResultTime, (Timer t) {
-      setState(() {
-        _thirdDiseaseValue += 0.01;
-        if (_thirdDiseaseValue > .22) {
-          t.cancel();
-        }
-        return;
       });
     });
   }
@@ -169,7 +135,14 @@ class _BrainClinicState extends State<BrainClinic> {
                 ),
               ),
               _show == 3
-                  ? resultInductors
+                  ? Padding(
+                      padding: EdgeInsets.all(15),
+                      child: ModelResult(
+                        firstDiseaseValue: 0.81,
+                        secondDiseaseValue: .48,
+                        thirdDiseaseValue: .22,
+                      ),
+                    )
                   : _show == 1 && _pickerImage != null
                       ? imagePreview()
                       : _show == 2 && _pickerImage != null
@@ -198,15 +171,11 @@ class _BrainClinicState extends State<BrainClinic> {
         ),
         SliverAppBar(
           pinned: true,
-          leading: Container(
-            margin: EdgeInsets.only(left: 10),
-            alignment: Alignment.center,
-            child: Text(
-              '${widget.clinicTittle} Doctors',
-              style: kHeadStyle,
-            ),
+          title: Text(
+            '${widget.clinicTittle} Doctors',
+            style: kHeadStyle,
           ),
-          leadingWidth: 135,
+          automaticallyImplyLeading: false,
           actions: [
             ImgButton(
               fun: () => Navigator.push(
@@ -357,45 +326,6 @@ class _BrainClinicState extends State<BrainClinic> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget get resultInductors {
-    return Container(
-      margin: EdgeInsets.all(15),
-      height: 170,
-      alignment: Alignment.center,
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: lightGreyColor.withOpacity(.8),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          ArcIndicator(
-            child: Text("${(_firstDiseaseValue * 100).toInt()} %",
-                style: progressTextStyle),
-            progressValue: _firstDiseaseValue,
-            dimensions: 100.0,
-            bgColor: Colors.white,
-          ),
-          ArcIndicator(
-            child: Text("${(_secondDiseaseValue * 100).toInt()} %",
-                style: progressTextStyle),
-            progressValue: _secondDiseaseValue,
-            dimensions: 100.0,
-            bgColor: Colors.white,
-          ),
-          ArcIndicator(
-            child: Text("${(_thirdDiseaseValue * 100).toInt()} %",
-                style: progressTextStyle),
-            progressValue: _thirdDiseaseValue,
-            dimensions: 100.0,
-            bgColor: Colors.white,
-          ),
-        ],
       ),
     );
   }

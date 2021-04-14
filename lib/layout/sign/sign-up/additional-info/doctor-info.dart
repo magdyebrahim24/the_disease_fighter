@@ -218,6 +218,8 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                         ),
                                         Text(
                                           '${clinicDates[i]['day']}, ${clinicDates[i]['from']} - ${clinicDates[i]['to']},',
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
                                           // 'Monday, 08.00am - 10.00 am',
                                           style:
                                               TextStyle(color: darkBlueColor),

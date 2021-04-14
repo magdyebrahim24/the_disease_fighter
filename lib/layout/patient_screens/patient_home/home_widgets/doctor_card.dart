@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/patient_screens/doctor_profile/doctor_profile.dart';
+import 'package:the_disease_fighter/layout/patient_screens/doctor_details/doctor_details.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/rate_bar.dart';
 import 'package:the_disease_fighter/model/doctor_model.dart';
@@ -25,7 +25,7 @@ class DoctorCard extends StatelessWidget {
         onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => DoctorProfile(
+                builder: (context) => DoctorDetails(
                       data: item,
                     ))),
         child: Row(

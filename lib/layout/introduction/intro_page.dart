@@ -1,6 +1,5 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/layout/sign/sign_in/sign_in.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
@@ -13,9 +12,9 @@ class IntroPage extends StatefulWidget {
 
 class _IntroPageState extends State<IntroPage> {
   @override
-  void initState() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('intro', true);
+  void initState() {
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // prefs.setBool('intro', true);
     super.initState();
   }
 
@@ -44,6 +43,7 @@ class _IntroPageState extends State<IntroPage> {
 
   @override
   void dispose() {
+    _pageController.dispose();
     super.dispose();
   }
 
