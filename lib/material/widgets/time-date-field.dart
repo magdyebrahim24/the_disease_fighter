@@ -52,6 +52,7 @@ class BasicTimeField extends StatelessWidget {
                   suffixIcon: Icon(Icons.arrow_drop_down,
                       color: darkBlueColor.withOpacity(.7)),
                   hintText: '00:00 AM',
+
                   // '${DateFormat("hh:mm a").format(DateTime.now())}',
                   border: InputBorder.none),
               onShowPicker: (context, currentValue) async {

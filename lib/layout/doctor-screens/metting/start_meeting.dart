@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
-import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctot_home.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
-import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 
 class StartMeeting extends StatefulWidget {
@@ -11,14 +12,31 @@ class StartMeeting extends StatefulWidget {
 }
 
 class _StartMeetingState extends State<StartMeeting> {
+  int _show = 0;
+  File _pickerImage;
+  final ImagePicker _picker = ImagePicker();
+
+  void _pickImage(ImageSource src) async {
+    final pickedImageFile = await _picker.getImage(source: src);
+    if (pickedImageFile != null) {
+      if (!mounted) return;
+      setState(() {
+        _pickerImage = File(pickedImageFile.path);
+      });
+    } else {
+      print('No Image Selected');
+    }
+  }
+
   Future _asyncConfirmDialog(BuildContext context) async {
     return showDialog(
       context: context,
       barrierDismissible: false, // user must tap button for close dialog!
       builder: (BuildContext context) {
         return AlertDialog(
-          content:
-              Text(Languages.of(context)!.doctorStartMeeting['endAlertTittle']),
+          contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          buttonPadding: EdgeInsets.symmetric(horizontal: 20),
+          content: const Text("Are you sure to end the meeting?"),
           contentTextStyle: TextStyle(
               color: darkBlueColor, fontSize: 16, fontWeight: FontWeight.bold),
           actions: [
@@ -31,8 +49,7 @@ class _StartMeetingState extends State<StartMeeting> {
                 width: MediaQuery.of(context).size.width * .3,
                 child: Center(
                   child: Text(
-                    Languages.of(context)!
-                        .doctorStartMeeting['endAlertCancelBtn'],
+                    "Cancel",
                     style: TextStyle(
                         color: primaryColor,
                         fontSize: 12,
@@ -53,7 +70,7 @@ class _StartMeetingState extends State<StartMeeting> {
                 height: 40,
                 child: Center(
                   child: Text(
-                    Languages.of(context)!.doctorStartMeeting['endAlertOkBtn'],
+                    "Okay",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -71,9 +88,8 @@ class _StartMeetingState extends State<StartMeeting> {
       },
     );
   }
-
   bool showFullImage = false;
-  late String fullImagePath;
+  String fullImagePath;
   List img = [
     "assets/images/file1.jpg",
     "assets/images/file3.jpg",
@@ -82,17 +98,16 @@ class _StartMeetingState extends State<StartMeeting> {
     "assets/images/file1.jpg",
     "assets/images/file2.jpg",
   ];
-  late String comment;
+  String comment;
 
   _getComment(String val) {
     setState(() {
       comment = val;
     });
   }
-
   Widget _textField() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      margin: EdgeInsets.symmetric(vertical: 5),
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
           color: lightGreyColor, borderRadius: BorderRadius.circular(10)),
@@ -109,7 +124,6 @@ class _StartMeetingState extends State<StartMeeting> {
       ),
     );
   }
-
   Widget _txt(String text) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 15),
@@ -120,87 +134,72 @@ class _StartMeetingState extends State<StartMeeting> {
       ),
     );
   }
-
   Widget _appointCard() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 130,
+      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
       decoration: BoxDecoration(
-          color: lightGreyColor, borderRadius: BorderRadius.circular(20)),
+          color: lightGreyColor, borderRadius: BorderRadius.circular(15)),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                          image: AssetImage("assets/images/img_1.png"),
-                          fit: BoxFit.cover)),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Dr/Earl E. Hazel",
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: darkBlueColor,
-                          fontWeight: FontWeight.w500),
+          Row(
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/img_1.png"),
+                        fit: BoxFit.cover)),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Dr/Earl E. Hazel",
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: darkBlueColor,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    "Mansoura, Egypt",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: subTextColor,
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          "Mansoura, Egypt",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: subTextColor,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 120,
-                        ),
-                        Container(
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                              color: Colors.green, shape: BoxShape.circle),
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          "Available",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: subTextColor,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                )
-              ],
-            ),
+                  )
+                ],
+              )
+            ],
           ),
-          SizedBox(
-            height: 5,
-          ),
-          RoundedButton(
-            text: "End Meeting",
-            minWdthRatio: .8,
-            fun: () {
+          InkWell(
+            onTap: () {
               _asyncConfirmDialog(context);
             },
-          )
+            child: Container(
+              width: MediaQuery.of(context).size.width * .6,
+              height: 40,
+              decoration: BoxDecoration(
+                color: primaryColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Center(
+                child: Text(
+                  "End Meeting",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -224,9 +223,6 @@ class _StartMeetingState extends State<StartMeeting> {
           ),
           actions: [
             ImgButton(
-              fun: () {},
-              // fun: () => Navigator.push(context,
-              //MaterialPageRoute(builder: (context) => Notifications())),
               img: 'assets/icons/model.png',
               imgHigh: 35.0,
               imgWidth: 35.0,
@@ -234,53 +230,98 @@ class _StartMeetingState extends State<StartMeeting> {
           ],
           centerTitle: true,
           title: Text(
-            Languages.of(context)!.doctorStartMeeting['tittle'],
+            "Meeting",
             style: TextStyle(color: primaryColor, fontSize: 16),
           ),
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _appointCard(),
-                _txt(
-                  Languages.of(context)!.doctorStartMeeting['addDiagnosis'],
-                ),
+                _txt("Add a diagnosis"),
                 _textField(),
-                _txt(
-                  Languages.of(context)!.doctorStartMeeting['addMedicine'],
-                ),
+                _txt("Add a Medicine"),
                 _textField(),
-                _txt(
-                  Languages.of(context)!.doctorStartMeeting['addFiles'],
-                ),
+                _txt("Add Image"),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ImgButton(
-                      img: "assets/icons/document.png",
-                      imgWidth: 90.0,
-                      imgHigh: 90.0,
-                      fun: () {},
+                    Column(
+                      children: [
+                        Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                              color: lightGreyColor,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Center(
+                              child: IconButton(
+                                  icon: Icon(
+                                    Icons.add_a_photo,
+                                    color: primaryColor,
+                                    size: 35,
+                                  ),
+                                  onPressed: () {
+                                    _pickImage(ImageSource.camera);
+                                    setState(() {
+                                      //_show = 1;
+                                    });
+                                  })),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "Camera",
+                          style: TextStyle(
+                              color: primaryColor,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
                     ),
                     SizedBox(
                       width: 20,
                     ),
-                    ImgButton(
-                      img: "assets/icons/img.png",
-                      imgWidth: 90.0,
-                      imgHigh: 90.0,
-                      fun: () {},
+                    Column(
+                      children: [
+                        Container(
+                            height: 80,
+                            width: 80,
+                            decoration: BoxDecoration(
+                                color: lightGreyColor,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: ImgButton(
+                              img: "assets/icons/addimage.png",
+                              imgWidth: 40.0,
+                              imgHigh: 40.0,
+                              fun: () {
+                                _pickImage(ImageSource.gallery);
+                                setState(() {
+                                 // _show = 1;
+                                });
+                              },
+                            )),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "Gallery",
+                          style: TextStyle(
+                              color: primaryColor,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
                     )
                   ],
                 ),
-                _txt(
-                  Languages.of(context)!.doctorStartMeeting['recentFiles'],
-                ),
+                _txt("Recent Files"),
                 SizedBox(
                   height: ((img.length / 4) * 150).toDouble(),
                   child: GridView.builder(
@@ -321,7 +362,6 @@ class _StartMeetingState extends State<StartMeeting> {
       showFullImage ? fullImage() : SizedBox(),
     ]);
   }
-
   Widget fullImage() {
     return Scaffold(
       body: Stack(
