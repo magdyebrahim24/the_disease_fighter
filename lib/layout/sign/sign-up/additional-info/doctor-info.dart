@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
+import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/drop-downlist.dart';
@@ -22,9 +23,8 @@ class _DoctorInfoState extends State<DoctorInfo> {
   DateTime fromTime;
   DateTime toTime;
   DateTime dateOfBirth;
-
-  Map clinicDates = {};
-  int x = 1;
+  List clinicDates = [];
+  String _clinicError = '';
 
   _getClinicLocation(String clinicLocation) {
     setState(() {
@@ -186,6 +186,10 @@ class _DoctorInfoState extends State<DoctorInfo> {
                       inputTextFunction: _getClinicLocation,
                       textInputType: TextInputType.text,
                     ),
+                    Text(
+                      'Enter Dates Clinic Available',
+                      style: TextStyle(fontSize: 15, color: subTextColor),
+                    ),
                     Container(
                       margin: EdgeInsets.symmetric(
                         vertical: 7,
@@ -202,12 +206,17 @@ class _DoctorInfoState extends State<DoctorInfo> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          for (var i = 1; i <= x - 1; i++)
-                            x != 1
-                                ? Container(
+                          SizedBox(
+                            height: clinicDates.length * 70.0,
+                            child: ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.all(0),
+                                itemCount: clinicDates.length,
+                                itemBuilder: (ctx, index) {
+                                  return Container(
+                                    height: 60,
                                     width: MediaQuery.of(context).size.width,
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 17, horizontal: 15),
+                                    padding: EdgeInsets.fromLTRB(15, 10, 5, 10),
                                     margin: EdgeInsets.symmetric(vertical: 5),
                                     child: Row(
                                       children: [
@@ -216,13 +225,26 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                         SizedBox(
                                           width: 10,
                                         ),
-                                        Text(
-                                          '${clinicDates[i]['day']}, ${clinicDates[i]['from']} - ${clinicDates[i]['to']},',
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          // 'Monday, 08.00am - 10.00 am',
-                                          style:
-                                              TextStyle(color: darkBlueColor),
+                                        Expanded(
+                                          child: Text(
+                                            '${clinicDates[index]['day']}, ${clinicDates[index]['from']} - ${clinicDates[index]['to']},',
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
+                                            style:
+                                                TextStyle(color: darkBlueColor),
+                                          ),
+                                        ),
+                                        CircleButton(
+                                          color: subTextColor,
+                                          fun: () {
+                                            setState(() {
+                                              clinicDates.removeAt(index);
+                                              // x--;
+                                              rebuildAllChildren(context);
+                                            });
+                                            print(clinicDates);
+                                          },
+                                          icn: Icons.delete_outline,
                                         ),
                                       ],
                                     ),
@@ -230,8 +252,9 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                         color: Colors.white,
                                         borderRadius:
                                             BorderRadius.circular(15)),
-                                  )
-                                : SizedBox(),
+                                  );
+                                }),
+                          ),
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: 5),
                             child: Column(
@@ -322,23 +345,36 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                   )),
                             ],
                           ),
+                          Text(
+                            '$_clinicError',
+                            style: TextStyle(color: Colors.red),
+                          ),
                           Padding(
-                            padding: EdgeInsets.only(top: 15),
+                            padding: EdgeInsets.only(top: 5),
                             child: RoundedButton(
                               fun: () {
-                                var from = fromTime.toString().split(' ');
-                                var to = toTime.toString().split(' ');
-                                var fromTimee = from[1];
-                                var toTimee = to[1];
-                                var clinicDate = {
-                                  'day': day,
-                                  'from': fromTimee,
-                                  'to': toTimee
-                                };
-                                clinicDates.addAll({x: clinicDate});
-                                setState(() {
-                                  x++;
-                                });
+                                if (fromTime != null ||
+                                    toTime != null ||
+                                    day != null) {
+                                  var from = fromTime.toString().split(' ');
+                                  var to = toTime.toString().split(' ');
+                                  var fromTimeSplit = from[1];
+                                  var toTimeSplit = to[1];
+                                  var clinicDate = {
+                                    'day': day,
+                                    'from': fromTimeSplit,
+                                    'to': toTimeSplit
+                                  };
+                                  clinicDates.add(clinicDate);
+                                  setState(() {
+                                    _clinicError = '';
+                                  });
+                                } else {
+                                  setState(() {
+                                    _clinicError =
+                                        'please enter times clinic open in and close in';
+                                  });
+                                }
                               },
                               text: 'Add',
                               borderRadious: 10,

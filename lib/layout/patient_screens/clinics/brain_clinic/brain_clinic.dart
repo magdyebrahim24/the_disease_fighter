@@ -32,13 +32,14 @@ class _BrainClinicState extends State<BrainClinic> {
   ScrollController _scrollController = new ScrollController();
   bool showUpButton = false;
 
-  File _pickerImage;
+  PickedFile _pickerImage;
   final ImagePicker _picker = ImagePicker();
+
   void _pickImage(ImageSource src) async {
     final pickedImageFile = await _picker.getImage(source: src);
     if (pickedImageFile != null) {
       setState(() {
-        _pickerImage = File(pickedImageFile.path);
+        _pickerImage = pickedImageFile;
       });
     } else {
       print('No Image Selected');
@@ -124,50 +125,55 @@ class _BrainClinicState extends State<BrainClinic> {
           ],
         ),
         SliverToBoxAdapter(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                child: Text(
-                  'Diagnosis disease with ML',
-                  style: kHeadStyle,
-                ),
-              ),
-              _show == 3
-                  ? Padding(
-                      padding: EdgeInsets.all(15),
-                      child: ModelResult(
-                        firstDiseaseValue: 0.81,
-                        secondDiseaseValue: .48,
-                        thirdDiseaseValue: .22,
+          child: FutureBuilder<void>(
+              future: retrieveLostData(),
+              builder: (context, snapshot) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                      child: Text(
+                        'Diagnosis disease with ML',
+                        style: kHeadStyle,
                       ),
-                    )
-                  : _show == 1 && _pickerImage != null
-                      ? imagePreview()
-                      : _show == 2 && _pickerImage != null
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ArcIndicator(
-                                  child: Text(
-                                    _progressAnalysisValue < 1
-                                        ? "Analysing ${_dotsValue == 0 ? '.  ' : _dotsValue == 1 ? '.. ' : '...'}"
-                                        : 'Done',
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: primaryColor.withOpacity(.6),
-                                    ),
-                                  ),
-                                  progressValue: _progressAnalysisValue,
-                                  bgColor: lightGreyColor,
-                                  dimensions: 160.0,
-                                ),
-                              ],
-                            )
-                          : takeImg,
-            ],
-          ),
+                    ),
+                    _show == 3
+                        ? Padding(
+                            padding: EdgeInsets.all(15),
+                            child: ModelResult(
+                              firstDiseaseValue: 0.81,
+                              secondDiseaseValue: .48,
+                              thirdDiseaseValue: .22,
+                            ),
+                          )
+                        : _show == 1 && _pickerImage != null
+                            ? imagePreview()
+                            : _show == 2 && _pickerImage != null
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      ArcIndicator(
+                                        child: Text(
+                                          _progressAnalysisValue < 1
+                                              ? "Analysing ${_dotsValue == 0 ? '.  ' : _dotsValue == 1 ? '.. ' : '...'}"
+                                              : 'Done',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: primaryColor.withOpacity(.6),
+                                          ),
+                                        ),
+                                        progressValue: _progressAnalysisValue,
+                                        bgColor: lightGreyColor,
+                                        dimensions: 160.0,
+                                      ),
+                                    ],
+                                  )
+                                : takeImg,
+                  ],
+                );
+              }),
         ),
         SliverAppBar(
           pinned: true,
@@ -238,7 +244,7 @@ class _BrainClinicState extends State<BrainClinic> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.file(
-                  _pickerImage,
+                  File(_pickerImage.path),
                   fit: BoxFit.fill,
                   gaplessPlayback: true,
                   scale: 1.0,
@@ -373,5 +379,22 @@ class _BrainClinicState extends State<BrainClinic> {
             ),
           );
         });
+  }
+
+  Future<void> retrieveLostData() async {
+    final LostData response = await _picker.getLostData();
+    if (response.isEmpty) {
+      return;
+    }
+    if (response.file != null) {
+      if (response.type == RetrieveType.image) {
+        setState(() {
+          _pickerImage = response.file;
+        });
+      } else {
+        print('errorrrrrrrrrrrrrrrrrrrr');
+      }
+      // _retrieveDataError = response.exception!.code;
+    }
   }
 }

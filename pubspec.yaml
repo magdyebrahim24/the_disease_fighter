@@ -15,14 +15,14 @@ dependencies:
 
 
   cupertino_icons: ^1.0.2
-  dotted_border: any
-  font_awesome_flutter: any
-  image_picker: any
-  datetime_picker_formfield: any
-  shared_preferences: ^2.0.1
-  url_launcher: any
-  device_preview: any
-  flutter_launcher_icons: any
+  dotted_border: ^2.0.0
+  font_awesome_flutter: ^9.0.0
+  image_picker: ^0.7.4
+  datetime_picker_formfield: ^2.0.0
+  shared_preferences: ^2.0.5
+  url_launcher: ^6.0.3
+  device_preview: ^0.7.1
+  flutter_launcher_icons: ^0.9.0
 
 flutter_icons:
   android: "launcher_icon"

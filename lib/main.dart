@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctot_home.dart';
+import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
+import 'package:the_disease_fighter/layout/splash/splash.dart';
 
 void main() => runApp(
       MyApp(),
@@ -9,13 +10,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'The Medical Solution',
+      title: 'The Disease Fighter',
       theme: ThemeData(
         primaryColor: Colors.white,
         fontFamily: 'Rubik',
       ),
       debugShowCheckedModeBanner: false,
-      home: DoctorHome(),
+      home: Home(),
     );
   }
 }
