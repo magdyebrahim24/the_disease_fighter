@@ -13,12 +13,12 @@ class BookAppointment extends StatefulWidget {
 }
 
 class _BookAppointmentState extends State<BookAppointment> {
-  String appointmentTime;
-  String gender;
-  String name;
-  String phone;
-  String comment;
-  DateTime fromTime;
+  String appointmentTime = '';
+  String gender = '';
+  String name = '';
+  String phone = '';
+  String comment = '';
+  DateTime date = DateTime(1 - 1 - 2019);
 
   _getAppointmentTime(String val) {
     setState(() {
@@ -50,9 +50,9 @@ class _BookAppointmentState extends State<BookAppointment> {
     });
   }
 
-  _getAppointmentDate(DateTime phone) {
+  _getAppointmentDate(DateTime date) {
     setState(() {
-      this.fromTime = phone;
+      this.date = date;
     });
   }
 
@@ -108,11 +108,11 @@ class _BookAppointmentState extends State<BookAppointment> {
                     BasicDateField(
                       helperText: 'Select Appointment Date',
                       label: 'Appointment Date',
-                      fun: _getAppointmentDate,
+                      fun: () => _getAppointmentDate,
                     ),
                     DropDownList(
                       value: appointmentTime,
-                      getValue: _getAppointmentTime,
+                      getValue: () => _getAppointmentTime,
                       items: [
                         '08:00 pm',
                         '08:30 pm',
@@ -121,14 +121,14 @@ class _BookAppointmentState extends State<BookAppointment> {
                         '10:00 pm',
                         '10:30 pm',
                       ],
-                      hintText: 'Time That Clinic Aviable',
+                      hintText: 'Time That Clinic Available',
                       labelText: 'Appointment Time',
                     ),
                     TxtField(
                       textInputType: TextInputType.text,
                       labelText: 'Name',
                       hintText: 'Write Patient Name',
-                      inputTextFunction: _getName,
+                      inputTextFunction: () => _getName,
                     ),
                     Row(
                       children: [
@@ -136,7 +136,7 @@ class _BookAppointmentState extends State<BookAppointment> {
                           width: 130,
                           child: DropDownList(
                             value: gender,
-                            getValue: _getGender,
+                            getValue: () => _getGender,
                             items: ['Male', 'Female'],
                             hintText: 'gender',
                             labelText: 'Gender',
@@ -150,7 +150,7 @@ class _BookAppointmentState extends State<BookAppointment> {
                             textInputType: TextInputType.phone,
                             labelText: 'Phone',
                             hintText: 'Write Phone',
-                            inputTextFunction: _getPhone,
+                            inputTextFunction: () => _getPhone,
                           ),
                         ),
                       ],

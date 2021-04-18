@@ -28,7 +28,7 @@ class _DoctorHomeState extends State<DoctorHome> with TickerProviderStateMixin {
               SliverAppBar(
                 elevation: 0.0,
                 leading: ImgButton(
-                  fun: () => _scaffoldKey.currentState.openDrawer(),
+                  fun: () => _scaffoldKey.currentState!.openDrawer(),
                   img: 'assets/icons/menu.png',
                   imgWidth: 22.0,
                   imgHigh: 15.0,
@@ -65,45 +65,12 @@ class _DoctorHomeState extends State<DoctorHome> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              // SliverPersistentHeader(delegate: _SliverTittleDelegate('All'),pinned: true,),
             ];
           },
           body: TabBarView(
             children: [
               TodayAppointments(),
               AllAppointments(),
-
-              // CustomScrollView(
-              //   slivers: [
-              //     SliverAppBar(snap: true,floating: true,
-              //       toolbarHeight: 50,
-              //       // stretchTriggerOffset: 10,forceElevated: true,excludeHeaderSemantics: true,
-              //       automaticallyImplyLeading: false,
-              //       title: Text(
-              //         'All Appointments',
-              //         style: kHeadStyle,
-              //       ),
-              //       actions: [
-              //         ImgButton(
-              //           fun: () {},
-              //           img: 'assets/icons/filter.png',
-              //           imgWidth: 20.0,
-              //           imgHigh: 25.0,
-              //         ),
-              //       ],
-              //       pinned: true,
-              //     ),
-              //     SliverList(
-              //             delegate: SliverChildBuilderDelegate(
-              //               // The builder function returns a ListTile with a title that
-              //               // displays the index of the current item.
-              //               (context, index) => ListTile(title: Text('Item #$index')),
-              //               // Builds 1000 ListTiles
-              //               childCount: 1000,
-              //             ),
-              //           ),
-              //   ],
-              // )
             ],
           ),
         ),
@@ -112,7 +79,7 @@ class _DoctorHomeState extends State<DoctorHome> with TickerProviderStateMixin {
     );
   }
 
-  Widget tapBarWidget({String label}) {
+  Widget tapBarWidget({required String label}) {
     return Container(
       child: Text(label),
       alignment: Alignment.center,

@@ -18,7 +18,7 @@ import 'package:the_disease_fighter/material/widgets/model_result.dart';
 class BrainClinic extends StatefulWidget {
   final clinicTittle;
 
-  const BrainClinic({Key key, this.clinicTittle}) : super(key: key);
+  const BrainClinic({Key? key, this.clinicTittle}) : super(key: key);
 
   @override
   _BrainClinicState createState() => _BrainClinicState();
@@ -32,7 +32,7 @@ class _BrainClinicState extends State<BrainClinic> {
   ScrollController _scrollController = new ScrollController();
   bool showUpButton = false;
 
-  PickedFile _pickerImage;
+  PickedFile? _pickerImage;
   final ImagePicker _picker = ImagePicker();
 
   void _pickImage(ImageSource src) async {
@@ -194,7 +194,7 @@ class _BrainClinicState extends State<BrainClinic> {
         ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
-            (context, index) => DoctorCard(
+                (context, index) => DoctorCard(
               item: doctorsData[index],
             ),
             childCount: doctorsData.length,
@@ -244,7 +244,7 @@ class _BrainClinicState extends State<BrainClinic> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.file(
-                  File(_pickerImage.path),
+                  File(_pickerImage!.path),
                   fit: BoxFit.fill,
                   gaplessPlayback: true,
                   scale: 1.0,
@@ -257,7 +257,7 @@ class _BrainClinicState extends State<BrainClinic> {
               ),
               Expanded(
                   child: Text(
-                '${_pickerImage.path.split('/').last}',
+                '${_pickerImage!.path.split('/').last}',
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               )),

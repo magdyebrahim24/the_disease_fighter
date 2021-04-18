@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Rate extends StatelessWidget {
   final rateValue;
 
-  final Color clr;
+  final Color? clr;
 
   const Rate({this.rateValue, this.clr});
 

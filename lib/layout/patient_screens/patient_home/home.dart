@@ -84,7 +84,10 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         elevation: 0.0,
         leading: ImgButton(
-          fun: () => _scaffoldKey.currentState.openDrawer(),
+          fun: () => WidgetsBinding.instance!.addPostFrameCallback((_) {
+            _scaffoldKey.currentState!.openDrawer();
+          }),
+          // fun: (){ _scaffoldKey.currentState!.openDrawer();},
           img: 'assets/icons/menu.png',
           imgWidth: 22.0,
           imgHigh: 15.0,
@@ -92,8 +95,10 @@ class _HomeState extends State<Home> {
         actions: [
           // SearchBar(inputTextFunction: _getSearchText),
           ImgButton(
-            fun: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Notifications())),
+            fun: () => WidgetsBinding.instance!.addPostFrameCallback((_) {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => Notifications()));
+            }),
             img: 'assets/icons/notification.png',
             imgHigh: 35.0,
             imgWidth: 35.0,
@@ -153,7 +158,7 @@ class _HomeState extends State<Home> {
             style: kHeadStyle.copyWith(fontWeight: FontWeight.w600),
           ),
           MaterialButton(
-            onPressed: () => Navigator.pushReplacement(context,
+            onPressed: () => Navigator.push(context,
                 MaterialPageRoute(builder: (context) => ViewAllDoctors())),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),

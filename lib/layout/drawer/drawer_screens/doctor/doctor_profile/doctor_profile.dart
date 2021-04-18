@@ -115,9 +115,9 @@ class _DoctorProfileState extends State<DoctorProfile> {
         ));
   }
 
-  Widget tapBarWidget({String label}) {
+  Widget tapBarWidget({String? label}) {
     return Container(
-      child: Text(label),
+      child: Text(label!),
       alignment: Alignment.center,
     );
   }

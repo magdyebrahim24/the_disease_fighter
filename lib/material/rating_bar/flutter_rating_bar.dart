@@ -6,16 +6,16 @@ class RatingWidget {
   final Widget empty;
 
   RatingWidget({
-    @required this.full,
-    @required this.half,
-    @required this.empty,
+    required this.full,
+    required this.half,
+    required this.empty,
   });
 }
 
 class _HalfRatingWidget extends StatelessWidget {
-  final Widget child;
-  final double size;
-  final int alpha;
+  final Widget? child;
+  final double? size;
+  final int? alpha;
   final bool enableMask;
   final bool rtlMode;
   final Color unratedColor;
@@ -93,9 +93,9 @@ class _HalfClipper extends CustomClipper<Rect> {
 }
 
 class _NoRatingWidget extends StatelessWidget {
-  final double size;
-  final Widget child;
-  final int alpha;
+  final double? size;
+  final Widget? child;
+  final int? alpha;
   final bool enableMask;
   final Color unratedColor;
 
@@ -116,7 +116,7 @@ class _NoRatingWidget extends StatelessWidget {
         fit: BoxFit.contain,
         child: enableMask
             ? _ColorMask(
-                color: unratedColor.withAlpha(255 - alpha),
+                color: unratedColor.withAlpha(255 - alpha!),
                 child: child,
               )
             : child,
@@ -126,8 +126,8 @@ class _NoRatingWidget extends StatelessWidget {
 }
 
 class _ColorMask extends StatelessWidget {
-  final Color color;
-  final Widget child;
+  final Color? color;
+  final Widget? child;
 
   _ColorMask({
     this.color,
@@ -138,8 +138,8 @@ class _ColorMask extends StatelessWidget {
   Widget build(BuildContext context) {
     return ShaderMask(
       shaderCallback: (bounds) => LinearGradient(colors: [
-        color,
-        color,
+        color!,
+        color!,
       ]).createShader(bounds),
       blendMode: BlendMode.srcATop,
       child: child,
@@ -173,10 +173,10 @@ class RatingBar extends StatefulWidget {
   final bool tapOnlyMode;
 
   /// The text flows from right to left if [textDirection] = TextDirection.rtl
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// Widget for each rating bar indicator item.
-  final IndexedWidgetBuilder itemBuilder;
+  final IndexedWidgetBuilder? itemBuilder;
 
   /// Defines the color opacity for unrated portion.
   ///
@@ -184,7 +184,7 @@ class RatingBar extends StatefulWidget {
   final int alpha;
 
   /// Customizes the Rating Bar item with [RatingWidget].
-  final RatingWidget ratingWidget;
+  final RatingWidget? ratingWidget;
 
   /// if set to true, Rating Bar item will glow when being touched.
   ///
@@ -199,7 +199,7 @@ class RatingBar extends StatefulWidget {
   /// Defines color for glow.
   ///
   /// Default = theme's accent color
-  final Color glowColor;
+  final Color? glowColor;
 
   /// Direction or rating bar indicator. Either can be vertical or horizontal.
   ///
@@ -212,7 +212,7 @@ class RatingBar extends StatefulWidget {
   RatingBar({
     this.itemCount = 5,
     this.initialRating = 0.0,
-    @required this.onRatingUpdate,
+    required this.onRatingUpdate,
     this.alpha = 80,
     this.itemSize = 40.0,
     this.allowHalfRating = false,
@@ -288,7 +288,8 @@ class _RatingBarState extends State<RatingBar> {
     if (index >= _rating) {
       ratingWidget = _NoRatingWidget(
         size: widget.itemSize,
-        child: widget.ratingWidget?.empty ?? widget.itemBuilder(context, index),
+        child:
+            widget.ratingWidget?.empty ?? widget.itemBuilder!(context, index),
         enableMask: widget.ratingWidget == null,
         alpha: widget.alpha,
         unratedColor: widget.unratedColor,
@@ -298,7 +299,7 @@ class _RatingBarState extends State<RatingBar> {
         widget.allowHalfRating) {
       ratingWidget = _HalfRatingWidget(
         size: widget.itemSize,
-        child: widget.ratingWidget?.half ?? widget.itemBuilder(context, index),
+        child: widget.ratingWidget?.half ?? widget.itemBuilder!(context, index),
         enableMask: widget.ratingWidget == null,
         alpha: widget.alpha,
         rtlMode: _isRTL,
@@ -312,7 +313,7 @@ class _RatingBarState extends State<RatingBar> {
         child: FittedBox(
           fit: BoxFit.contain,
           child:
-              widget.ratingWidget?.full ?? widget.itemBuilder(context, index),
+              widget.ratingWidget?.full ?? widget.itemBuilder!(context, index),
         ),
       );
       iconRating += 1.0;
@@ -322,12 +323,10 @@ class _RatingBarState extends State<RatingBar> {
       ignoring: widget.ignoreGestures,
       child: GestureDetector(
         onTap: () {
-          if (widget.onRatingUpdate != null) {
-            widget.onRatingUpdate(index + 1.0);
-            setState(() {
-              _rating = index + 1.0;
-            });
-          }
+          widget.onRatingUpdate(index + 1.0);
+          setState(() {
+            _rating = index + 1.0;
+          });
         },
         onHorizontalDragStart: (_) {
           if (widget.direction == Axis.horizontal) _glow.value = true;
@@ -361,7 +360,7 @@ class _RatingBarState extends State<RatingBar> {
           padding: widget.itemPadding,
           child: ValueListenableBuilder(
             valueListenable: _glow,
-            builder: (context, glow, _) {
+            builder: (context, dynamic glow, _) {
               if (glow && widget.glow) {
                 Color glowColor =
                     widget.glowColor ?? Theme.of(context).accentColor;
@@ -395,7 +394,7 @@ class _RatingBarState extends State<RatingBar> {
 
   void _dragOperation(DragUpdateDetails dragDetails, Axis direction) {
     if (!widget.tapOnlyMode) {
-      RenderBox box = context.findRenderObject();
+      RenderBox box = context.findRenderObject() as RenderBox;
       var _pos = box.globalToLocal(dragDetails.globalPosition);
       double i;
       if (direction == Axis.horizontal) {
@@ -413,11 +412,9 @@ class _RatingBarState extends State<RatingBar> {
       if (_isRTL && widget.direction == Axis.horizontal) {
         currentRating = widget.itemCount - currentRating;
       }
-      if (widget.onRatingUpdate != null) {
-        setState(() {
-          _rating = currentRating;
-        });
-      }
+      setState(() {
+        _rating = currentRating;
+      });
     }
   }
 }

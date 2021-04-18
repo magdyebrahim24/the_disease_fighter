@@ -7,12 +7,12 @@ class FlatBTN extends StatelessWidget {
 
   final Function fun;
 
-  const FlatBTN({this.txt, this.fun});
+  const FlatBTN({this.txt, required this.fun});
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      onPressed: fun,
+      onPressed: fun(),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),

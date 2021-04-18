@@ -9,9 +9,7 @@ import 'package:the_disease_fighter/material/constants.dart';
 
 class Clinic extends StatefulWidget {
   Clinic({this.clinicTittle});
-
   final clinicTittle;
-
   @override
   _ClinicState createState() => _ClinicState();
 }

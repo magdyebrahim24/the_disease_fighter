@@ -60,12 +60,12 @@ class BasicTimeField extends StatelessWidget {
                   helpText: helperText,
                   initialTime:
                       TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
-                  builder: (BuildContext context, Widget child) {
+                  builder: (BuildContext context, Widget? child) {
                     return MediaQuery(
                       data: MediaQuery.of(context).copyWith(
                         alwaysUse24HourFormat: false,
                       ),
-                      child: child,
+                      child: child!,
                     );
                   },
                 );
@@ -84,7 +84,7 @@ class BasicDateField extends StatelessWidget {
 
   BasicDateField({
     this.label,
-    this.fun,
+    required this.fun,
     this.helperText,
   });
 

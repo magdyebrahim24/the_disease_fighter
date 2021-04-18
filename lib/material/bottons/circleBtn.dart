@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class CircleButton extends StatelessWidget {
   CircleButton({
-    this.icn,
-    this.fun,
-    this.color,
+    required this.icn,
+    required this.fun,
+    required this.color,
   });
 
   final IconData icn;
-  Function fun;
+  final fun;
   final Color color;
 
   @override
@@ -33,7 +32,6 @@ class CircleButton extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
 class ImgButton extends StatelessWidget {
   ImgButton({
     this.img,

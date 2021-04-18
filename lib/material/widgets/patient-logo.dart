@@ -3,12 +3,11 @@ import '../constants.dart';
 
 class PatientLogo extends StatelessWidget {
   PatientLogo({
-    Key key,
     this.imgHigh = 240.0,
     this.imgWidth = 240.0,
     this.nameColor,
     this.nameSize = 18.0,
-  }) : super(key: key);
+  });
   final imgHigh;
   final imgWidth;
   final nameColor;

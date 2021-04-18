@@ -5,7 +5,7 @@ import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/rate_bar.dart';
 
 class ViewDocBuilder extends StatelessWidget {
-  ViewDocBuilder({@required this.data});
+  ViewDocBuilder({required this.data});
 
   final List data;
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctot_home.dart';
+import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -70,7 +70,7 @@ class _StartMeetingState extends State<StartMeeting> {
   }
 
   bool showFullImage = false;
-  String fullImagePath;
+  late String fullImagePath;
   List img = [
     "assets/images/file1.jpg",
     "assets/images/file3.jpg",
@@ -79,7 +79,7 @@ class _StartMeetingState extends State<StartMeeting> {
     "assets/images/file1.jpg",
     "assets/images/file2.jpg",
   ];
-  String comment;
+  late String comment;
 
   _getComment(String val) {
     setState(() {

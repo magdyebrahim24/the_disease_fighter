@@ -14,15 +14,15 @@ class DoctorInfo extends StatefulWidget {
 
 class _DoctorInfoState extends State<DoctorInfo> {
   String clinicLocation = '';
-  String phone;
+  String? phone;
   String errorMessage = '';
   bool isDoctor = false;
-  String genderValue;
-  String specialistValue;
-  String day;
-  DateTime fromTime;
-  DateTime toTime;
-  DateTime dateOfBirth;
+  String? genderValue;
+  String? specialistValue;
+  String? day;
+  DateTime? fromTime;
+  DateTime? toTime;
+  DateTime? dateOfBirth;
   List clinicDates = [];
   String _clinicError = '';
 
@@ -56,7 +56,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
     });
   }
 
-  _getDay(String val) {
+  _getDay(String? val) {
     setState(() {
       day = val;
     });
@@ -75,7 +75,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
   }
 
   _onSubmitSignUp() {
-    if (clinicLocation == null
+    if (clinicLocation == '' /* == false */
         // clinicLocation == '' || phone == ''
         ) {
       setState(() {

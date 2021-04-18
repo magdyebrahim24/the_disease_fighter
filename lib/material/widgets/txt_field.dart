@@ -6,7 +6,7 @@ import '../constants.dart';
 // ignore: must_be_immutable
 class TxtField extends StatelessWidget {
   TxtField(
-      {Key key,
+      {Key? key,
       this.labelText,
       this.hintText,
       this.actionIcon,
@@ -19,11 +19,11 @@ class TxtField extends StatelessWidget {
 
   final hintText;
 
-  final Icon actionIcon;
+  final Icon? actionIcon;
   final obSecure;
   final readOnly;
 
-  Function inputTextFunction;
+  Function? inputTextFunction;
 
   final TextInputType textInputType;
 
@@ -70,11 +70,11 @@ class TxtField extends StatelessWidget {
                     readOnly: readOnly,
                     style: TextStyle(color: darkBlueColor.withOpacity(.8)),
                     onChanged: (value) {
-                      inputTextFunction(value);
+                      inputTextFunction!(value);
                     },
                   ),
                 ),
-                actionIcon != null ? actionIcon : SizedBox(),
+                actionIcon != null ? actionIcon! : SizedBox(),
               ],
             ),
           ),

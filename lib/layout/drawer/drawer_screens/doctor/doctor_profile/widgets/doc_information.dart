@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/patient_screens/the_appointment/show_appointment.dart';
 import 'package:the_disease_fighter/material/constants.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class DocInformation extends StatelessWidget {
   Widget _infoCard(
-    double width,
+    double? width,
     String text,
     Widget widget,
   ) {
@@ -15,7 +13,7 @@ class DocInformation extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: lightGreyColor,
+        color: Color(0xffE6F7FD),
       ),
       width: width,
       height: 50,
@@ -24,8 +22,8 @@ class DocInformation extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(7)),
-            width: 30,
-            height: 30,
+            width: 40,
+            height: 40,
             child: Center(child: widget),
           ),
           SizedBox(
@@ -42,108 +40,94 @@ class DocInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: 15,
-        itemBuilder: (ctx, index) {
-          return Container(
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                    color: subTextColor,
-                    offset: Offset(1.0, 2.0),
-                    blurRadius: 3.0,
-                    spreadRadius: .5),
-              ],
-              color: backGroundColor,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                        margin: EdgeInsets.only(right: 13),
-                        height: 45,
-                        width: 45,
-                        decoration: BoxDecoration(
-                          color: greyColor.withOpacity(.5),
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            image: AssetImage('assets/doctors_img/doc1.jpg'),
-                            fit: BoxFit.cover,
-                          ),
-                        )),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Dr.Magdy Ebrahim',
-                            style: TextStyle(
-                              color: darkBlueColor,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            'Mon, Feb 19, 08.00am - 10.00am',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: subTextColor,
-                            ),
-                          ),
-                        ],
-                      ),
+    return SingleChildScrollView(
+        child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              height: 110,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: lightGreyColor,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "About",
+                    style: TextStyle(
+                        color: darkBlueColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Lorem Ipsum is simply dummy text the printing typesetting and  industry Lorem Ipsum has been the industry's standard dummy text  ever since the 1500s.",
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: subTextColor,
                     ),
-                    MaterialButton(
-                      onPressed: () => launch("tel://01552154105"),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
-                      child: Icon(
-                        Icons.phone_rounded,
-                        color: primaryColor,
-                        size: 16,
-                      ),
-                      height: 30,
-                      minWidth: 30,
-                      padding: EdgeInsets.zero,
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      color: Colors.white,
-                    )
-                  ],
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            _infoCard(
+              MediaQuery.of(context).size.width,
+              "alia12@example.com",
+              Icon(Icons.email, color: primaryColor),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            _infoCard(MediaQuery.of(context).size.width, "+20 1334 5678 988",
+                Icon(Icons.phone, color: primaryColor)),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                _infoCard(
+                  150,
+                  "Female",
+                  Icon(Icons.wc, color: primaryColor),
                 ),
                 SizedBox(
-                  height: 10,
+                  width: 20,
                 ),
-                MaterialButton(
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ShowAppointment())),
-                  child: Text(
-                    'Appointment Details',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                  height: 40,
-                  minWidth: MediaQuery.of(context).size.width,
-                  color: primaryColor,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                )
+                Expanded(
+                    child: _infoCard(
+                        null,
+                        "21 / 02 / 1999",
+                        Icon(
+                          Icons.calendar_today_rounded,
+                          color: primaryColor,
+                        )
+                        //ImgButton(img:"assets/icons/calendar .png",fun: (){},imgWidth: 40.0,imgHigh: 40.0,),)
+
+                        )),
               ],
             ),
-          );
-        });
+            SizedBox(
+              height: 10,
+            ),
+            _infoCard(
+              MediaQuery.of(context).size.width,
+              "Mansoura, Egypt",
+              Icon(Icons.location_on_rounded, color: primaryColor),
+            ),
+          ]),
+    ));
   }
 }

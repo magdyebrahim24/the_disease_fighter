@@ -18,15 +18,15 @@ class _EditDoctorProfileState extends State<EditDoctorProfile> {
   String phone = '';
   String email = '';
   String address = '';
-  String day;
-  DateTime fromTime;
-  DateTime toTime;
+  String? day;
+  DateTime? fromTime;
+  DateTime? toTime;
   Map clinicDates = {
     1: {'day': 'sunday', 'from': '05:30 PM', 'to': '05:30 PM'}
   };
   int x = 2;
 
-  _getDay(String val) {
+  _getDay(String? val) {
     setState(() {
       day = val;
     });
@@ -62,7 +62,7 @@ class _EditDoctorProfileState extends State<EditDoctorProfile> {
     });
   }
 
-  File _pickerImage;
+  File? _pickerImage;
   final ImagePicker _picker = ImagePicker();
 
   void _pickImage(ImageSource src) async {
@@ -298,7 +298,7 @@ class _EditDoctorProfileState extends State<EditDoctorProfile> {
     );
   }
 
-  Widget item({label, hintText, fun, initialValue, textInputType}) {
+  Widget item({required label, hintText, fun, initialValue, textInputType}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 10),
@@ -386,9 +386,12 @@ class _EditDoctorProfileState extends State<EditDoctorProfile> {
                                     spreadRadius: 1),
                               ],
                               image: DecorationImage(
-                                  image: _pickerImage == null
-                                      ? AssetImage("assets/images/img_1.png")
-                                      : FileImage(_pickerImage),
+                                  image:
+                                      (_pickerImage == null
+                                              ? AssetImage(
+                                                  "assets/images/img_1.png")
+                                              : FileImage(_pickerImage!))
+                                          as ImageProvider<Object>,
                                   fit: BoxFit.cover),
                               shape: BoxShape.circle,
                               border: Border.all(

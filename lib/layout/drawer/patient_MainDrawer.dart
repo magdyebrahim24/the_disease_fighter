@@ -143,8 +143,10 @@ class PatientMainDrawer extends StatelessWidget {
                 DrawerTile(
                   leadingIconColor: primaryColor.withOpacity(.7),
                   icon: Icons.info_outline,
-                  fun: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => About())),
+                  fun: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => About()));
+                  },
                   tittle: "About",
                 ),
                 // FittedBox(child: Container(color: Colors.white,height: 10,),fit: BoxFit.fitHeight,
@@ -158,16 +160,15 @@ class PatientMainDrawer extends StatelessWidget {
 
 class DrawerTile extends StatelessWidget {
   const DrawerTile({
-    Key key,
-    @required this.icon,
-    @required this.tittle,
-    @required this.fun,
-    @required this.leadingIconColor,
-  }) : super(key: key);
+    this.icon,
+    this.tittle,
+    this.fun,
+    this.leadingIconColor,
+  });
 
-  final IconData icon;
-  final String tittle;
-  final Function fun;
+  final icon;
+  final tittle;
+  final fun;
   final leadingIconColor;
 
   @override

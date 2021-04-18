@@ -15,9 +15,9 @@ class _PatientInfoState extends State<PatientInfo> {
   String address = '';
   String phone = '';
   String errorMessage = '';
-  String genderValue;
+  String genderValue = '';
 
-  DateTime dateOfBirth;
+  late DateTime dateOfBirth;
 
   _getAddress(String address) {
     setState(() {
@@ -44,7 +44,7 @@ class _PatientInfoState extends State<PatientInfo> {
   }
 
   _onSubmitSignUp() {
-    if (address == null
+    if (address == ''
         // clinicLocation == '' || phone == ''
         ) {
       setState(() {

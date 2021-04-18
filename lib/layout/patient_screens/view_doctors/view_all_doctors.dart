@@ -13,7 +13,7 @@ class ViewAllDoctors extends StatefulWidget {
 
 class _ViewAllDoctorsState extends State<ViewAllDoctors>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  TabController? _tabController;
 
   @override
   void initState() {
@@ -94,7 +94,7 @@ class _ViewAllDoctorsState extends State<ViewAllDoctors>
     );
   }
 
-  Widget tapBarWidget({String label}) {
+  Widget tapBarWidget({required String label}) {
     return Container(
       child: Text(label),
       alignment: Alignment.center,
@@ -104,7 +104,7 @@ class _ViewAllDoctorsState extends State<ViewAllDoctors>
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController!.dispose();
     super.dispose();
   }
 }

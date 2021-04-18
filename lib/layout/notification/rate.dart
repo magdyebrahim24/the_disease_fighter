@@ -12,7 +12,7 @@ class RateScreen extends StatefulWidget {
 
 class _RateScreenState extends State<RateScreen> {
   String comment = '';
-  double _rating;
+  double? _rating;
 
   _getComment(String val) {
     setState(() {

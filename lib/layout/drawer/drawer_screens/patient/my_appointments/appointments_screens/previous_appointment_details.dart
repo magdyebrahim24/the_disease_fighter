@@ -10,7 +10,7 @@ class PreviousAppointmentDetails extends StatefulWidget {
 class _PreviousAppointmentDetailsState
     extends State<PreviousAppointmentDetails> {
   bool showFullImage = false;
-  String fullImagePath;
+  late String fullImagePath;
   List img = [
     "assets/images/file1.jpg",
     "assets/images/file3.jpg",

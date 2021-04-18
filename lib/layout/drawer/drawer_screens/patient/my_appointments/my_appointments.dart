@@ -100,9 +100,9 @@ class _MyAppointmentsState extends State<MyAppointments> {
         ));
   }
 
-  Widget tapBarWidget({String label}) {
+  Widget tapBarWidget({String? label}) {
     return Container(
-      child: Text(label),
+      child: Text(label!),
       alignment: Alignment.center,
     );
   }

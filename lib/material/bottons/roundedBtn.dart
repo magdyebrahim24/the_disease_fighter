@@ -7,8 +7,8 @@ class RoundedButton extends StatelessWidget {
       {this.fun, this.text, this.minWdthRatio = .9, this.borderRadious = 10});
 
   @required
-  final String text;
-  final Function fun;
+  final String? text;
+  final Function? fun;
   final minWdthRatio;
   final double borderRadious;
 
@@ -23,9 +23,9 @@ class RoundedButton extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(borderRadious),
       ),
-      onPressed: fun,
+      onPressed: fun as void Function()?,
       child: Text(
-        text,
+        text!,
         style: TextStyle(fontSize: 16, color: Colors.white),
       ),
     );

@@ -37,7 +37,7 @@ class _PatientProfileState extends State<PatientProfile> {
     });
   }
 
-  File _pickerImage;
+  File? _pickerImage;
   final ImagePicker _picker = ImagePicker();
 
   void _pickImage(ImageSource src) async {
@@ -227,7 +227,7 @@ class _PatientProfileState extends State<PatientProfile> {
     );
   }
 
-  Widget item({label, hintText, fun, initialValue, textInputType}) {
+  Widget item({required label, hintText, fun, initialValue, textInputType}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 10),
@@ -318,9 +318,12 @@ class _PatientProfileState extends State<PatientProfile> {
                                     spreadRadius: 1),
                               ],
                               image: DecorationImage(
-                                  image: _pickerImage == null
-                                      ? AssetImage("assets/images/img_1.png")
-                                      : FileImage(_pickerImage),
+                                  image:
+                                      (_pickerImage == null
+                                              ? AssetImage(
+                                                  "assets/images/img_1.png")
+                                              : FileImage(_pickerImage!))
+                                          as ImageProvider<Object>,
                                   fit: BoxFit.cover),
                               shape: BoxShape.circle,
                               border: Border.all(

@@ -13,13 +13,13 @@ class EditAppointment extends StatefulWidget {
 }
 
 class _EditAppointmentState extends State<EditAppointment> {
-  String appointmentTime;
+  String appointmentTime = '';
 
   String gender = 'Female';
   String name = 'magdy';
-  String phone;
-  String comment;
-  DateTime fromTime;
+  String phone = '';
+  String comment = '';
+  late DateTime fromTime;
 
   _getAppointmentTime(String val) {
     setState(() {

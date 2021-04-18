@@ -8,7 +8,11 @@ class ArcIndicator extends StatelessWidget {
 
   final Color bgColor;
 
-  ArcIndicator({this.progressValue, this.child, this.dimensions, this.bgColor});
+  ArcIndicator(
+      {this.progressValue,
+      required this.child,
+      this.dimensions,
+      required this.bgColor});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +44,11 @@ class ArcIndicatorPainter extends CustomPainter {
   final double percent;
   final double width;
 
-  ArcIndicatorPainter({this.bgColor, this.lineColor, this.percent, this.width});
+  ArcIndicatorPainter(
+      {required this.bgColor,
+      required this.lineColor,
+      required this.percent,
+      required this.width});
 
   @override
   void paint(Canvas canvas, Size size) {

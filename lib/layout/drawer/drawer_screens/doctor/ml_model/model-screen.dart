@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctot_home.dart';
+import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_profile/edit_doctor_info/edit_doctor_info.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
@@ -17,7 +17,7 @@ class ModelScreen extends StatefulWidget {
 
 class _ModelScreenState extends State<ModelScreen> {
   int _show = 0;
-  File _pickerImage;
+  File? _pickerImage;
   final ImagePicker _picker = ImagePicker();
 
   void _pickImage(ImageSource src) async {
@@ -254,7 +254,7 @@ class _ModelScreenState extends State<ModelScreen> {
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Image.file(
-              _pickerImage,
+              _pickerImage!,
               fit: BoxFit.fill,
               gaplessPlayback: true,
               scale: 1.0,
@@ -269,7 +269,7 @@ class _ModelScreenState extends State<ModelScreen> {
               child: Column(
             children: [
               Text(
-                '${_pickerImage.path.split('/').last}',
+                '${_pickerImage!.path.split('/').last}',
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),

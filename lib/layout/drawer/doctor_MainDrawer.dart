@@ -136,16 +136,15 @@ class DoctorMainDrawer extends StatelessWidget {
 
 class DrawerTile extends StatelessWidget {
   const DrawerTile({
-    Key key,
-    @required this.icon,
-    @required this.tittle,
-    @required this.fun,
-    @required this.leadingIconColor,
-  }) : super(key: key);
+    this.icon,
+    this.tittle,
+    this.fun,
+    this.leadingIconColor,
+  });
 
-  final IconData icon;
-  final String tittle;
-  final Function fun;
+  final icon;
+  final tittle;
+  final fun;
   final leadingIconColor;
 
   @override
@@ -154,7 +153,7 @@ class DrawerTile extends StatelessWidget {
       children: [
         ListTile(
           contentPadding: EdgeInsets.only(left: 40),
-          onTap: fun,
+          onTap: fun(),
           tileColor: Colors.white,
           leading: Icon(
             icon,

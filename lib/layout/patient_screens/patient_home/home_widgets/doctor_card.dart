@@ -6,7 +6,7 @@ import 'package:the_disease_fighter/model/doctor_model.dart';
 
 class DoctorCard extends StatelessWidget {
   const DoctorCard({
-    @required this.item,
+    required this.item,
   });
 
   final DoctorModel item;
