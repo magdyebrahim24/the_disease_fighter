@@ -28,7 +28,7 @@ class PreviousAppointments extends StatelessWidget {
                       color: greyColor.withOpacity(.5),
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
-                        image: AssetImage('assets/doctors_img/doc1.jpg'),
+                        image: AssetImage('assets/doctors_img/doc3.jpg'),
                         fit: BoxFit.cover,
                       ),
                     )),

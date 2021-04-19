@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
@@ -17,12 +18,12 @@ class _DoctorInfoState extends State<DoctorInfo> {
   String? phone;
   String errorMessage = '';
   bool isDoctor = false;
-  String? genderValue;
-  String? specialistValue;
+  String genderValue = 'Male';
+  String specialistValue = 'Brain';
   String? day;
-  DateTime? fromTime;
-  DateTime? toTime;
-  DateTime? dateOfBirth;
+  late DateTime fromTime;
+  late DateTime toTime;
+  late DateTime dateOfBirth;
   List clinicDates = [];
   String _clinicError = '';
 
@@ -38,37 +39,37 @@ class _DoctorInfoState extends State<DoctorInfo> {
     });
   }
 
-  _getDateOfBirth(DateTime phone) {
+  _getDateOfBirth(val) {
     setState(() {
-      this.dateOfBirth = phone;
+      this.dateOfBirth = val;
     });
   }
 
-  _getGender(String val) {
+  _getGender(val) {
     setState(() {
       genderValue = val;
     });
   }
 
-  _getSpecialist(String val) {
+  _getSpecialist(val) {
     setState(() {
       specialistValue = val;
     });
   }
 
-  _getDay(String? val) {
+  _getDay(val) {
     setState(() {
       day = val;
     });
   }
 
-  _getTimeFrom(DateTime val) {
+  _getTimeFrom(val) {
     setState(() {
       fromTime = val;
     });
   }
 
-  _getTimeTo(DateTime val) {
+  _getTimeTo(val) {
     setState(() {
       toTime = val;
     });
@@ -85,7 +86,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => Home(),
+          builder: (context) => DoctorHome(),
         ),
       );
     }

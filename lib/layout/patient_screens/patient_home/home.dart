@@ -4,6 +4,7 @@ import 'package:the_disease_fighter/data/doctor_data.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/my_appointments/my_appointments.dart';
 import 'package:the_disease_fighter/layout/drawer/patient_MainDrawer.dart';
 import 'package:the_disease_fighter/layout/notification/notification.dart';
+import 'package:the_disease_fighter/layout/patient_screens/clinics/all_clinics.dart';
 import 'package:the_disease_fighter/layout/patient_screens/view_doctors/view_all_doctors.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -70,9 +71,6 @@ class _HomeState extends State<Home> {
             context, MaterialPageRoute(builder: (context) => MyAppointments())),
       ),
     );
-
-    // Find the ScaffoldMessenger in the widget tree
-    // and use it to show a SnackBar.
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
@@ -109,8 +107,15 @@ class _HomeState extends State<Home> {
       body: ListView(
         controller: _scrollController,
         children: [
+          listHead(
+              tittle: 'Clinics',
+              fun: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AllClinics()))),
           Categories(),
-          listHead(),
+          listHead(
+              tittle: 'Top Doctors',
+              fun: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ViewAllDoctors()))),
           for (var item in doctorsData)
             DoctorCard(
               item: item,
@@ -147,19 +152,18 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget listHead() {
+  Widget listHead({tittle, fun}) {
     return Padding(
       padding: EdgeInsets.only(left: 15, top: 25, bottom: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'Top Doctors',
+            tittle,
             style: kHeadStyle.copyWith(fontWeight: FontWeight.w600),
           ),
           MaterialButton(
-            onPressed: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ViewAllDoctors())),
+            onPressed: fun,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),

@@ -14,7 +14,7 @@ dependencies:
     sdk: flutter
 
 
-  cupertino_icons: ^1.0.1
+  cupertino_icons: ^1.0.2
   dotted_border: ^2.0.0
   font_awesome_flutter: ^9.0.0
   image_picker: ^0.7.4
@@ -43,6 +43,7 @@ flutter:
     - assets/intro/
     - assets/doctors_img/
     - assets/clinics/
+    - assets/clinics_logo/
     - assets/images/
     - assets/icons/
 

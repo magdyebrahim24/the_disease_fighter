@@ -5,6 +5,7 @@ import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_p
 import 'package:the_disease_fighter/material/constants.dart';
 import 'drawer_screens/about.dart';
 import 'drawer_screens/setting/settings.dart';
+import 'patient_MainDrawer.dart';
 
 class DoctorMainDrawer extends StatelessWidget {
   @override
@@ -22,8 +23,12 @@ class DoctorMainDrawer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 InkWell(
-                  onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => DoctorProfile())),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DoctorProfile()));
+                  },
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 35),
                     child: Row(
@@ -121,8 +126,10 @@ class DoctorMainDrawer extends StatelessWidget {
                 DrawerTile(
                   leadingIconColor: primaryColor.withOpacity(.7),
                   icon: Icons.info_outline,
-                  fun: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => About())),
+                  fun: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => About()));
+                  },
                   tittle: "About",
                 ),
                 // FittedBox(child: Container(color: Colors.white,height: 10,),fit: BoxFit.fitHeight,
@@ -134,42 +141,42 @@ class DoctorMainDrawer extends StatelessWidget {
   }
 }
 
-class DrawerTile extends StatelessWidget {
-  const DrawerTile({
-    this.icon,
-    this.tittle,
-    this.fun,
-    this.leadingIconColor,
-  });
-
-  final icon;
-  final tittle;
-  final fun;
-  final leadingIconColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          contentPadding: EdgeInsets.only(left: 40),
-          onTap: fun(),
-          tileColor: Colors.white,
-          leading: Icon(
-            icon,
-            color: leadingIconColor,
-          ),
-          title: Text(
-            tittle,
-            style: TextStyle(color: darkBlueColor, fontSize: 16),
-          ),
-        ),
-        Divider(
-          height: 1,
-          color: backGroundColor,
-          thickness: 1,
-        ),
-      ],
-    );
-  }
-}
+// class DrawerTile extends StatelessWidget {
+//   const DrawerTile({
+//     this.icon,
+//     this.tittle,
+//     this.fun,
+//     this.leadingIconColor,
+//   });
+//
+//   final icon;
+//   final tittle;
+//   final fun;
+//   final leadingIconColor;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         ListTile(
+//           contentPadding: EdgeInsets.only(left: 40),
+//           onTap: fun(),
+//           tileColor: Colors.white,
+//           leading: Icon(
+//             icon,
+//             color: leadingIconColor,
+//           ),
+//           title: Text(
+//             tittle,
+//             style: TextStyle(color: darkBlueColor, fontSize: 16),
+//           ),
+//         ),
+//         Divider(
+//           height: 1,
+//           color: backGroundColor,
+//           thickness: 1,
+//         ),
+//       ],
+//     );
+//   }
+// }

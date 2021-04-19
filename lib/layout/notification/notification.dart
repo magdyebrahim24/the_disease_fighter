@@ -51,7 +51,7 @@ class _NotificationsState extends State<Notifications> {
                             color: greyColor.withOpacity(.5),
                             shape: BoxShape.circle,
                             image: DecorationImage(
-                              image: AssetImage('assets/doctors_img/doc1.jpg'),
+                              image: AssetImage('assets/doctors_img/doc3.jpg'),
                               fit: BoxFit.cover,
                             ),
                           )),

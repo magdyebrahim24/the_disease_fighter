@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
-import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
-import 'package:the_disease_fighter/layout/sign/sign_in/sign_in.dart';
+import 'package:the_disease_fighter/layout/splash/splash.dart';
 
 void main() => runApp(
       MyApp(),
@@ -17,7 +15,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Rubik',
       ),
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: Splash(),
     );
   }
 }

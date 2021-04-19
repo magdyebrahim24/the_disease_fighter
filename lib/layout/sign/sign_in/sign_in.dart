@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
 import 'package:the_disease_fighter/layout/sign/sign-up/sign_up.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
@@ -36,6 +37,13 @@ class _SignInState extends State<SignIn> {
       setState(() {
         errorMessage = 'Email Or Password are empty';
       });
+    } else if (email == 'doctor') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DoctorHome(),
+        ),
+      );
     } else {
       Navigator.pushReplacement(
         context,

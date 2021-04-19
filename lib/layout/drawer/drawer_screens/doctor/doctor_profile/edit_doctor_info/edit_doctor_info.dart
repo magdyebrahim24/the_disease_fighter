@@ -32,13 +32,13 @@ class _EditDoctorProfileState extends State<EditDoctorProfile> {
     });
   }
 
-  _getTimeFrom(DateTime val) {
+  _getTimeFrom(val) {
     setState(() {
       fromTime = val;
     });
   }
 
-  _getTimeTo(DateTime val) {
+  _getTimeTo(val) {
     setState(() {
       toTime = val;
     });

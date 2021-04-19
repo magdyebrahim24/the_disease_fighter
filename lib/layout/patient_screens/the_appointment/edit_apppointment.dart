@@ -13,27 +13,26 @@ class EditAppointment extends StatefulWidget {
 }
 
 class _EditAppointmentState extends State<EditAppointment> {
-  String appointmentTime = '';
-
+  String appointmentTime = '08:00 pm';
   String gender = 'Female';
   String name = 'magdy';
-  String phone = '';
+  String phone = '01277155972';
   String comment = '';
   late DateTime fromTime;
 
-  _getAppointmentTime(String val) {
+  _getAppointmentTime(val) {
     setState(() {
       appointmentTime = val;
     });
   }
 
-  _getComment(String val) {
+  _getComment(val) {
     setState(() {
       comment = val;
     });
   }
 
-  _getGender(String val) {
+  _getGender(val) {
     setState(() {
       gender = val;
     });
@@ -51,7 +50,7 @@ class _EditAppointmentState extends State<EditAppointment> {
     });
   }
 
-  _getAppointmentDate(DateTime phone) {
+  _getAppointmentDate(phone) {
     setState(() {
       this.fromTime = phone;
     });
@@ -60,20 +59,6 @@ class _EditAppointmentState extends State<EditAppointment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // extendBodyBehindAppBar: true,
-      // appBar: AppBar(
-      //   elevation: 0.0,
-      //   backgroundColor: Colors.transparent,
-      //   leading: MaterialButton(
-      //     onPressed: ()=> Navigator.pop(context),
-      //     child: Icon(Icons.arrow_back,color: darkBlueColor,),
-      //     color: primaryColor.withOpacity(.2),elevation: 0.0,
-      //     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      //     shape: RoundedRectangleBorder(
-      //       borderRadius: BorderRadius.circular(45.0),
-      //     ),),
-      // ),
-
       body: SingleChildScrollView(
         child: Column(
           children: [

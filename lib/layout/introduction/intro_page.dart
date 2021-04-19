@@ -11,15 +11,8 @@ class IntroPage extends StatefulWidget {
 }
 
 class _IntroPageState extends State<IntroPage> {
-  @override
-  void initState() {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.setBool('intro', true);
-    super.initState();
-  }
 
   PageController _pageController = PageController();
-
   double currentPage = 0;
   List<Map> intro = [
     {
@@ -109,9 +102,10 @@ class _IntroPageState extends State<IntroPage> {
                 ),
                 Text(
                   intro[index]['headTxt'],
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       color: darkBlueColor,
-                      fontSize: 24,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold),
                 ),
                 Padding(

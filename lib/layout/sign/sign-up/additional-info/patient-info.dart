@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_disease_fighter/layout/drawer/drawer_screens/terms_of_use.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -15,7 +16,7 @@ class _PatientInfoState extends State<PatientInfo> {
   String address = '';
   String phone = '';
   String errorMessage = '';
-  String genderValue = '';
+  String genderValue = 'Male';
 
   late DateTime dateOfBirth;
 
@@ -25,7 +26,7 @@ class _PatientInfoState extends State<PatientInfo> {
     });
   }
 
-  _getDateOfBirth(DateTime phone) {
+  _getDateOfBirth(phone) {
     setState(() {
       this.dateOfBirth = phone;
     });
@@ -37,7 +38,7 @@ class _PatientInfoState extends State<PatientInfo> {
     });
   }
 
-  _getGender(String val) {
+  _getGender(val) {
     setState(() {
       genderValue = val;
     });
@@ -152,12 +153,20 @@ class _PatientInfoState extends State<PatientInfo> {
                             'By pressing “Done” you agree to our',
                             style: TextStyle(color: subTextColor),
                           ),
-                          Text(
-                            'terms & conditions',
-                            style: TextStyle(
-                                color: Colors.orangeAccent,
-                                decoration: TextDecoration.underline,
-                                decorationThickness: 2),
+                          InkWell(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TermsOfUse(),
+                              ),
+                            ),
+                            child: Text(
+                              'terms & conditions',
+                              style: TextStyle(
+                                  color: Colors.orangeAccent,
+                                  decoration: TextDecoration.underline,
+                                  decorationThickness: 2),
+                            ),
                           ),
                         ],
                       ),
