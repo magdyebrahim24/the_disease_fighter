@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_disease_fighter/data/doctor_data.dart';
-import 'package:the_disease_fighter/layout/patient_screens/clinics/doctor-card.dart';
 import 'package:the_disease_fighter/layout/notification/notification.dart';
+import 'package:the_disease_fighter/layout/patient_screens/patient_home/home_widgets/doctor_card.dart';
 import 'package:the_disease_fighter/layout/patient_screens/search/search.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -67,32 +67,24 @@ class _ClinicState extends State<Clinic> {
             ],
             bottom: PreferredSize(
               preferredSize: Size(50.0, 50.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: 15,
-                    ),
-                    child: Text(
-                      '${widget.clinicTittle} Doctors',
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '${widget.clinicTittle}',
                       style: kHeadStyle,
                     ),
-                  ),
-                  ImgButton(
-                    fun: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Search())),
-                    img: 'assets/icons/search1.png',
-                    imgWidth: 35.0,
-                    imgHigh: 20.0,
-                  ),
-                  // ImgButton(
-                  //   fun: () {},
-                  //   img: 'assets/icons/filter.png',
-                  //   imgWidth: 25.0,
-                  //   imgHigh: 25.0,
-                  // ),
-                ],
+                    ImgButton(
+                      fun: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Search())),
+                      img: 'assets/icons/search1.png',
+                      imgWidth: 20.0,
+                      imgHigh: 20.0,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

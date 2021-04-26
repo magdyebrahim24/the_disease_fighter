@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -93,89 +94,57 @@ class _PatientProfileState extends State<PatientProfile> {
             children: [
               _profilePicCard(context),
               item(
-                  label: 'Phone Number',
-                  initialValue: '01552154105',
-                  hintText: 'write your phone',
-                  fun: _getPhone,
-                  textInputType: TextInputType.phone),
+                label: Languages.of(context)!.patientProfile['phoneLabel'],
+                initialValue: '01552154105',
+                hintText: Languages.of(context)!.patientProfile['phoneHint'],
+                fun: _getPhone,
+                textInputType: TextInputType.phone,
+                readOnly: readOnly,
+              ),
               item(
-                  label: 'Email',
+                  label: Languages.of(context)!.patientProfile['email'],
                   initialValue: 'magdyebrahim224@yahoo.com',
-                  hintText: 'write your email',
+                  hintText: Languages.of(context)!.patientProfile['emailHint'],
                   fun: _getEmail,
+                  readOnly: readOnly,
                   textInputType: TextInputType.emailAddress),
               item(
-                  label: 'Address',
+                  label: Languages.of(context)!.patientProfile['addressLabel'],
                   initialValue: 'Mansoura - Meet Mazah',
-                  hintText: 'write your address',
+                  hintText:
+                      Languages.of(context)!.patientProfile['addressHint'],
                   fun: _getAddress,
+                  readOnly: readOnly,
                   textInputType: TextInputType.streetAddress),
               readOnly
                   ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 7, left: 12, bottom: 20),
-                          padding: EdgeInsets.only(
-                              top: 15, left: 15, right: 15, bottom: 10),
-                          // width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: backGroundColor,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Gender'),
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical: 7),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 15),
-                                width: MediaQuery.of(context).size.width * .35,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white,
-                                ),
-                                child: Text('Male'),
-                              ),
-                            ],
-                          ),
+                        Expanded(
+                          child: item(
+                              label: Languages.of(context)!
+                                  .patientProfile['DateLabel'],
+                              initialValue: '1/3/1999',
+                              readOnly: true,
+                              hintText: Languages.of(context)!
+                                  .patientProfile['helperText'],
+                              fun: _getAddress,
+                              textInputType: TextInputType.streetAddress),
                         ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Container(
-                          margin:
-                              EdgeInsets.only(top: 7, right: 12, bottom: 20),
-                          padding: EdgeInsets.only(
-                              top: 15, left: 15, right: 15, bottom: 10),
-                          // width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: backGroundColor,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Date'),
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical: 7),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 15),
-                                width: MediaQuery.of(context).size.width * .4,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white,
-                                ),
-                                child: Text('1/3/1999'),
-                              ),
-                            ],
-                          ),
+                        Expanded(
+                          child: item(
+                              label: Languages.of(context)!
+                                  .patientProfile['genderLabel'],
+                              initialValue: 'Male',
+                              readOnly: true,
+                              hintText: Languages.of(context)!
+                                  .patientProfile['genderHint'],
+                              fun: _getAddress,
+                              textInputType: TextInputType.streetAddress),
                         ),
                       ],
                     )
                   : SizedBox(
-                      height: 5,
+                      height: 10,
                     ),
             ]),
       ),
@@ -201,7 +170,7 @@ class _PatientProfileState extends State<PatientProfile> {
                         });
                       },
                       child: Text(
-                        'Cancel',
+                        Languages.of(context)!.patientProfile['cancelBtn'],
                         style: TextStyle(fontSize: 16, color: subTextColor),
                       ),
                     ),
@@ -215,7 +184,7 @@ class _PatientProfileState extends State<PatientProfile> {
                           readOnly = true;
                         });
                       },
-                      text: 'Save',
+                      text: Languages.of(context)!.patientProfile['saveBtn'],
                       borderRadious: 50,
                     ),
                   ],
@@ -227,7 +196,13 @@ class _PatientProfileState extends State<PatientProfile> {
     );
   }
 
-  Widget item({required label, hintText, fun, initialValue, textInputType}) {
+  Widget item(
+      {required label,
+      hintText,
+      fun,
+      initialValue,
+      textInputType,
+      required readOnly}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 10),

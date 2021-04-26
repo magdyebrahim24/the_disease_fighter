@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/drop-downlist.dart';
@@ -106,8 +107,10 @@ class _BookAppointmentState extends State<BookAppointment> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     BasicDateField(
-                      helperText: 'Select Appointment Date',
-                      label: 'Appointment Date',
+                      helperText: Languages.of(context)!
+                          .bookAppointment['appointmentDateHint'],
+                      label: Languages.of(context)!
+                          .bookAppointment['appointmentDateLabel'],
                       fun: _getAppointmentDate,
                     ),
                     DropDownList(
@@ -121,13 +124,17 @@ class _BookAppointmentState extends State<BookAppointment> {
                         '10:00 pm',
                         '10:30 pm',
                       ],
-                      hintText: 'Time That Clinic Available',
-                      labelText: 'Appointment Time',
+                      hintText: Languages.of(context)!
+                          .bookAppointment['appointmentTimeHint'],
+                      labelText: Languages.of(context)!
+                          .bookAppointment['appointmentTimeLabel'],
                     ),
                     TxtField(
                       textInputType: TextInputType.text,
-                      labelText: 'Name',
-                      hintText: 'Write Patient Name',
+                      labelText:
+                          Languages.of(context)!.bookAppointment['nameLabel'],
+                      hintText:
+                          Languages.of(context)!.bookAppointment['nameHint'],
                       inputTextFunction: _getName,
                     ),
                     Row(
@@ -138,8 +145,10 @@ class _BookAppointmentState extends State<BookAppointment> {
                             value: gender,
                             getValue: _getGender,
                             items: ['Male', 'Female'],
-                            hintText: 'gender',
-                            labelText: 'Gender',
+                            hintText: Languages.of(context)!
+                                .bookAppointment['genderHint'],
+                            labelText: Languages.of(context)!
+                                .bookAppointment['genderLabel'],
                           ),
                         ),
                         SizedBox(
@@ -148,15 +157,17 @@ class _BookAppointmentState extends State<BookAppointment> {
                         Expanded(
                           child: TxtField(
                             textInputType: TextInputType.phone,
-                            labelText: 'Phone',
-                            hintText: 'Write Phone',
+                            labelText: Languages.of(context)!
+                                .bookAppointment['phoneLabel'],
+                            hintText: Languages.of(context)!
+                                .bookAppointment['phoneHint'],
                             inputTextFunction: _getPhone,
                           ),
                         ),
                       ],
                     ),
                     Text(
-                      'Appointment Note',
+                      Languages.of(context)!.bookAppointment['appointmentNote'],
                       style: TextStyle(color: subTextColor),
                     ),
                     Container(
@@ -175,7 +186,8 @@ class _BookAppointmentState extends State<BookAppointment> {
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.all(10),
-                            hintText: "Write your Note ...",
+                            hintText: Languages.of(context)!
+                                .bookAppointment['appointmentNoteHint'],
                             hintStyle: TextStyle(
                                 color: subTextColor.withOpacity(.8),
                                 fontSize: 16)),
@@ -197,7 +209,7 @@ class _BookAppointmentState extends State<BookAppointment> {
                     builder: (context) => Home(
                           showSnackBar: true,
                         ))),
-            text: 'Book Appointment',
+            text: Languages.of(context)!.bookAppointment['bookBTN'],
             borderRadious: 50,
           ),
         ),

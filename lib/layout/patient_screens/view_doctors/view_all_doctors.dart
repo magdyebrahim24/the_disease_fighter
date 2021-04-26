@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/data/doctor_data.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
 import 'package:the_disease_fighter/layout/patient_screens/search/search.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'view_doc_builder.dart';
@@ -17,7 +18,7 @@ class _ViewAllDoctorsState extends State<ViewAllDoctors>
 
   @override
   void initState() {
-    _tabController = TabController(initialIndex: 0, length: 5, vsync: this);
+    _tabController = TabController(initialIndex: 0, length: 12, vsync: this);
     super.initState();
   }
 
@@ -46,7 +47,7 @@ class _ViewAllDoctorsState extends State<ViewAllDoctors>
               ],
               pinned: true,
               floating: true,
-              // snap: true,
+              snap: true,
               bottom: TabBar(
                   indicatorPadding: EdgeInsets.all(5),
                   controller: _tabController,
@@ -61,19 +62,41 @@ class _ViewAllDoctorsState extends State<ViewAllDoctors>
                       color: Color(0xffE6F7FD)),
                   tabs: [
                     tapBarWidget(
-                      label: 'All',
+                      label: Languages.of(context)!.allDoctors['all'],
                     ),
                     tapBarWidget(
-                      label: 'Heart',
+                      label: Languages.of(context)!.allDoctors['brain'],
                     ),
                     tapBarWidget(
-                      label: 'Teeth',
+                      label: Languages.of(context)!.allDoctors['chest'],
                     ),
                     tapBarWidget(
-                      label: 'Brain',
+                      label: Languages.of(context)!.allDoctors['physical'],
                     ),
                     tapBarWidget(
-                      label: 'Brain',
+                      label: Languages.of(context)!.allDoctors['bone'],
+                    ),
+                    tapBarWidget(
+                      label:
+                          Languages.of(context)!.allDoctors['internalMedicine'],
+                    ),
+                    tapBarWidget(
+                      label: Languages.of(context)!.allDoctors['surgery'],
+                    ),
+                    tapBarWidget(
+                      label: Languages.of(context)!.allDoctors['teeth'],
+                    ),
+                    tapBarWidget(
+                      label: Languages.of(context)!.allDoctors['urology'],
+                    ),
+                    tapBarWidget(
+                      label: Languages.of(context)!.allDoctors['heart'],
+                    ),
+                    tapBarWidget(
+                      label: Languages.of(context)!.allDoctors['kids'],
+                    ),
+                    tapBarWidget(
+                      label: Languages.of(context)!.allDoctors['dermatology'],
                     ),
                   ]),
               forceElevated: innerBoxIsScrolled,
@@ -87,6 +110,13 @@ class _ViewAllDoctorsState extends State<ViewAllDoctors>
             ViewDocBuilder(data: doctorsData5),
             ViewDocBuilder(data: doctorsData10),
             ViewDocBuilder(data: doctorsData15),
+            ViewDocBuilder(data: doctorsData5),
+            ViewDocBuilder(data: doctorsData15),
+            ViewDocBuilder(data: doctorsData10),
+            ViewDocBuilder(data: doctorsData20),
+            ViewDocBuilder(data: doctorsData5),
+            ViewDocBuilder(data: doctorsData15),
+            ViewDocBuilder(data: doctorsData10),
             ViewDocBuilder(data: doctorsData20),
           ],
         ),
@@ -98,7 +128,7 @@ class _ViewAllDoctorsState extends State<ViewAllDoctors>
     return Container(
       child: Text(label),
       alignment: Alignment.center,
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
     );
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/favorite_doctors.dart';
 import 'package:the_disease_fighter/layout/patient_screens/doctor_details/reviews.dart';
 import 'package:the_disease_fighter/layout/patient_screens/the_appointment/book_appointment.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -40,16 +41,6 @@ class _DoctorDetailsState extends State<DoctorDetails> {
     return Scaffold(
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
-      // appBar: AppBar(
-      //   elevation: 0.0,
-      //   toolbarOpacity: 1,
-      //   backgroundColor: Colors.transparent,
-      //   leading: CircleButton(
-      //     color: darkBlueColor,
-      //     icn: Icons.arrow_back,
-      //     fun: () => Navigator.pop(context),
-      //   ),
-      // ),
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
@@ -76,18 +67,22 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                     });
                     isFavorite
                         ? snackBarr(
-                            label: 'Show',
-                            text: 'Added To Favorite',
+                            label: Languages.of(context)!
+                                .doctorDetails['snackBarAddBTN'],
+                            text: Languages.of(context)!
+                                .doctorDetails['snackBarAddLabel'],
                             fun: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => FavoriteDoctors())),
                           )
-                        : snackBarr(text: 'Removed From Favorite', fun: () {});
+                        : snackBarr(
+                            text: Languages.of(context)!
+                                .doctorDetails['snackBarRemove'],
+                            fun: () {});
                   }),
             ],
             pinned: true,
-            // snap: true,
             floating: true,
             expandedHeight: 400.0,
             flexibleSpace: FlexibleSpaceBar(
@@ -115,7 +110,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'About',
+                              Languages.of(context)!.doctorDetails['about'],
                               style: kHeadStyle.copyWith(
                                   fontSize: 17, fontWeight: FontWeight.w700),
                             ),
@@ -160,7 +155,6 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                   decoration: BoxDecoration(
                     color: backGroundColor,
                     borderRadius: BorderRadius.all(Radius.circular(10)),
-                    // border: Border.all(color: lightGreyColor),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,7 +162,8 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
                         child: Text(
-                          'Clinic Appointments ',
+                          Languages.of(context)!
+                              .doctorDetails['clinicAppointments'],
                           style: kHeadStyle.copyWith(
                               fontSize: 17, fontWeight: FontWeight.w700),
                         ),
@@ -190,7 +185,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                             builder: (context) => DoctorReviews())),
                     tileColor: backGroundColor,
                     title: Text(
-                      "Patient Reviews",
+                      Languages.of(context)!.doctorDetails['patientReviews'],
                       style: TextStyle(
                         color: darkBlueColor,
                         fontSize: 16,
@@ -245,7 +240,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                 fun: () => Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => BookAppointment())),
                 minWdthRatio: .63,
-                text: 'Book Appointment',
+                text: Languages.of(context)!.doctorDetails['bookBtn'],
                 borderRadious: 50,
               ),
             ],

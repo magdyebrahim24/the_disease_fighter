@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -64,22 +65,28 @@ class _ChangePasswordState extends State<ChangePassword> {
                 height: 25,
               ),
               TxtField(
-                labelText: 'Old password',
-                hintText: 'write old password',
+                labelText:
+                    Languages.of(context)!.changePassword['oldPasswordLabel'],
+                hintText:
+                    Languages.of(context)!.changePassword['oldPasswordHint'],
                 textInputType: TextInputType.visiblePassword,
                 obSecure: true,
                 inputTextFunction: _getPassword,
               ),
               TxtField(
-                labelText: 'New password',
-                hintText: 'write New password',
+                labelText:
+                    Languages.of(context)!.changePassword['newPasswordLabel'],
+                hintText:
+                    Languages.of(context)!.changePassword['newPasswordHint'],
                 textInputType: TextInputType.visiblePassword,
                 obSecure: true,
                 inputTextFunction: _getNewPassword,
               ),
               TxtField(
-                labelText: 'Confirm password',
-                hintText: 'write confirm password',
+                labelText: Languages.of(context)!
+                    .changePassword['confirmPasswordLabel'],
+                hintText: Languages.of(context)!
+                    .changePassword['ConfirmPasswordHint'],
                 textInputType: TextInputType.visiblePassword,
                 obSecure: true,
                 inputTextFunction: _getConfirmPassword,
@@ -90,7 +97,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               RoundedButton(
                 fun: () => Navigator.pop(context),
                 minWdthRatio: 1,
-                text: 'Done',
+                text: Languages.of(context)!.changePassword['doneBtn'],
               ),
             ]),
       )),

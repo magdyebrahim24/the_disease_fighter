@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/txt_field.dart';
@@ -73,13 +74,21 @@ class _ForgetPassword3State extends State<ForgetPassword3> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 15),
+                      padding: EdgeInsets.symmetric(vertical: 10),
                       child: Text(
-                        'Forgot password ?',
+                        Languages.of(context)!.forgetPasswordScreen['header'],
                         style: TextStyle(
                           color: darkBlueColor,
                           fontSize: 28,
                         ),
+                      ),
+                    ),
+                    Text(
+                      Languages.of(context)!
+                          .forgetPasswordScreen['newPassHint'],
+                      style: TextStyle(
+                        color: darkBlueColor,
+                        fontSize: 20,
                       ),
                     ),
                     SizedBox(
@@ -88,16 +97,20 @@ class _ForgetPassword3State extends State<ForgetPassword3> {
                     Column(
                       children: [
                         TxtField(
-                          labelText: 'Password',
-                          hintText: 'enter password',
+                          labelText: Languages.of(context)!
+                              .forgetPasswordScreen['passwordLabel'],
+                          hintText: Languages.of(context)!
+                              .forgetPasswordScreen['passwordHint'],
                           inputTextFunction: _getCode,
-                          textInputType: TextInputType.emailAddress,
+                          textInputType: TextInputType.visiblePassword,
                         ),
                         TxtField(
-                          labelText: 'Confirm Password',
-                          hintText: 'enter password again',
+                          labelText: Languages.of(context)!
+                              .forgetPasswordScreen['confirmPassword'],
+                          hintText: Languages.of(context)!
+                              .forgetPasswordScreen['confirmPasswordHint'],
                           inputTextFunction: _getConfirmPassword,
-                          textInputType: TextInputType.emailAddress,
+                          textInputType: TextInputType.visiblePassword,
                         ),
                       ],
                     ),
@@ -108,7 +121,8 @@ class _ForgetPassword3State extends State<ForgetPassword3> {
                           builder: (context) => Home(),
                         ),
                       ),
-                      text: 'Change',
+                      text: Languages.of(context)!
+                          .forgetPasswordScreen['changeBTN'],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

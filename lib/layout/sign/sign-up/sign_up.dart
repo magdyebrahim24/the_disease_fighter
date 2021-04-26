@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_disease_fighter/layout/sign/sign_in/sign_in.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/bottons/socialBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -148,7 +149,7 @@ class _SignUpState extends State<SignUp> {
                                 width: 10,
                               ),
                               Text(
-                                'Patient',
+                                Languages.of(context)!.signUp['patientBTN'],
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -189,7 +190,7 @@ class _SignUpState extends State<SignUp> {
                                 width: 10,
                               ),
                               Text(
-                                'Doctor',
+                                Languages.of(context)!.signUp['doctorBTN'],
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -205,27 +206,29 @@ class _SignUpState extends State<SignUp> {
                       height: 15,
                     ),
                     TxtField(
-                      labelText: 'Name',
-                      hintText: 'Enter your email',
+                      labelText: Languages.of(context)!.signUp['name'],
+                      hintText: Languages.of(context)!.signUp['nameHint'],
                       inputTextFunction: _getName,
                       textInputType: TextInputType.text,
                     ),
                     TxtField(
-                      labelText: 'Email Address',
-                      hintText: 'Enter your email',
+                      labelText: Languages.of(context)!.signUp['email'],
+                      hintText: Languages.of(context)!.signUp['emailHint'],
                       inputTextFunction: _getEmail,
                       textInputType: TextInputType.emailAddress,
                     ),
                     TxtField(
-                      labelText: 'Password',
-                      hintText: 'Enter your password',
+                      labelText: Languages.of(context)!.signUp['password'],
+                      hintText: Languages.of(context)!.signUp['passwordHint'],
                       inputTextFunction: _getPassword,
                       obSecure: true,
                       textInputType: TextInputType.visiblePassword,
                     ),
                     TxtField(
-                      labelText: 'Confirm Password',
-                      hintText: 'Enter your password',
+                      labelText:
+                          Languages.of(context)!.signUp['confirmPassword'],
+                      hintText:
+                          Languages.of(context)!.signUp['confirmPasswordHint'],
                       inputTextFunction: _getConfirmPassword,
                       obSecure: true,
                       textInputType: TextInputType.visiblePassword,
@@ -241,19 +244,22 @@ class _SignUpState extends State<SignUp> {
                     ),
                     RoundedButton(
                       fun: _onSubmitSignUp,
-                      text: 'Sign Up',
+                      text: Languages.of(context)!.signUp['signButtonTxt'],
                     ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 30, bottom: 10),
-                        child: InkWell(
-                            onTap: () {},
-                            child: Text(
-                              'Or Sign Up With',
-                              style: TextStyle(color: subTextColor),
-                            )),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 30, bottom: 10),
+                          child: InkWell(
+                              onTap: () {},
+                              child: Text(
+                                Languages.of(context)!.signUp['orSignWith'],
+                                style: TextStyle(color: subTextColor),
+                              )),
+                        ),
+                      ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -281,8 +287,11 @@ class _SignUpState extends State<SignUp> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Have an account ? ',
+                            Languages.of(context)!.signUp['dontHaveAccount'],
                             style: TextStyle(color: subTextColor),
+                          ),
+                          SizedBox(
+                            width: 5,
                           ),
                           InkWell(
                               onTap: () => Navigator.pushReplacement(
@@ -291,7 +300,7 @@ class _SignUpState extends State<SignUp> {
                                     builder: (context) => SignIn(),
                                   )),
                               child: Text(
-                                'SIGN IN',
+                                Languages.of(context)!.signUp['signUpTxt'],
                                 style: TextStyle(color: darkBlueColor),
                               )),
                         ],

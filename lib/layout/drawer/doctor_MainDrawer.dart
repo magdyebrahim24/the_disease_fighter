@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/ml_model/model-screen.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_profile/doctor_profile.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'drawer_screens/about.dart';
 import 'drawer_screens/setting/settings.dart';
@@ -74,14 +75,14 @@ class DoctorMainDrawer extends StatelessWidget {
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(vertical: 40, horizontal: 15),
+                  padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
                   decoration: BoxDecoration(
                       color: backGroundColor,
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(25),
                           topRight: Radius.circular(25))),
                   child: Text(
-                    "Menu",
+                    Languages.of(context)!.drawer['menu'],
                     style: TextStyle(
                       color: darkBlueColor,
                       fontSize: 17,
@@ -90,15 +91,14 @@ class DoctorMainDrawer extends StatelessWidget {
                 ),
 
                 DrawerTile(
-                    leadingIconColor: primaryColor.withOpacity(.7),
-                    icon: FontAwesomeIcons.user,
-                    fun: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DoctorProfile())),
-                    tittle: "Profile"),
+                  leadingIconColor: primaryColor.withOpacity(.7),
+                  icon: FontAwesomeIcons.user,
+                  fun: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => DoctorProfile())),
+                  tittle: Languages.of(context)!.drawer['profile'],
+                ),
                 ListTile(
-                  contentPadding: EdgeInsets.only(left: 40),
+                  contentPadding: EdgeInsets.only(left: 40, right: 40),
                   onTap: () => Navigator.push(context,
                       MaterialPageRoute(builder: (context) => ModelScreen())),
                   tileColor: Colors.white,
@@ -109,7 +109,8 @@ class DoctorMainDrawer extends StatelessWidget {
                     fit: BoxFit.fill,
                   ),
                   title: Text(
-                    'Using AI Model',
+                    Languages.of(context)!.drawer['usingAi'],
+                    maxLines: 2,
                     style: TextStyle(color: darkBlueColor, fontSize: 16),
                   ),
                 ),
@@ -118,11 +119,12 @@ class DoctorMainDrawer extends StatelessWidget {
                   color: backGroundColor,
                 ),
                 DrawerTile(
-                    leadingIconColor: primaryColor.withOpacity(.7),
-                    icon: Icons.settings_outlined,
-                    fun: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Setting())),
-                    tittle: "Setting"),
+                  leadingIconColor: primaryColor.withOpacity(.7),
+                  icon: Icons.settings_outlined,
+                  fun: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Setting())),
+                  tittle: Languages.of(context)!.drawer['setting'],
+                ),
                 DrawerTile(
                   leadingIconColor: primaryColor.withOpacity(.7),
                   icon: Icons.info_outline,
@@ -130,7 +132,7 @@ class DoctorMainDrawer extends StatelessWidget {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => About()));
                   },
-                  tittle: "About",
+                  tittle: Languages.of(context)!.drawer['about'],
                 ),
                 // FittedBox(child: Container(color: Colors.white,height: 10,),fit: BoxFit.fitHeight,
                 // ),

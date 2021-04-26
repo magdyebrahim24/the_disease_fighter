@@ -13,26 +13,6 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
   // AnimationController controller;
   // Animation<double> animation;
 
-  // void _getIntroBool() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.setBool('intro', false);
-  //   bool intro = prefs.getBool('intro');
-  //   if (intro != null || intro == true) {
-  //     Navigator.pushReplacement(
-  //       context,
-  //       MaterialPageRoute(
-  //         builder: (context) => SignIn(),
-  //       ),
-  //     );
-  //   } else {
-  //     Navigator.pushReplacement(
-  //       context,
-  //       MaterialPageRoute(
-  //         builder: (context) => IntroPage(),
-  //       ),
-  //     );
-  //   }
-  // }
 
   Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

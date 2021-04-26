@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'appointments_screens/appointments.dart';
@@ -58,11 +59,13 @@ class _MyAppointmentsState extends State<MyAppointments> {
                   pinned: true,
                   snap: false,
                   floating: true,
-                  expandedHeight: 210.0,
+                  expandedHeight: 200.0,
                   flexibleSpace: FlexibleSpaceBar(
                     title: Text(
-                      'Magdy Ebrahim',
-                      style: TextStyle(color: darkBlueColor),
+                      ' Magdy Ebrahim',
+                      maxLines: 1,
+                      softWrap: true,
+                      style: TextStyle(color: darkBlueColor, fontSize: 16),
                     ),
                     centerTitle: true,
                     background: patientImage(),
@@ -81,8 +84,12 @@ class _MyAppointmentsState extends State<MyAppointments> {
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white),
                       tabs: [
-                        tapBarWidget(label: 'My Appointments'),
-                        tapBarWidget(label: 'Previous'),
+                        tapBarWidget(
+                            label: Languages.of(context)!
+                                .patientAppointments['myAppointmentTap']),
+                        tapBarWidget(
+                            label: Languages.of(context)!
+                                .patientAppointments['previousTap']),
                       ],
                     ),
                   ),

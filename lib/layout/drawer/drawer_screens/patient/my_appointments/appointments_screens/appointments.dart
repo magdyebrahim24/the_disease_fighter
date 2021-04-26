@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/patient_screens/the_appointment/show_appointment.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -31,7 +32,6 @@ class AppointmentsBuilder extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                        margin: EdgeInsets.only(right: 13),
                         height: 45,
                         width: 45,
                         decoration: BoxDecoration(
@@ -42,6 +42,9 @@ class AppointmentsBuilder extends StatelessWidget {
                             fit: BoxFit.cover,
                           ),
                         )),
+                    SizedBox(
+                      width: 10,
+                    ),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +98,7 @@ class AppointmentsBuilder extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => ShowAppointment())),
                   child: Text(
-                    'Appointment Details',
+                    Languages.of(context)!.patientAppointments['detailsBTN'],
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),

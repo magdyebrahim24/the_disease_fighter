@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/sign/sign-up/sign_up.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -84,7 +85,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 15),
                           child: Text(
-                            'Forgot password?',
+                            Languages.of(context)!
+                                .forgetPasswordScreen['header'],
                             style: TextStyle(
                               color: darkBlueColor,
                               fontSize: 28,
@@ -92,7 +94,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                           ),
                         ),
                         Text(
-                          'Enter your email and we will send \n code to your mail.',
+                          Languages.of(context)!
+                              .forgetPasswordScreen['emailSubTxt'],
                           style: TextStyle(
                             color: darkBlueColor,
                             fontSize: 20,
@@ -104,8 +107,10 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                       height: 15,
                     ),
                     TxtField(
-                      labelText: 'Email Address',
-                      hintText: 'Enter your email',
+                      labelText: Languages.of(context)!
+                          .forgetPasswordScreen['emailLabel'],
+                      hintText: Languages.of(context)!
+                          .forgetPasswordScreen['emailHint'],
                       inputTextFunction: _getEmail,
                       textInputType: TextInputType.emailAddress,
                     ),
@@ -116,7 +121,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                           builder: (context) => ForgetPassword2(),
                         ),
                       ),
-                      text: 'Next',
+                      text: Languages.of(context)!
+                          .forgetPasswordScreen['nextBTN'],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -139,8 +145,12 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Don’t have an account ? ',
+                            Languages.of(context)!
+                                .forgetPasswordScreen['dontHaveAccount'],
                             style: TextStyle(color: subTextColor),
+                          ),
+                          SizedBox(
+                            width: 5,
                           ),
                           InkWell(
                               onTap: () => Navigator.pushReplacement(
@@ -149,7 +159,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                     builder: (context) => SignUp(),
                                   )),
                               child: Text(
-                                'SIGN UP',
+                                Languages.of(context)!
+                                    .forgetPasswordScreen['signUpTxt'],
                                 style: TextStyle(
                                     color: darkBlueColor, fontSize: 15),
                               )),

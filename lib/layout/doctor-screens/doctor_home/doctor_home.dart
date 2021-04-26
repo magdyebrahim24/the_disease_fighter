@@ -4,6 +4,7 @@ import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/widgets/al
 import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/widgets/today_appointments.dart';
 import 'package:the_disease_fighter/layout/drawer/doctor_MainDrawer.dart';
 import 'package:the_disease_fighter/layout/notification/notification.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 
@@ -59,8 +60,10 @@ class _DoctorHomeState extends State<DoctorHome> with TickerProviderStateMixin {
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.white),
                     tabs: [
-                      tapBarWidget(label: 'Today'),
-                      tapBarWidget(label: 'All'),
+                      tapBarWidget(
+                          label: Languages.of(context)!.doctorHome['todayTap']),
+                      tapBarWidget(
+                          label: Languages.of(context)!.doctorHome['allTap']),
                     ],
                   ),
                 ),

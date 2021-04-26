@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../constants.dart';
+import 'dart:ui';
 
 // ignore: must_be_immutable
 class BasicTimeField extends StatelessWidget {
@@ -104,8 +105,7 @@ class BasicDateField extends StatelessWidget {
               vertical: 7,
             ),
             padding: EdgeInsets.only(
-              left: 14,
-            ),
+                left: 14, right: 10),
             decoration: BoxDecoration(
               color: backGroundColor,
               border: Border.all(

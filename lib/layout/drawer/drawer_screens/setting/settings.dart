@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:the_disease_fighter/services/basicData/controllers/logOutController.dart';
 import 'package:the_disease_fighter/layout/sign/sign_in/sign_in.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
+import 'package:the_disease_fighter/localizations/localization/locale_constant.dart';
+import 'package:the_disease_fighter/localizations/localization_models/language_data.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/patient-logo.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -13,6 +17,8 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
+  LogOutController _logOut = LogOutController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +62,7 @@ class _SettingState extends State<Setting> {
                         topLeft: Radius.circular(25),
                         topRight: Radius.circular(25))),
                 child: Text(
-                  "Settings",
+                  Languages.of(context)!.setting['settingLabel'],
                   style: TextStyle(
                     color: darkBlueColor,
                     fontSize: 16,
@@ -67,61 +73,131 @@ class _SettingState extends State<Setting> {
                 icon: Icons.lock_open_outlined,
                 fun: () => Navigator.push(context,
                     MaterialPageRoute(builder: (context) => ChangePassword())),
-                tittle: "Password",
+                tittle: Languages.of(context)!.setting['password'],
                 leadingIconColor: primaryColor.withOpacity(.7),
               ),
               DrawerTile(
                 icon: Icons.notifications_none_rounded,
                 fun: () {},
-                tittle: "Notification",
+                tittle: Languages.of(context)!.setting['notification'],
                 leadingIconColor: primaryColor.withOpacity(.7),
               ),
-              DrawerTile(
-                icon: Icons.language,
-                fun: () {},
-                tittle: "Languge",
-                leadingIconColor: primaryColor.withOpacity(.7),
+              _createLanguageDropDown(),
+              Divider(
+                height: 1,
+                color: backGroundColor,
+                thickness: 1,
               ),
               DrawerTile(
                 leadingIconColor: primaryColor.withOpacity(.7),
-                fun: () => Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => SignIn())),
+                fun: () {
+                  _logOut.userLogOut();
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => SignIn()));
+                },
                 icon: Icons.logout,
-                tittle: 'Log Out',
+                tittle: Languages.of(context)!.setting['logOut'],
               ),
               Container(
-                alignment: Alignment.topLeft,
-                width: MediaQuery.of(context).size.width,
                 color: backGroundColor,
                 padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-                child: Text(
-                  "Share App",
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    color: darkBlueColor,
-                    fontSize: 16,
-                  ),
+                child: Row(
+                  children: [
+                    Text(
+                      Languages.of(context)!.setting['shareApp'],
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                        color: darkBlueColor,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               DrawerTile(
                   leadingIconColor: darkBlueColor.withOpacity(.8),
                   icon: FontAwesomeIcons.facebookF,
-                  tittle: 'Facebook',
+                  tittle: Languages.of(context)!.setting['faceBook'],
                   fun: () => launch('https://www.facebook.com/')),
               DrawerTile(
                 leadingIconColor: primaryColor.withOpacity(.8),
                 icon: FontAwesomeIcons.twitter,
-                tittle: 'Twitter',
+                tittle: Languages.of(context)!.setting['twitter'],
                 fun: () => launch('https://www.twitter.com/'),
               ),
               DrawerTile(
                   leadingIconColor: Colors.green,
                   icon: FontAwesomeIcons.whatsapp,
-                  tittle: 'WhatsApp',
+                  tittle: Languages.of(context)!.setting['whatsApp'],
                   fun: () async => await launch(
                       "https://wa.me/01552154105?text=Share The Medical Solution App With Your Friends - link :https://twitter.com/migoo_1_3?s=09&fbclid=IwAR3k92gBqVe_OWHYwn2jsvsdV7hpO_lCB9dqJdS2SSM-7yhlaD_i8S7nsKM")),
             ],
           ),
         ));
+  }
+
+  _createLanguageDropDown() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.language,
+                color: primaryColor.withOpacity(.7),
+              ),
+              SizedBox(
+                width: 33,
+              ),
+              Text(
+                Languages.of(context)!.setting['language'],
+                style: TextStyle(color: darkBlueColor, fontSize: 16),
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 55),
+            child: Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<LanguageData>(
+                      iconSize: 30,
+                      hint: Text(Languages.of(context)!
+                          .setting['labelSelectLanguage']),
+                      onChanged: (language) {
+                        changeLanguage(context, language!.languageCode);
+                      },
+                      isDense: false,
+                      items: LanguageData.languageList()
+                          .map<DropdownMenuItem<LanguageData>>(
+                            (e) => DropdownMenuItem<LanguageData>(
+                              value: e,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+                                  Text(
+                                    e.flag,
+                                    style: TextStyle(fontSize: 30),
+                                  ),
+                                  Text(e.name)
+                                ],
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

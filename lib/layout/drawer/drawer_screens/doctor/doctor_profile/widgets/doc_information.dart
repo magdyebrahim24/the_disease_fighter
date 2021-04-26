@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 
 class DocInformation extends StatelessWidget {
@@ -61,7 +62,7 @@ class DocInformation extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "About",
+                    Languages.of(context)!.doctorProfile['infoTapAbout'],
                     style: TextStyle(
                         color: darkBlueColor,
                         fontSize: 12,

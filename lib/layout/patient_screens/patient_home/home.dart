@@ -6,6 +6,7 @@ import 'package:the_disease_fighter/layout/drawer/patient_MainDrawer.dart';
 import 'package:the_disease_fighter/layout/notification/notification.dart';
 import 'package:the_disease_fighter/layout/patient_screens/clinics/all_clinics.dart';
 import 'package:the_disease_fighter/layout/patient_screens/view_doctors/view_all_doctors.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'home_widgets/categories.dart';
@@ -60,12 +61,12 @@ class _HomeState extends State<Home> {
   snackBarr() {
     final snackBar = SnackBar(
       content: Text(
-        'Appointment Has Booked',
+        Languages.of(context)!.patientHome['snackBarLabel'],
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
       backgroundColor: primaryColor,
       action: SnackBarAction(
-        label: 'Show',
+        label: Languages.of(context)!.patientHome['snackBarBTN'],
         textColor: Colors.white,
         onPressed: () => Navigator.push(
             context, MaterialPageRoute(builder: (context) => MyAppointments())),
@@ -107,13 +108,22 @@ class _HomeState extends State<Home> {
       body: ListView(
         controller: _scrollController,
         children: [
+          SizedBox(
+            height: 15,
+          ),
           listHead(
-              tittle: 'Clinics',
+              tittle: Languages.of(context)!.patientHome['clinics'],
               fun: () => Navigator.push(context,
                   MaterialPageRoute(builder: (context) => AllClinics()))),
           Categories(),
+          Container(
+            height: 5,
+            margin: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+            decoration: BoxDecoration(
+                color: backGroundColor, borderRadius: BorderRadius.circular(2)),
+          ),
           listHead(
-              tittle: 'Top Doctors',
+              tittle: Languages.of(context)!.patientHome['topDoctors'],
               fun: () => Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ViewAllDoctors()))),
           for (var item in doctorsData)
@@ -154,7 +164,7 @@ class _HomeState extends State<Home> {
 
   Widget listHead({tittle, fun}) {
     return Padding(
-      padding: EdgeInsets.only(left: 15, top: 25, bottom: 5),
+      padding: EdgeInsets.only(left: 15, top: 0, bottom: 5, right: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -170,7 +180,7 @@ class _HomeState extends State<Home> {
             child: Column(
               children: [
                 Text(
-                  'view all',
+                  Languages.of(context)!.patientHome['viewAllBTN'],
                   style: TextStyle(color: subTextColor, fontSize: 14),
                 ),
                 Container(

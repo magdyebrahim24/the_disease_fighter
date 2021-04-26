@@ -12,6 +12,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
 
   cupertino_icons: ^1.0.2
@@ -23,6 +25,11 @@ dependencies:
   url_launcher: ^6.0.3
   device_preview: ^0.7.1
   flutter_launcher_icons: ^0.9.0
+  dio: ^4.0.0
+  cookie_jar: ^3.0.1
+  path_provider: ^2.0.1
+  dio_cookie_manager: ^2.0.0
+
 
 flutter_icons:
   android: "launcher_icon"
@@ -42,7 +49,6 @@ flutter:
     - assets/
     - assets/intro/
     - assets/doctors_img/
-    - assets/clinics/
     - assets/clinics_logo/
     - assets/images/
     - assets/icons/

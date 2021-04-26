@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/my_appointments/appointments_screens/previous_appointment_details.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 
 class PreviousAppointments extends StatelessWidget {
@@ -20,7 +21,6 @@ class PreviousAppointments extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                    margin: EdgeInsets.only(right: 13),
                     height: 45,
                     width: 45,
                     decoration: BoxDecoration(
@@ -31,6 +31,9 @@ class PreviousAppointments extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                     )),
+                SizedBox(
+                  width: 10,
+                ),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +67,7 @@ class PreviousAppointments extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                   child: Text(
-                    'Show More',
+                    Languages.of(context)!.doctorProfile['prevTapMoreBtn'],
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),

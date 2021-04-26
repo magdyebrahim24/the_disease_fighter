@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/patient_screens/doctor_details/doctor_details.dart';
 import 'package:the_disease_fighter/layout/patient_screens/the_appointment/book_appointment.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/rate_bar.dart';
 
@@ -32,7 +33,7 @@ class ViewDocBuilder extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                    margin: EdgeInsets.only(right: 15),
+                  // margin: EdgeInsets.only(right: 15),
                     height: 92,
                     width: 90,
                     decoration: BoxDecoration(
@@ -43,6 +44,9 @@ class ViewDocBuilder extends StatelessWidget {
                       ),
                       borderRadius: BorderRadius.circular(10),
                     )),
+                SizedBox(
+                  width: 12,
+                ),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +91,7 @@ class ViewDocBuilder extends StatelessWidget {
                             height: 30,
                             minWidth: 65,
                             child: Text(
-                              'Book',
+                              Languages.of(context)!.allDoctors['bookBtn'],
                               style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,

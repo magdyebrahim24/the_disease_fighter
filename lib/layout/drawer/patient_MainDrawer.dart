@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/patient_profile/patient_profile.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 
 import 'drawer_screens/about.dart';
@@ -82,14 +83,14 @@ class PatientMainDrawer extends StatelessWidget {
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(vertical: 40, horizontal: 15),
+                  padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
                   decoration: BoxDecoration(
                       color: backGroundColor,
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(25),
                           topRight: Radius.circular(25))),
                   child: Text(
-                    "Menu",
+                    Languages.of(context)!.drawer['menu'],
                     style: TextStyle(
                       color: darkBlueColor,
                       fontSize: 17,
@@ -97,23 +98,25 @@ class PatientMainDrawer extends StatelessWidget {
                   ),
                 ),
                 DrawerTile(
-                    leadingIconColor: primaryColor.withOpacity(.7),
-                    icon: FontAwesomeIcons.calendarCheck,
-                    fun: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MyAppointments())),
-                    tittle: "My Appointments"),
+                  leadingIconColor: primaryColor.withOpacity(.7),
+                  icon: FontAwesomeIcons.calendarCheck,
+                  fun: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyAppointments())),
+                  tittle: Languages.of(context)!.drawer['appointments'],
+                ),
                 DrawerTile(
-                    leadingIconColor: primaryColor.withOpacity(.7),
-                    icon: FontAwesomeIcons.user,
-                    fun: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PatientProfile())),
-                    tittle: "Profile"),
+                  leadingIconColor: primaryColor.withOpacity(.7),
+                  icon: FontAwesomeIcons.user,
+                  fun: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PatientProfile())),
+                  tittle: Languages.of(context)!.drawer['profile'],
+                ),
                 ListTile(
-                  contentPadding: EdgeInsets.only(left: 40),
+                  contentPadding: EdgeInsets.only(left: 40, right: 40),
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -126,7 +129,7 @@ class PatientMainDrawer extends StatelessWidget {
                     fit: BoxFit.fill,
                   ),
                   title: Text(
-                    'Favorite Doctors',
+                    Languages.of(context)!.drawer['favoriteDoc'],
                     style: TextStyle(color: darkBlueColor, fontSize: 16),
                   ),
                 ),
@@ -135,11 +138,12 @@ class PatientMainDrawer extends StatelessWidget {
                   color: backGroundColor,
                 ),
                 DrawerTile(
-                    leadingIconColor: primaryColor.withOpacity(.7),
-                    icon: Icons.settings_outlined,
-                    fun: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Setting())),
-                    tittle: "Setting"),
+                  leadingIconColor: primaryColor.withOpacity(.7),
+                  icon: Icons.settings_outlined,
+                  fun: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Setting())),
+                  tittle: Languages.of(context)!.drawer['setting'],
+                ),
                 DrawerTile(
                   leadingIconColor: primaryColor.withOpacity(.7),
                   icon: Icons.info_outline,
@@ -147,10 +151,8 @@ class PatientMainDrawer extends StatelessWidget {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => About()));
                   },
-                  tittle: "About",
+                  tittle: Languages.of(context)!.drawer['about'],
                 ),
-                // FittedBox(child: Container(color: Colors.white,height: 10,),fit: BoxFit.fitHeight,
-                // ),
               ]),
         ),
       ],
@@ -176,7 +178,10 @@ class DrawerTile extends StatelessWidget {
     return Column(
       children: [
         ListTile(
-          contentPadding: EdgeInsets.only(left: 40),
+          contentPadding: EdgeInsets.only(
+            left: 40,
+            right: 40,
+          ),
           onTap: fun,
           tileColor: Colors.white,
           leading: Icon(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/patient_screens/doctor_details/doctor_details.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/rate_bar.dart';
-import 'package:the_disease_fighter/model/doctor_model.dart';
+import 'package:the_disease_fighter/models/doctor_model.dart';
 
 class DoctorCard extends StatelessWidget {
   const DoctorCard({
@@ -31,7 +31,6 @@ class DoctorCard extends StatelessWidget {
         child: Row(
           children: [
             Container(
-                margin: EdgeInsets.only(right: 13),
                 height: 55,
                 width: 55,
                 decoration: BoxDecoration(
@@ -42,6 +41,9 @@ class DoctorCard extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 )),
+            SizedBox(
+              width: 13,
+            ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

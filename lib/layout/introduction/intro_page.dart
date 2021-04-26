@@ -1,6 +1,7 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/sign/sign_in/sign_in.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -14,24 +15,10 @@ class _IntroPageState extends State<IntroPage> {
 
   PageController _pageController = PageController();
   double currentPage = 0;
-  List<Map> intro = [
-    {
-      'img': 'assets/intro/illustraion.png',
-      'headTxt': 'The Initial Diagnosis With ML',
-      'subTxt':
-          'Initial diagnosis of the disease with ML is due to breaching the rumors and analyzes of the patient .'
-    },
-    {
-      'img': 'assets/intro/illustraion2.png',
-      'headTxt': 'Easy Booking And Nominating',
-      'subTxt':
-          'Helping patients with reservations easily and nominating the appropriate doctor through the symptoms of the patient.'
-    },
-    {
-      'img': 'assets/intro/illustraion3.png',
-      'headTxt': 'Keeping Previous Statements',
-      'subTxt': 'Keeping all previous patient statements and analyzes.'
-    },
+  List intro = [
+    'assets/intro/illustraion.png',
+    'assets/intro/illustraion2.png',
+    'assets/intro/illustraion3.png',
   ];
 
   @override
@@ -67,7 +54,7 @@ class _IntroPageState extends State<IntroPage> {
                     ),
                   ),
                   child: Text(
-                    'Skip',
+                    Languages.of(context)!.introSkip,
                     style: TextStyle(
                       fontSize: 16,
                       color: subTextColor.withOpacity(.7),
@@ -95,13 +82,14 @@ class _IntroPageState extends State<IntroPage> {
                   margin: EdgeInsets.all(15.0),
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(intro[index]['img'].toString()),
+                      image: AssetImage(intro[index].toString()),
                       fit: BoxFit.contain,
                     ),
                   ),
                 ),
                 Text(
-                  intro[index]['headTxt'],
+                  Languages.of(context)!.introInformation[index]['headTxt'],
+                  // intro[index]['headTxt'],
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: darkBlueColor,
@@ -111,7 +99,8 @@ class _IntroPageState extends State<IntroPage> {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 20, horizontal: 39),
                   child: Text(
-                    intro[index]['subTxt'],
+                    Languages.of(context)!.introInformation[index]['subTxt'],
+                    // intro[index]['subTxt'],
                     style: TextStyle(
                       color: greyColor,
                       fontSize: 16,

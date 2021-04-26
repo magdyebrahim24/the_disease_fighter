@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/patient_screens/clinics/brain_clinic/brain_clinic.dart';
 import 'package:the_disease_fighter/layout/patient_screens/clinics/clinic.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import '../../../material/bottons/circleBtn.dart';
 import '../../../material/constants.dart';
 
@@ -22,7 +23,7 @@ class _AllClinicsState extends State<AllClinics> {
         ),
         centerTitle: true,
         title: Text(
-          'All Clinics',
+          Languages.of(context)!.allClinicsScreen['tittle'],
           style: TextStyle(color: darkBlueColor),
         ),
       ),
@@ -44,34 +45,39 @@ class _AllClinicsState extends State<AllClinics> {
                 children: [
                   ClinicItem(
                     clinicLogo: 'assets/clinics_logo/Brain.png',
-                    clinicName: 'Brain Clinic',
+                    clinicName:
+                        Languages.of(context)!.allClinicsScreen['brain'],
                     fun: () => Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => BrainClinic(
-                                  clinicTittle: 'Brain',
+                                  clinicTittle: Languages.of(context)!
+                                      .allClinicsScreen['brainDoctors'],
                                 ))),
                   ),
                   ClinicItem(
                     clinicLogo: 'assets/clinics_logo/chest.png',
-                    clinicName: 'Chest Clinic',
+                    clinicName:
+                        Languages.of(context)!.allClinicsScreen['chest'],
                     fun: () => Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => BrainClinic(
-                                  clinicTittle: 'Chest',
+                                  clinicTittle: Languages.of(context)!
+                                      .allClinicsScreen['chestDoctors'],
                                 ))),
                   ),
                 ],
               ),
               verticalItem(
                 clinicLogo: 'assets/clinics_logo/any.png',
-                clinicName: 'physical Clinic',
+                clinicName: Languages.of(context)!.allClinicsScreen['physical'],
                 fun: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => Clinic(
-                              clinicTittle: 'physical',
+                              clinicTittle: Languages.of(context)!
+                                  .allClinicsScreen['physicalDoctors'],
                             ))),
               ),
               Row(
@@ -80,22 +86,25 @@ class _AllClinicsState extends State<AllClinics> {
                 children: [
                   ClinicItem(
                     clinicLogo: 'assets/clinics_logo/bone.png',
-                    clinicName: 'Bone Clinic',
+                    clinicName: Languages.of(context)!.allClinicsScreen['bone'],
                     fun: () => Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Clinic(
-                                  clinicTittle: 'Bone',
+                                  clinicTittle: Languages.of(context)!
+                                      .allClinicsScreen['boneDoctors'],
                                 ))),
                   ),
                   ClinicItem(
-                    clinicLogo: 'assets/clinics_logo/urology.png',
-                    clinicName: 'Urology Clinic',
+                    clinicLogo: 'assets/clinics_logo/internal_medicine.png',
+                    clinicName:
+                        Languages.of(context)!.allClinicsScreen['internal'],
                     fun: () => Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Clinic(
-                                  clinicTittle: 'Urology',
+                                  clinicTittle: Languages.of(context)!
+                                      .allClinicsScreen['internalDoctors'],
                                 ))),
                   ),
                 ],
@@ -106,34 +115,39 @@ class _AllClinicsState extends State<AllClinics> {
                 children: [
                   ClinicItem(
                     clinicLogo: 'assets/clinics_logo/surgery.png',
-                    clinicName: 'Surgery Clinic',
+                    clinicName:
+                        Languages.of(context)!.allClinicsScreen['surgery'],
                     fun: () => Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Clinic(
-                                  clinicTittle: 'Surgery',
+                                  clinicTittle: Languages.of(context)!
+                                      .allClinicsScreen['surgeryDoctors'],
                                 ))),
                   ),
                   ClinicItem(
                     clinicLogo: 'assets/clinics_logo/Teeth.png',
-                    clinicName: 'Teeth Clinic',
+                    clinicName:
+                        Languages.of(context)!.allClinicsScreen['teeth'],
                     fun: () => Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Clinic(
-                                  clinicTittle: 'Teeth',
+                                  clinicTittle: Languages.of(context)!
+                                      .allClinicsScreen['teethDoctors'],
                                 ))),
                   ),
                 ],
               ),
               verticalItem(
-                clinicLogo: 'assets/clinics_logo/internal_medicine.png',
-                clinicName: 'Internal Medicine',
+                clinicLogo: 'assets/clinics_logo/urology.png',
+                clinicName: Languages.of(context)!.allClinicsScreen['urology'],
                 fun: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => Clinic(
-                              clinicTittle: 'Internal Medicine',
+                              clinicTittle: Languages.of(context)!
+                                  .allClinicsScreen['urologyDoctors'],
                             ))),
               ),
               Row(
@@ -142,34 +156,39 @@ class _AllClinicsState extends State<AllClinics> {
                 children: [
                   ClinicItem(
                     clinicLogo: 'assets/clinics_logo/heart.png',
-                    clinicName: 'Heart Clinic',
+                    clinicName:
+                        Languages.of(context)!.allClinicsScreen['heart'],
                     fun: () => Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Clinic(
-                                  clinicTittle: 'Heart',
+                                  clinicTittle: Languages.of(context)!
+                                      .allClinicsScreen['heartDoctors'],
                                 ))),
                   ),
                   ClinicItem(
                     clinicLogo: 'assets/clinics_logo/any.png',
-                    clinicName: 'Kids Clinic',
+                    clinicName: Languages.of(context)!.allClinicsScreen['kids'],
                     fun: () => Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Clinic(
-                                  clinicTittle: 'Kids',
+                                  clinicTittle: Languages.of(context)!
+                                      .allClinicsScreen['kidsDoctors'],
                                 ))),
                   ),
                 ],
               ),
               verticalItem(
                 clinicLogo: 'assets/clinics_logo/any.png',
-                clinicName: 'Dermatology Clinic',
+                clinicName:
+                    Languages.of(context)!.allClinicsScreen['dermatology'],
                 fun: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => Clinic(
-                              clinicTittle: 'Dermatology',
+                              clinicTittle: Languages.of(context)!
+                                  .allClinicsScreen['dermatologyDoctors'],
                             ))),
               ),
             ],

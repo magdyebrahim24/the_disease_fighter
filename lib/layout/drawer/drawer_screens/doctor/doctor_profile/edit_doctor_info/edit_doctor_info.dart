@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/time-date-field.dart';
@@ -87,21 +88,27 @@ class _EditDoctorProfileState extends State<EditDoctorProfile> {
             children: [
               _profilePicCard(context),
               item(
-                  label: 'Phone Number',
+                  label: Languages.of(context)!.doctorProfile['editProfile']
+                      ['phoneLabel'],
                   initialValue: '01552154105',
-                  hintText: 'write your phone',
+                  hintText: Languages.of(context)!.doctorProfile['editProfile']
+                      ['phoneHint'],
                   fun: _getPhone,
                   textInputType: TextInputType.phone),
               item(
-                  label: 'Email',
+                  label: Languages.of(context)!.doctorProfile['editProfile']
+                      ['email'],
                   initialValue: 'magdyebrahim224@yahoo.com',
-                  hintText: 'write your email',
+                  hintText: Languages.of(context)!.doctorProfile['editProfile']
+                      ['emailHint'],
                   fun: _getEmail,
                   textInputType: TextInputType.emailAddress),
               item(
-                  label: 'Clinic Address',
+                  label: Languages.of(context)!.doctorProfile['editProfile']
+                      ['clinicAddressLabel'],
                   initialValue: 'Mansoura - Meet Mazah',
-                  hintText: 'write your address',
+                  hintText: Languages.of(context)!.doctorProfile['editProfile']
+                      ['clinicAddressHint'],
                   fun: _getAddress,
                   textInputType: TextInputType.streetAddress),
               Container(
@@ -276,7 +283,8 @@ class _EditDoctorProfileState extends State<EditDoctorProfile> {
                 ),
                 onPressed: () => Navigator.pop(context),
                 child: Text(
-                  'Cancel',
+                  Languages.of(context)!.doctorProfile['editProfile']
+                      ['cancelBtn'],
                   style: TextStyle(fontSize: 16, color: subTextColor),
                 ),
               ),
@@ -287,7 +295,8 @@ class _EditDoctorProfileState extends State<EditDoctorProfile> {
                 minWdthRatio: .5,
                 fun: () => Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (ctx) => DoctorProfile())),
-                text: 'Save',
+                text: Languages.of(context)!.doctorProfile['editProfile']
+                    ['saveBtn'],
                 borderRadious: 50,
               ),
             ],

@@ -1,31 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/patient_screens/clinics/brain_clinic/brain_clinic.dart';
 import 'package:the_disease_fighter/layout/patient_screens/clinics/clinic.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 
 // ignore: must_be_immutable
 class Categories extends StatelessWidget {
-  List clinicsInfo = [
-    {
-      'img': 'assets/clinics_logo/Brain.png',
-      'name': 'Brain',
-    },
-    {
-      'img': 'assets/clinics_logo/Teeth.png',
-      'name': 'Teeth',
-    },
-    {
-      'img': 'assets/clinics_logo/chest.png',
-      'name': 'Chest',
-    },
-    {
-      'img': 'assets/clinics_logo/heart.png',
-      'name': 'Heart',
-    }
-  ];
-
   @override
   Widget build(BuildContext context) {
+    List clinicsInfo = [
+      {
+        'img': 'assets/clinics_logo/Brain.png',
+        'name': '${Languages.of(context)!.allClinicsScreen['brainDoctors']}',
+        'docName': '${Languages.of(context)!.allClinicsScreen['brainDoctors']}',
+      },
+      {
+        'img': 'assets/clinics_logo/Teeth.png',
+        'name': '${Languages.of(context)!.allClinicsScreen['teeth']}',
+        'docName': '${Languages.of(context)!.allClinicsScreen['teethDoctors']}',
+      },
+      {
+        'img': 'assets/clinics_logo/chest.png',
+        'name': '${Languages.of(context)!.allClinicsScreen['chest']}',
+        'docName': '${Languages.of(context)!.allClinicsScreen['chestDoctors']}',
+      },
+      {
+        'img': 'assets/clinics_logo/heart.png',
+        'name': '${Languages.of(context)!.allClinicsScreen['heart']}',
+        'docName': '${Languages.of(context)!.allClinicsScreen['heartDoctors']}',
+      },
+      {
+        'img': 'assets/clinics_logo/bone.png',
+        'name': '${Languages.of(context)!.allClinicsScreen['bone']}',
+        'docName': '${Languages.of(context)!.allClinicsScreen['boneDoctors']}',
+      }
+    ];
     return SizedBox(
       height: 145,
       child: ListView.builder(
@@ -36,12 +45,12 @@ class Categories extends StatelessWidget {
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => index == 0 || index == 1
+                    builder: (context) => index == 0 || index == 2
                         ? BrainClinic(
-                            clinicTittle: clinicsInfo[index]['name'],
+                            clinicTittle: clinicsInfo[index]['docName'],
                           )
                         : Clinic(
-                            clinicTittle: clinicsInfo[index]['name'],
+                            clinicTittle: clinicsInfo[index]['docName'],
                           ))),
             child: Container(
               margin: EdgeInsets.all(5),
@@ -49,8 +58,10 @@ class Categories extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 color: primaryColor,
               ),
-              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 17),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Image.asset(
                     '${clinicsInfo[index]['img']}',
@@ -58,7 +69,7 @@ class Categories extends StatelessWidget {
                     width: 55,
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 5,
                   ),
                   Text(
                     '${clinicsInfo[index]['name']}',

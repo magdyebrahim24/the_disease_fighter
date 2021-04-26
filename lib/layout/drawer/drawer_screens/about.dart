@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -15,7 +16,7 @@ class About extends StatelessWidget {
         elevation: 1,
         centerTitle: true,
         title: Text(
-          'About',
+          Languages.of(context)!.aboutScreen['about'],
           style: TextStyle(color: darkBlueColor),
         ),
         leading: CircleButton(
@@ -37,7 +38,7 @@ class About extends StatelessWidget {
                 ),
               ),
               title: Text(
-                "Version",
+                Languages.of(context)!.aboutScreen['version'],
                 style: TextStyle(
                   color: darkBlueColor,
                   fontSize: 16,
@@ -57,7 +58,7 @@ class About extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => TermsOfUse())),
               tileColor: Colors.white,
               title: Text(
-                "Terms of use",
+                Languages.of(context)!.aboutScreen['termsOfUse'],
                 style: TextStyle(
                   color: darkBlueColor,
                   fontSize: 16,
@@ -72,48 +73,46 @@ class About extends StatelessWidget {
               contentPadding:
                   EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             ),
-            Divider(
-              height: 1,
-              thickness: 2,
-              color: backGroundColor,
-            ),
-            Container(
-              alignment: Alignment.topLeft,
-              width: MediaQuery.of(context).size.width,
-              color: backGroundColor,
-              padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-              child: Text(
-                "Contact Us",
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                  color: darkBlueColor,
-                  fontSize: 16,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 35, horizontal: 20),
+                  child: Text(
+                    Languages.of(context)!.aboutScreen['contactUS'],
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                      color: darkBlueColor,
+                      fontSize: 16,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
             DrawerTile(
                 leadingIconColor: darkBlueColor.withOpacity(.8),
                 icon: FontAwesomeIcons.facebookF,
-                tittle: 'Facebook',
+                tittle: Languages.of(context)!.aboutScreen['faceBook'],
                 fun: () => launch('https://www.facebook.com/migoamasha224')),
             DrawerTile(
                 leadingIconColor: primaryColor.withOpacity(.8),
                 icon: FontAwesomeIcons.twitter,
-                tittle: 'Twitter',
+                tittle: Languages.of(context)!.aboutScreen['twitter'],
                 fun: () => launch(
                     'https://twitter.com/migoo_1_3?s=09&fbclid=IwAR3k92gBqVe_OWHYwn2jsvsdV7hpO_lCB9dqJdS2SSM-7yhlaD_i8S7nsKM')),
             DrawerTile(
               leadingIconColor: primaryColor,
               icon: FontAwesomeIcons.google,
-              tittle: 'Gmail',
+              tittle: Languages.of(context)!.aboutScreen['gmail'],
               fun: () => launch(_emailLaunchUri.toString()),
             ),
             DrawerTile(
                 leadingIconColor: Colors.green,
                 icon: FontAwesomeIcons.whatsapp,
-                tittle: 'WhatsApp',
+                tittle: Languages.of(context)!.aboutScreen['whatsApp'],
                 fun: () async => await launch(
-                    "https://wa.me/01552154105?text=write your problem"))
+                    "https://wa.me/01552154105?text=write your problem")),
           ],
         ),
       ),

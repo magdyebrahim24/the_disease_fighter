@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -16,7 +17,8 @@ class _StartMeetingState extends State<StartMeeting> {
       barrierDismissible: false, // user must tap button for close dialog!
       builder: (BuildContext context) {
         return AlertDialog(
-          content: const Text("Are you sure to end the meeting?"),
+          content:
+              Text(Languages.of(context)!.doctorStartMeeting['endAlertTittle']),
           contentTextStyle: TextStyle(
               color: darkBlueColor, fontSize: 16, fontWeight: FontWeight.bold),
           actions: [
@@ -29,7 +31,8 @@ class _StartMeetingState extends State<StartMeeting> {
                 width: MediaQuery.of(context).size.width * .3,
                 child: Center(
                   child: Text(
-                    "Cancel",
+                    Languages.of(context)!
+                        .doctorStartMeeting['endAlertCancelBtn'],
                     style: TextStyle(
                         color: primaryColor,
                         fontSize: 12,
@@ -50,7 +53,7 @@ class _StartMeetingState extends State<StartMeeting> {
                 height: 40,
                 child: Center(
                   child: Text(
-                    "Okay",
+                    Languages.of(context)!.doctorStartMeeting['endAlertOkBtn'],
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -221,6 +224,7 @@ class _StartMeetingState extends State<StartMeeting> {
           ),
           actions: [
             ImgButton(
+              fun: () {},
               // fun: () => Navigator.push(context,
               //MaterialPageRoute(builder: (context) => Notifications())),
               img: 'assets/icons/model.png',
@@ -230,7 +234,7 @@ class _StartMeetingState extends State<StartMeeting> {
           ],
           centerTitle: true,
           title: Text(
-            "Meeting",
+            Languages.of(context)!.doctorStartMeeting['tittle'],
             style: TextStyle(color: primaryColor, fontSize: 16),
           ),
         ),
@@ -242,11 +246,17 @@ class _StartMeetingState extends State<StartMeeting> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _appointCard(),
-                _txt("Add a diagnosis"),
+                _txt(
+                  Languages.of(context)!.doctorStartMeeting['addDiagnosis'],
+                ),
                 _textField(),
-                _txt("Add a Medicine"),
+                _txt(
+                  Languages.of(context)!.doctorStartMeeting['addMedicine'],
+                ),
                 _textField(),
-                _txt("Add Files"),
+                _txt(
+                  Languages.of(context)!.doctorStartMeeting['addFiles'],
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -268,7 +278,9 @@ class _StartMeetingState extends State<StartMeeting> {
                     )
                   ],
                 ),
-                _txt("Recent Files"),
+                _txt(
+                  Languages.of(context)!.doctorStartMeeting['recentFiles'],
+                ),
                 SizedBox(
                   height: ((img.length / 4) * 150).toDouble(),
                   child: GridView.builder(

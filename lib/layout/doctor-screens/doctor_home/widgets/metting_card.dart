@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/doctor-screens/metting/upComing_metting.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -30,7 +31,6 @@ class MeetingCard extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                  margin: EdgeInsets.only(right: 13),
                   height: 93,
                   width: 90,
                   decoration: BoxDecoration(
@@ -41,6 +41,9 @@ class MeetingCard extends StatelessWidget {
                       fit: BoxFit.contain,
                     ),
                   )),
+              SizedBox(
+                width: 10,
+              ),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -112,7 +115,7 @@ class MeetingCard extends StatelessWidget {
                           MaterialPageRoute(
                               builder: (context) => UpComingMeeting())),
                       child: Text(
-                        'Show',
+                        Languages.of(context)!.doctorHome['showBtn'],
                         style: TextStyle(
                             fontSize: 12,
                             color: Colors.white,

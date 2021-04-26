@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/my_appointments/my_appointments.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/patient-logo.dart';
@@ -58,13 +59,27 @@ class ShowAppointment extends StatelessWidget {
                 nameSize: 20.0,
               ),
             ),
-            _item(labelText: 'Appointment Date', data: '4/4/2021'),
-            _item(labelText: 'Appointment Time', data: '05:30 PM'),
-            _item(labelText: 'Name', data: 'Magdy Ebrahim Ali'),
-            _item(labelText: 'Gender', data: 'Male'),
-            _item(labelText: 'Phone', data: '01552154105'),
-            _item(
-                labelText: 'Comment',
+            _item(context,
+                labelText: Languages.of(context)!
+                    .bookAppointment['appointmentDateLabel'],
+                data: '4/4/2021'),
+            _item(context,
+                labelText: Languages.of(context)!
+                    .bookAppointment['appointmentTimeLabel'],
+                data: '05:30 PM'),
+            _item(context,
+                labelText: Languages.of(context)!.bookAppointment['nameLabel'],
+                data: 'Magdy Ebrahim Ali'),
+            _item(context,
+                labelText:
+                    Languages.of(context)!.bookAppointment['genderLabel'],
+                data: 'Male'),
+            _item(context,
+                labelText: Languages.of(context)!.bookAppointment['phoneLabel'],
+                data: '01552154105'),
+            _item(context,
+                labelText:
+                    Languages.of(context)!.bookAppointment['appointmentNote'],
                 data:
                     'I have a severe headache and the abdomen and suffer from your diversity and a cold and a cold '),
             SizedBox(
@@ -91,7 +106,7 @@ class ShowAppointment extends StatelessWidget {
                 onPressed: () => Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => MyAppointments())),
                 child: Text(
-                  'Delete',
+                  Languages.of(context)!.bookAppointment['deleteBTN'],
                   style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
               ),
@@ -102,9 +117,9 @@ class ShowAppointment extends StatelessWidget {
                 minWdthRatio: .5,
                 fun: () => Navigator.push(context,
                     MaterialPageRoute(builder: (context) => EditAppointment())),
-                text: 'Edit',
+                text: Languages.of(context)!.bookAppointment['editBTN'],
                 borderRadious: 50,
-              ),
+              )
             ],
           ),
         ),
@@ -113,7 +128,7 @@ class ShowAppointment extends StatelessWidget {
     );
   }
 
-  Widget _item({labelText, data}) {
+  Widget _item(BuildContext context, {labelText, data}) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 7, horizontal: 15),
       child: Column(
@@ -124,10 +139,11 @@ class ShowAppointment extends StatelessWidget {
             style: TextStyle(fontSize: 15, color: subTextColor),
           ),
           Container(
-              alignment: Alignment.centerLeft,
+              // alignment: Alignment.centerLeft,
               margin: EdgeInsets.symmetric(
                 vertical: 7,
               ),
+              width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(horizontal: 14, vertical: 15),
               decoration: BoxDecoration(
                 color: backGroundColor,

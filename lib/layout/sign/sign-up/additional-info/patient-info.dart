@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/terms_of_use.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/drop-downlist.dart';
@@ -108,33 +109,41 @@ class _PatientInfoState extends State<PatientInfo> {
                     Padding(
                       padding: EdgeInsets.only(top: 25, bottom: 30),
                       child: Text(
-                        'You\'re Almost Done!',
+                        Languages.of(context)!.signUpPatientInfo['header'],
                         style: TextStyle(fontSize: 30, color: darkBlueColor),
                       ),
                     ),
                     TxtField(
-                      labelText: 'Address',
-                      hintText: 'Enter your Address',
+                      labelText: Languages.of(context)!
+                          .signUpPatientInfo['addressLabel'],
+                      hintText: Languages.of(context)!
+                          .signUpPatientInfo['addressHint'],
                       inputTextFunction: _getAddress,
                       textInputType: TextInputType.text,
                     ),
                     TxtField(
-                      labelText: 'Phone',
-                      hintText: 'Enter your Phone',
+                      labelText: Languages.of(context)!
+                          .signUpPatientInfo['phoneLabel'],
+                      hintText:
+                          Languages.of(context)!.signUpPatientInfo['phoneHint'],
                       inputTextFunction: _getPhone,
                       textInputType: TextInputType.phone,
                     ),
                     BasicDateField(
-                      helperText: 'Select Date Of Birth',
-                      label: 'Date Of Birth',
+                      helperText:
+                          Languages.of(context)!.signUpPatientInfo['DateLabel'],
+                      label: Languages.of(context)!
+                          .signUpPatientInfo['helperText'],
                       fun: _getDateOfBirth,
                     ),
                     DropDownList(
                       value: genderValue,
                       getValue: _getGender,
                       items: ["Male", "Female"],
-                      hintText: 'Select Gender',
-                      labelText: 'Gender',
+                      hintText: Languages.of(context)!
+                          .signUpPatientInfo['genderHint'],
+                      labelText: Languages.of(context)!
+                          .signUpPatientInfo['genderLabel'],
                     ),
                     errorMessage != ''
                         ? Text(
@@ -143,14 +152,14 @@ class _PatientInfoState extends State<PatientInfo> {
                           )
                         : SizedBox(),
                     Container(
-                      margin: EdgeInsets.symmetric(vertical: 20),
+                      margin: EdgeInsets.symmetric(vertical: 15),
                       width: MediaQuery.of(context).size.width,
                       alignment: Alignment.center,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'By pressing “Done” you agree to our',
+                            Languages.of(context)!.signUpPatientInfo['subText'],
                             style: TextStyle(color: subTextColor),
                           ),
                           InkWell(
@@ -161,7 +170,7 @@ class _PatientInfoState extends State<PatientInfo> {
                               ),
                             ),
                             child: Text(
-                              'terms & conditions',
+                              Languages.of(context)!.signUpPatientInfo['terms'],
                               style: TextStyle(
                                   color: Colors.orangeAccent,
                                   decoration: TextDecoration.underline,
@@ -171,15 +180,12 @@ class _PatientInfoState extends State<PatientInfo> {
                         ],
                       ),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    RoundedButton(
-                      fun: _onSubmitSignUp,
-                      text: 'Done',
-                    ),
-                    SizedBox(
-                      height: 20,
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: RoundedButton(
+                        fun: _onSubmitSignUp,
+                        text: Languages.of(context)!.signUpPatientInfo['done'],
+                      ),
                     ),
                   ],
                 ),

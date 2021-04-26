@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
 import 'package:the_disease_fighter/layout/doctor-screens/metting/start_meeting.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/drop-downlist.dart';
 import 'package:the_disease_fighter/material/widgets/time-date-field.dart';
@@ -42,8 +43,10 @@ class _UpComingMeetingState extends State<UpComingMeeting> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 BasicDateField(
-                  helperText: 'Select Appointment Date',
-                  label: 'Date',
+                  helperText: Languages.of(context)!
+                      .doctorUpcomingMeeting['delayAlertDateHint'],
+                  label: Languages.of(context)!
+                      .doctorUpcomingMeeting['delayAlertDateLabel'],
                   fun: _getAppointmentDate,
                 ),
                 DropDownList(
@@ -58,7 +61,8 @@ class _UpComingMeetingState extends State<UpComingMeeting> {
                     '10:30 pm',
                   ],
                   hintText: '${DateTime.now().hour}:${DateTime.now().minute}',
-                  labelText: 'Time',
+                  labelText: Languages.of(context)!
+                      .doctorUpcomingMeeting['delayAlertTimeLabel'],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -73,7 +77,8 @@ class _UpComingMeetingState extends State<UpComingMeeting> {
                         width: MediaQuery.of(context).size.width * .3,
                         child: Center(
                           child: Text(
-                            "Cancel",
+                            Languages.of(context)!
+                                .doctorUpcomingMeeting['delayAlertCancelBtn'],
                             style: TextStyle(
                                 color: greyColor,
                                 fontSize: 12,
@@ -99,7 +104,8 @@ class _UpComingMeetingState extends State<UpComingMeeting> {
                         height: 45,
                         child: Center(
                           child: Text(
-                            "Done",
+                            Languages.of(context)!
+                                .doctorUpcomingMeeting['delayAlertDoneBtn'],
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
@@ -128,7 +134,8 @@ class _UpComingMeetingState extends State<UpComingMeeting> {
                     height: 45,
                     child: Center(
                       child: Text(
-                        "Delete Meeting",
+                        Languages.of(context)!
+                            .doctorUpcomingMeeting['delayAlertDeleteBtn'],
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 12,
@@ -196,7 +203,7 @@ class _UpComingMeetingState extends State<UpComingMeeting> {
               ),
               child: Center(
                 child: Text(
-                  "Delay Meeting",
+                  Languages.of(context)!.doctorUpcomingMeeting['delayBtn'],
                   style: TextStyle(
                       color: primaryColor,
                       fontWeight: FontWeight.bold,
@@ -222,7 +229,7 @@ class _UpComingMeetingState extends State<UpComingMeeting> {
               ),
               child: Center(
                 child: Text(
-                  "Start Meeting",
+                  Languages.of(context)!.doctorUpcomingMeeting['startBtn'],
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -289,7 +296,7 @@ class _UpComingMeetingState extends State<UpComingMeeting> {
         ),
         centerTitle: true,
         title: Text(
-          "Meeting",
+          Languages.of(context)!.doctorUpcomingMeeting['tittle'],
           style: TextStyle(color: primaryColor, fontSize: 16),
         ),
       ),
@@ -300,9 +307,6 @@ class _UpComingMeetingState extends State<UpComingMeeting> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              //SizedBox(
-              // height: 15,
-              // ),
               _profilePicCard(context),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -317,7 +321,7 @@ class _UpComingMeetingState extends State<UpComingMeeting> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "About",
+                      Languages.of(context)!.doctorUpcomingMeeting['about'],
                       style: TextStyle(
                           color: darkBlueColor,
                           fontSize: 12,

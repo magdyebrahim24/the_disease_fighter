@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+import 'package:the_disease_fighter/material/widgets/rate_bar.dart';
 
 class DoctorReviews extends StatelessWidget {
   @override
@@ -16,7 +18,7 @@ class DoctorReviews extends StatelessWidget {
           ),
         ),
         title: Text(
-          'Reviews',
+          Languages.of(context)!.doctorDetails['reviewsTittle'],
           style: TextStyle(color: darkBlueColor),
         ),
         centerTitle: true,
@@ -37,7 +39,6 @@ class DoctorReviews extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                    margin: EdgeInsets.only(right: 13),
                     height: 45,
                     width: 45,
                     decoration: BoxDecoration(
@@ -48,6 +49,9 @@ class DoctorReviews extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                     )),
+                SizedBox(
+                  width: 13,
+                ),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,8 +65,12 @@ class DoctorReviews extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(
-                        height: 5,
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 6),
+                        child: Rate(
+                          clr: primaryColor,
+                          rateValue: 3,
+                        ),
                       ),
                       Text(
                         'this doctor is very good and have a large experience and gave me good medicine this doctor is very good and have a large experience and gave me good medicinethis doctor is very good and have a large experience and gave me good medicine this doctor is very good and have a large experience and gave me good medicine',

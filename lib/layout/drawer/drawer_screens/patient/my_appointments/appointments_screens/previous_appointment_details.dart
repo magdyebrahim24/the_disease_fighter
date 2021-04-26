@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 
 class PreviousAppointmentDetails extends StatefulWidget {
@@ -136,7 +137,7 @@ class _PreviousAppointmentDetailsState
           appBar: AppBar(
             elevation: 0,
             title: Text(
-              "Meeting",
+              Languages.of(context)!.previousAppointmentDetails['tittle'],
               style: TextStyle(color: primaryColor, fontSize: 16),
             ),
             centerTitle: true,
@@ -156,11 +157,16 @@ class _PreviousAppointmentDetailsState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _appointCard(),
-                  _txt("Diagnosis"),
+                  _txt(
+                    Languages.of(context)!
+                        .previousAppointmentDetails['diagnosis'],
+                  ),
                   _discribeCard(),
-                  _txt("Medicines"),
+                  _txt(Languages.of(context)!
+                      .previousAppointmentDetails['medicines']),
                   _discribeCard(),
-                  _txt("Files"),
+                  _txt(Languages.of(context)!
+                      .previousAppointmentDetails['files']),
                   SizedBox(
                     height: ((img.length / 4) * 150).toDouble(),
                     child: GridView.builder(

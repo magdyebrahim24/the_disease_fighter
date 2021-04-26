@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -44,7 +45,6 @@ class _RateScreenState extends State<RateScreen> {
                 Column(
                   children: [
                     Stack(
-                      // fit: StackFit.loose,
                       children: [
                         Container(
                           margin: EdgeInsets.only(bottom: 10),
@@ -122,7 +122,7 @@ class _RateScreenState extends State<RateScreen> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                'Review',
+                Languages.of(context)!.rateScreen['reviewLabel'],
                 style: TextStyle(color: subTextColor),
               ),
             ),
@@ -141,7 +141,7 @@ class _RateScreenState extends State<RateScreen> {
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(10),
-                    hintText: "Write a review about doctor ...",
+                    hintText: Languages.of(context)!.rateScreen['reviewHint'],
                     hintStyle: TextStyle(
                         color: subTextColor.withOpacity(.8), fontSize: 16)),
               ),
@@ -151,7 +151,7 @@ class _RateScreenState extends State<RateScreen> {
                 fun: () => Navigator.pushReplacement(
                     context, MaterialPageRoute(builder: (context) => Home())),
                 borderRadious: 15,
-                text: 'Done',
+                text: Languages.of(context)!.rateScreen['done'],
                 minWdthRatio: .5,
               ),
             ),

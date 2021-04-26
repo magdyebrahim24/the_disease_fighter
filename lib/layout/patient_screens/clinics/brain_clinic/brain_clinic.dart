@@ -6,10 +6,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:the_disease_fighter/data/doctor_data.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_profile/edit_doctor_info/edit_doctor_info.dart';
-import 'package:the_disease_fighter/layout/patient_screens/clinics/doctor-card.dart';
 import 'package:the_disease_fighter/layout/notification/notification.dart';
-import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
+import 'package:the_disease_fighter/layout/patient_screens/patient_home/home_widgets/doctor_card.dart';
 import 'package:the_disease_fighter/layout/patient_screens/search/search.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/inductors/arc_inductor.dart';
@@ -109,8 +109,7 @@ class _BrainClinicState extends State<BrainClinic> {
           pinned: false,
           snap: true,
           leading: CircleButton(
-            fun: () => Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => Home())),
+            fun: () => Navigator.pop(context),
             icn: Icons.arrow_back,
             color: primaryColor,
           ),
@@ -135,7 +134,7 @@ class _BrainClinicState extends State<BrainClinic> {
                       padding:
                           EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                       child: Text(
-                        'Diagnosis disease with ML',
+                        Languages.of(context)!.allClinicsScreen['mlHeader'],
                         style: kHeadStyle,
                       ),
                     ),
@@ -178,7 +177,7 @@ class _BrainClinicState extends State<BrainClinic> {
         SliverAppBar(
           pinned: true,
           title: Text(
-            '${widget.clinicTittle} Doctors',
+            '${widget.clinicTittle}',
             style: kHeadStyle,
           ),
           automaticallyImplyLeading: false,

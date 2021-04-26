@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/data/doctor_data.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 
@@ -22,15 +23,13 @@ class _SearchState extends State<Search> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          // elevation: .5,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () => Navigator.pop(context),
             color: primaryColor,
           ),
-          leadingWidth: 30,
+          leadingWidth: 40,
           title: Container(
-            padding: EdgeInsets.only(right: 0, left: 15),
             decoration: BoxDecoration(
                 border: Border.all(color: primaryColor.withOpacity(.2)),
                 color: backGroundColor,
@@ -38,27 +37,27 @@ class _SearchState extends State<Search> {
             child: Row(
               children: [
                 Expanded(
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      hintText: 'Doctor Search ...',
-                      hintStyle: TextStyle(
-                        color: subTextColor.withOpacity(.6),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        hintText: Languages.of(context)!.search,
+                        hintStyle: TextStyle(
+                          color: subTextColor.withOpacity(.6),
+                        ),
+                        border: InputBorder.none,
                       ),
-                      border: InputBorder.none,
+                      keyboardType: TextInputType.text,
+                      cursorColor: primaryColor,
+                      style: TextStyle(
+                          color: subTextColor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800),
+                      onChanged: (value) {
+                        _getEmail(value);
+                      },
                     ),
-                    keyboardType: TextInputType.text,
-                    cursorColor: primaryColor,
-                    style: TextStyle(
-                        color: subTextColor,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w800),
-                    onChanged: (value) {
-                      _getEmail(value);
-                    },
                   ),
-                ),
-                SizedBox(
-                  width: 10,
                 ),
                 Container(
                   decoration: BoxDecoration(
