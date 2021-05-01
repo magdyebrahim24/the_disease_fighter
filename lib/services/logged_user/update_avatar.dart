@@ -33,19 +33,34 @@ class UpdateAvatarController {
     _dio.interceptors.add(CookieManager(await ApiCookies.cookieJar));
 
     String fileName = file!.path.split('/').last;
+    FormData formData = FormData.fromMap(
+        {"file": await MultipartFile.fromFile(file.path, filename: fileName)});
+
     Map data = {
-      'file': await MultipartFile.fromFile(file.path,
-          filename: fileName, contentType: new MediaType('image', 'png')),
+      'file': MultipartFile.fromFile(file.path,
+          filename: fileName, contentType: MediaType('image', 'png'))
+      // 'file': await MultipartFile.fromFile(file.path,
+      //     filename: fileName, contentType: MediaType('image', 'png')),
     };
 
-    var response = await _dio.patch('/avatar', data: data);
+    var formDataa = FormData();
+    formDataa.files.add(MapEntry(
+        'file', MultipartFile.fromFileSync(file.path, filename: fileName)));
+
+    var response = await _dio.patch(
+      '/avatar',
+      data: formData,
+    );
 
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
-      print(response.data);
+      print(response.statusCode);
+      // response.data.putIfAbsent('success', () => true);
+
       return response.data;
     } else {
       // throw Exception('Failed to Log In');
       print(response.data);
+      // response.data.putIfAbsent('success', () => false);
 
       return response.data;
     }

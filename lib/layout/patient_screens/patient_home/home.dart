@@ -11,6 +11,7 @@ import 'package:the_disease_fighter/localizations/localization/language/language
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/services/doctors/controllers/top_doctors_controller.dart';
+import 'package:the_disease_fighter/services/logged_user/get_user_info_controller.dart';
 import 'home_widgets/categories.dart';
 import 'home_widgets/doctor_card.dart';
 
@@ -83,6 +84,8 @@ class _HomeState extends State<Home> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  CurrentUserInfoController _getUserInfo = CurrentUserInfoController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,7 +116,8 @@ class _HomeState extends State<Home> {
           IconButton(
               icon: Icon(Icons.done),
               onPressed: () {
-                _topDoctors.topDoctorsData();
+                // _topDoctors.topDoctorsData();
+                _getUserInfo.getCurrentUser();
               })
         ],
         centerTitle: true,

@@ -27,32 +27,33 @@ class _PatientProfileState extends State<PatientProfile> {
 
   Future _updateAvatarFun() async {
     if (_pickerImage != null) {
-      LoaderDialog().onLoading(context);
+      // LoaderDialog().onLoading(context);
       final data = await _updateAvatar.updateAvatar(
         file: _pickerImage,
       );
-      if (await data['success']) {
-        AlertDialog(
-            title: Text('AlertDialog Title'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text('This is a demo alert dialog.'),
-                  Text('Would you like to approve of this message?'),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: Text('Approve'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
-            ]);
-      } else {
-        Navigator.of(context).pop();
-      }
+      print(data);
+      // if (await data['success']) {
+      //   AlertDialog(
+      //       title: Text('AlertDialog Title'),
+      //       content: SingleChildScrollView(
+      //         child: ListBody(
+      //           children: <Widget>[
+      //             Text('This is a demo alert dialog.'),
+      //             Text('Would you like to approve of this message?'),
+      //           ],
+      //         ),
+      //       ),
+      //       actions: <Widget>[
+      //         TextButton(
+      //           child: Text('Approve'),
+      //           onPressed: () {
+      //             Navigator.of(context).pop();
+      //           },
+      //         )
+      //       ]);
+      // } else {
+      //   Navigator.of(context).pop();
+      // }
     }
   }
 

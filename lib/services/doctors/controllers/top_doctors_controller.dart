@@ -5,7 +5,6 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/models/ApiCookies.dart';
 import 'package:the_disease_fighter/services/doctors/models/top_doctors_model.dart';
-import 'package:the_disease_fighter/services/favorite_doctors/models/get_FavoritesModel.dart';
 
 class TopDoctorsController {
   Dio _dio = Dio();

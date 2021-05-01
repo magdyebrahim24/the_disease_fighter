@@ -44,9 +44,13 @@ class UpdateUserInfoController {
     var response = await _dio.patch('/user', data: data);
 
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
+      response.data.putIfAbsent('success', () => true);
+
       return response.data;
     } else {
       // throw Exception('Failed to Log In');
+      response.data.putIfAbsent('success', () => false);
+
       return response.data;
     }
   }

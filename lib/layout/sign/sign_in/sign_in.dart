@@ -45,7 +45,7 @@ class _SignInState extends State<SignIn> {
         password: password,
       );
       if (await data['success'] ?? false) {
-        if (await data['id_doctor']) {
+        if (await data['is_doctor'] ?? false) {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(

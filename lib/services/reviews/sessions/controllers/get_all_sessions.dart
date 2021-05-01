@@ -1,10 +1,8 @@
-import 'dart:convert';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/models/ApiCookies.dart';
-import 'package:the_disease_fighter/services/reviews/models/get_doctor_reviews_model.dart';
 import 'package:the_disease_fighter/services/reviews/sessions/models/get_all_sessions-model.dart';
 
 class GetAllSessionsController {

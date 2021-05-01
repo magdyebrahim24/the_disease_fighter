@@ -25,7 +25,7 @@ class LoginController {
         'Content-Type': 'application/json',
       };
 
-    final List<Cookie> cookies = [Cookie('set-cookie', 'xxxxx')];
+    final List<Cookie> cookies = [Cookie('set-cookie', 'empty')];
 
     (await ApiCookies.cookieJar)
         .saveFromResponse(Uri.parse(BaseUrl.url), cookies);
@@ -50,6 +50,7 @@ class LoginController {
     } else {
       // throw Exception('Failed to Log In');
       print(response.data);
+      response.data.putIfAbsent('success', () => false);
 
       return response.data;
     }
