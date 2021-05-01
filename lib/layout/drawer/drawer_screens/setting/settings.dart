@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
 import 'package:the_disease_fighter/services/basicData/controllers/logOutController.dart';
 import 'package:the_disease_fighter/layout/sign/sign_in/sign_in.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
@@ -12,16 +14,49 @@ import '../../patient_MainDrawer.dart';
 import 'setting_screens/change_password.dart';
 
 class Setting extends StatefulWidget {
+  final showSnackBar;
+
+  Setting({this.showSnackBar = false});
+
   @override
   _SettingState createState() => _SettingState();
 }
 
 class _SettingState extends State<Setting> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   LogOutController _logOut = LogOutController();
+
+  Future _userLogOut() async {
+    LoaderDialog().onLoading(context);
+    final data = await _logOut.userLogOut();
+    if (await data['success']) {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SignIn(),
+          ));
+    } else {
+      Navigator.of(context).pop();
+    }
+  }
+
+  @override
+  void initState() {
+    widget.showSnackBar
+        ? Future.delayed(Duration.zero, () async {
+            snackBarr();
+          })
+        // ignore: unnecessary_statements
+        : null;
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         backgroundColor: primaryColor,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
@@ -90,11 +125,7 @@ class _SettingState extends State<Setting> {
               ),
               DrawerTile(
                 leadingIconColor: primaryColor.withOpacity(.7),
-                fun: () {
-                  _logOut.userLogOut();
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => SignIn()));
-                },
+                fun: _userLogOut,
                 icon: Icons.logout,
                 tittle: Languages.of(context)!.setting['logOut'],
               ),
@@ -175,20 +206,20 @@ class _SettingState extends State<Setting> {
                       items: LanguageData.languageList()
                           .map<DropdownMenuItem<LanguageData>>(
                             (e) => DropdownMenuItem<LanguageData>(
-                              value: e,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: <Widget>[
-                                  Text(
-                                    e.flag,
-                                    style: TextStyle(fontSize: 30),
-                                  ),
-                                  Text(e.name)
-                                ],
+                          value: e,
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Text(
+                                e.flag,
+                                style: TextStyle(fontSize: 30),
                               ),
-                            ),
-                          )
+                              Text(e.name)
+                            ],
+                          ),
+                        ),
+                      )
                           .toList(),
                     ),
                   ),
@@ -199,5 +230,16 @@ class _SettingState extends State<Setting> {
         ],
       ),
     );
+  }
+
+  snackBarr() {
+    final snackBar = SnackBar(
+      content: Text(
+        'Password Changed',
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+      backgroundColor: primaryColor,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

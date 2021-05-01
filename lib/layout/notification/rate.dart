@@ -4,7 +4,9 @@ import 'package:the_disease_fighter/localizations/localization/language/language
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
 import 'package:the_disease_fighter/material/rating_bar/flutter_rating_bar.dart';
+import 'package:the_disease_fighter/services/reviews/controllers/create_review_controller.dart';
 
 class RateScreen extends StatefulWidget {
   @override
@@ -12,13 +14,39 @@ class RateScreen extends StatefulWidget {
 }
 
 class _RateScreenState extends State<RateScreen> {
-  String comment = '';
+  String _comment = '';
   double? _rating;
+  String errorMessage = '';
+  CreateReviewController _createReviewController = CreateReviewController();
 
-  _getComment(String val) {
-    setState(() {
-      comment = val;
-    });
+  Future _userLogin() async {
+    if (_comment != '' && _rating != 0) {
+      LoaderDialog().onLoading(context);
+      final data = await _createReviewController.createReview(
+        comment: _comment,
+        stars: _rating,
+      );
+      if (await data['success'] ?? false) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Home(),
+            ));
+        setState(() {
+          errorMessage = '';
+        });
+      } else {
+        setState(() {
+          errorMessage = data['message'].toString();
+        });
+        Navigator.of(context).pop();
+      }
+    } else {
+      setState(() {
+        errorMessage = 'Rate Value Must Be at least one star \n '
+            'OR Comment mustn\'t be empty';
+      });
+    }
   }
 
   @override
@@ -135,7 +163,11 @@ class _RateScreenState extends State<RateScreen> {
                   color: backGroundColor,
                   borderRadius: BorderRadius.circular(10)),
               child: TextFormField(
-                onChanged: _getComment,
+                onChanged: (String val) {
+                  setState(() {
+                    _comment = val;
+                  });
+                },
                 keyboardType: TextInputType.text,
                 maxLines: 4,
                 decoration: InputDecoration(
@@ -146,10 +178,18 @@ class _RateScreenState extends State<RateScreen> {
                         color: subTextColor.withOpacity(.8), fontSize: 16)),
               ),
             ),
+            errorMessage != ''
+                ? Padding(
+                    padding: EdgeInsets.fromLTRB(20, 0, 15, 20),
+                    child: Text(
+                      errorMessage,
+                      style: TextStyle(color: Colors.red.withOpacity(.6)),
+                    ),
+                  )
+                : SizedBox(),
             Center(
               child: RoundedButton(
-                fun: () => Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => Home())),
+                fun: _userLogin,
                 borderRadious: 15,
                 text: Languages.of(context)!.rateScreen['done'],
                 minWdthRatio: .5,
@@ -178,7 +218,7 @@ class _RateScreenState extends State<RateScreen> {
       ),
       onRatingUpdate: (rating) {
         setState(() {
-          _rating = rating;
+          rating = rating;
         });
       },
     );

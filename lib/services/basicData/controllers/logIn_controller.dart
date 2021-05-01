@@ -43,13 +43,14 @@ class LoginController {
       String accessToken = response.data['access_token'];
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('access_token', '$accessToken');
+      response.data.putIfAbsent('success', () => true);
 
-      Map successMap = {
-        'success': true,
-      };
-      return successMap;
+      print(response.data);
+      return response.data;
     } else {
       // throw Exception('Failed to Log In');
+      print(response.data);
+
       return response.data;
     }
   }

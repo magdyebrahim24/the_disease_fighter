@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_disease_fighter/data/doctor_data.dart';
+import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/favorite/favorite_doctors.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/my_appointments/my_appointments.dart';
 import 'package:the_disease_fighter/layout/drawer/patient_MainDrawer.dart';
 import 'package:the_disease_fighter/layout/notification/notification.dart';
@@ -9,6 +10,7 @@ import 'package:the_disease_fighter/layout/patient_screens/view_doctors/view_all
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+import 'package:the_disease_fighter/services/doctors/controllers/top_doctors_controller.dart';
 import 'home_widgets/categories.dart';
 import 'home_widgets/doctor_card.dart';
 
@@ -27,6 +29,13 @@ class _HomeState extends State<Home> {
 
   bool showUpButton = false;
 
+  TopDoctorsController _topDoctors = TopDoctorsController();
+
+  Future _loadTopDoctors() async {
+    var data = await _topDoctors.topDoctorsData();
+    return data;
+  }
+
   @override
   void initState() {
     _scrollController.addListener(() {
@@ -44,7 +53,6 @@ class _HomeState extends State<Home> {
     widget.showSnackBar
         ? Future.delayed(Duration.zero, () async {
             snackBarr();
-            // ignore: unnecessary_statements
           })
         // ignore: unnecessary_statements
         : null;
@@ -102,6 +110,11 @@ class _HomeState extends State<Home> {
             imgHigh: 35.0,
             imgWidth: 35.0,
           ),
+          IconButton(
+              icon: Icon(Icons.done),
+              onPressed: () {
+                _topDoctors.topDoctorsData();
+              })
         ],
         centerTitle: true,
       ),
@@ -126,10 +139,34 @@ class _HomeState extends State<Home> {
               tittle: Languages.of(context)!.patientHome['topDoctors'],
               fun: () => Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ViewAllDoctors()))),
-          for (var item in doctorsData)
-            DoctorCard(
-              item: item,
-            )
+          FutureBuilder<dynamic>(
+              future: _loadTopDoctors(),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if (snapshot.hasData) {
+                  return snapshot.data.topDoctors.length != 0
+                      ? SizedBox(
+                          height: 400,
+                          child: ListView.builder(
+                              // physics: NeverScrollableScrollPhysics(),
+                              padding: EdgeInsets.symmetric(vertical: 15),
+                              itemCount: snapshot.data.topDoctors.length ?? 0,
+                              itemBuilder: (ctx, index) {
+                                return DoctorCard(
+                                  item: snapshot.data.topDoctors[index],
+                                );
+                              }),
+                        )
+                      : EmptyPage();
+                } else if (snapshot.hasError) {
+                  return EmptyPage();
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              }),
+          // for (var item in snapshot.data.topDoctors)
+          //   DoctorCard(
+          //     item: item,
+          //   )
         ],
       ),
       floatingActionButton: AnimatedOpacity(

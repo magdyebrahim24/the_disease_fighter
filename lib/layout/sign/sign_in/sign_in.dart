@@ -2,16 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
+import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
 import 'package:the_disease_fighter/services/basicData/controllers/logOutController.dart';
 import 'package:the_disease_fighter/layout/sign/sign-up/sign_up.dart';
-import 'package:the_disease_fighter/services/basicData/controllers/signIn_controller.dart';
+import 'package:the_disease_fighter/services/basicData/controllers/logIn_controller.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/bottons/socialBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/txt_field.dart';
-import '../../../services/basicData/controllers/userController.dart';
+import '../../../services/logged_user/get_user_info_controller.dart';
 import 'forget_password/forget_password.dart';
 
 class SignIn extends StatefulWidget {
@@ -24,42 +26,43 @@ class _SignInState extends State<SignIn> {
   late String password;
   String errorMessage = '';
 
-  bool _loading = false;
-
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   LoginController _loginController = LoginController();
 
   LogOutController _logOut = LogOutController();
 
-  CurrentUserController _currentUser = CurrentUserController();
+  CurrentUserInfoController _currentUser = CurrentUserInfoController();
 
   Future _userLogin() async {
     _formKey.currentState!.validate();
     _formKey.currentState!.save();
 
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _loading = true;
-      });
+      LoaderDialog().onLoading(context);
       final data = await _loginController.userLogin(
         email: email,
         password: password,
       );
-      print(data.toString());
       if (await data['success'] ?? false) {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Home(),
-            ));
+        if (await data['id_doctor']) {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DoctorHome(),
+              ));
+        } else {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Home(),
+              ));
+        }
       } else {
         setState(() {
           errorMessage = data['message'].toString();
         });
-        setState(() {
-          _loading = false;
-        });
+        Navigator.of(context).pop();
       }
     }
   }
@@ -97,7 +100,6 @@ class _SignInState extends State<SignIn> {
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  // height: MediaQuery.of(context).size.height - 168 ,
                   padding: EdgeInsets.symmetric(
                       horizontal: MediaQuery.of(context).size.width * .05,
                       vertical: 30),
@@ -107,19 +109,18 @@ class _SignInState extends State<SignIn> {
                         topLeft: Radius.circular(50)),
                     color: Colors.white,
                   ),
-                  child: !_loading
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: 25, bottom: 30),
-                              child: Text(
-                                Languages.of(context)!.signIn['welcome'],
-                                style: TextStyle(
-                                    fontSize: 32, color: darkBlueColor),
-                              ),
-                            ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 25, bottom: 30),
+                          child: Text(
+                            Languages.of(context)!.signIn['welcome'],
+                            style:
+                                TextStyle(fontSize: 32, color: darkBlueColor),
+                          ),
+                        ),
                             TxtField(
                               labelText: Languages.of(context)!.signIn['email'],
                               hintText:
@@ -261,11 +262,7 @@ class _SignInState extends State<SignIn> {
                               ),
                             )
                           ],
-                        )
-                      : Container(
-                          alignment: Alignment.center,
-                          child: CircularProgressIndicator()),
-                ),
+                        )),
               ],
             ),
           ),

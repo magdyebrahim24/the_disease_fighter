@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/patient_screens/doctor_details/doctor_details.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/rate_bar.dart';
-import 'package:the_disease_fighter/models/doctor_model.dart';
 
 class DoctorCard extends StatelessWidget {
   const DoctorCard({
     required this.item,
   });
 
-  final DoctorModel item;
+  final item;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +36,7 @@ class DoctorCard extends StatelessWidget {
                   color: greyColor.withOpacity(.5),
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                    image: AssetImage('${item.doctorImg}'),
+                    image: AssetImage("assets/doctors_img/doc3.jpg"),
                     fit: BoxFit.cover,
                   ),
                 )),
@@ -50,7 +49,7 @@ class DoctorCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Dr.${item.doctorName}',
+                    'Dr.${item.name}',
                     style: TextStyle(
                       color: darkBlueColor,
                       fontSize: 15,
@@ -63,7 +62,7 @@ class DoctorCard extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    '${item.pecialty}',
+                    '${item.specialization[0].name}',
                     style: TextStyle(
                       color: subTextColor,
                       fontSize: 14,
@@ -80,7 +79,7 @@ class DoctorCard extends StatelessWidget {
               children: [
                 Rate(
                   clr: primaryColor,
-                  rateValue: item.rate.toInt(),
+                  rateValue: item.reviews.rates.toInt(),
                 ),
                 SizedBox(
                   height: 8,

@@ -104,8 +104,7 @@ class BasicDateField extends StatelessWidget {
             margin: EdgeInsets.symmetric(
               vertical: 7,
             ),
-            padding: EdgeInsets.only(
-                left: 14, right: 10),
+            padding: EdgeInsets.only(left: 14, right: 10),
             decoration: BoxDecoration(
               color: backGroundColor,
               border: Border.all(
@@ -114,6 +113,11 @@ class BasicDateField extends StatelessWidget {
             ),
             child: DateTimeField(
               onChanged: fun,
+              validator: (value) {
+                if (value.toString().isEmpty) {
+                  return 'Date Required';
+                }
+              },
               format: DateFormat("yyyy-MM-dd"),
               decoration: InputDecoration(
                   hintStyle: TextStyle(color: subTextColor, fontSize: 16),

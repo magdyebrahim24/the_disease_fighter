@@ -7,6 +7,8 @@ import 'package:the_disease_fighter/localizations/localization/language/language
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
+import 'package:the_disease_fighter/services/logged_user/update_avatar.dart';
 
 // ignore: must_be_immutable
 class PatientProfile extends StatefulWidget {
@@ -19,6 +21,40 @@ class _PatientProfileState extends State<PatientProfile> {
   String email = '';
   String address = '';
   bool readOnly = true;
+  File? _pickerImage;
+
+  UpdateAvatarController _updateAvatar = UpdateAvatarController();
+
+  Future _updateAvatarFun() async {
+    if (_pickerImage != null) {
+      LoaderDialog().onLoading(context);
+      final data = await _updateAvatar.updateAvatar(
+        file: _pickerImage,
+      );
+      if (await data['success']) {
+        AlertDialog(
+            title: Text('AlertDialog Title'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text('This is a demo alert dialog.'),
+                  Text('Would you like to approve of this message?'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Approve'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ]);
+      } else {
+        Navigator.of(context).pop();
+      }
+    }
+  }
 
   _getPhone(String email) {
     setState(() {
@@ -38,11 +74,11 @@ class _PatientProfileState extends State<PatientProfile> {
     });
   }
 
-  File? _pickerImage;
   final ImagePicker _picker = ImagePicker();
 
   void _pickImage(ImageSource src) async {
     final pickedImageFile = await _picker.getImage(source: src);
+    // _pickerImage = File(await ImagePicker().getImage(source: src).then((pickedFile) =>pickedFile!.path));
     if (pickedImageFile != null) {
       setState(() {
         _pickerImage = File(pickedImageFile.path);
@@ -85,6 +121,7 @@ class _PatientProfileState extends State<PatientProfile> {
                   },
                 )
               : SizedBox(),
+          IconButton(icon: Icon(Icons.done), onPressed: _updateAvatarFun)
         ],
       ),
       body: SingleChildScrollView(
@@ -294,6 +331,7 @@ class _PatientProfileState extends State<PatientProfile> {
                               ],
                               image: DecorationImage(
                                   image:
+                                  // ignore: unnecessary_null_comparison
                                       (_pickerImage == null
                                               ? AssetImage(
                                                   "assets/images/img_1.png")

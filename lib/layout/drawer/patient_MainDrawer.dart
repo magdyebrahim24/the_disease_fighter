@@ -3,12 +3,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/patient_profile/patient_profile.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
-
 import 'drawer_screens/about.dart';
-import 'drawer_screens/patient/favorite_doctors.dart';
+import 'drawer_screens/patient/favorite/favorite_doctors.dart';
 import 'drawer_screens/patient/my_appointments/my_appointments.dart';
 import 'drawer_screens/setting/settings.dart';
 
+// ignore: must_be_immutable
 class PatientMainDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -117,6 +117,8 @@ class PatientMainDrawer extends StatelessWidget {
                 ),
                 ListTile(
                   contentPadding: EdgeInsets.only(left: 40, right: 40),
+                  // onTap: ()=>_getFavoriteDoctors.getFavorite(),
+                  // onTap:()=> _addToFavorite.addToFavorite(isFavorite: true),
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(

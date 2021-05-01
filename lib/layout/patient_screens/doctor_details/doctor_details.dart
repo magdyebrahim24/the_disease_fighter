@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/favorite_doctors.dart';
+import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/favorite/favorite_doctors.dart';
 import 'package:the_disease_fighter/layout/patient_screens/doctor_details/reviews.dart';
 import 'package:the_disease_fighter/layout/patient_screens/the_appointment/book_appointment.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
@@ -86,7 +86,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
             floating: true,
             expandedHeight: 400.0,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text('Dr. ${widget.data.doctorName}', style: kHeadStyle),
+              title: Text('Dr. ${widget.data.name}', style: kHeadStyle),
               background: docImage(),
             ),
           ),
@@ -115,7 +115,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                                   fontSize: 17, fontWeight: FontWeight.w700),
                             ),
                             Rate(
-                              rateValue: widget.data.rate.toInt(),
+                              rateValue: widget.data.reviews.rates.toInt(),
                               clr: primaryColor,
                             ),
                           ],
@@ -142,7 +142,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                             SizedBox(
                               width: 5,
                             ),
-                            Text(widget.data.address, style: kSubStyle),
+                            Text(widget.data.clinicLocation, style: kSubStyle),
                           ],
                         ),
                       ),
@@ -263,7 +263,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
             width: 10,
           ),
           Text(
-            'Monday, 08.00am - 10.00 am',
+            '${widget.data.availableDates[0].day}, ${widget.data.availableDates[0].startTime} - ${widget.data.availableDates[0].endTime}',
             maxLines: 2,
             style: TextStyle(color: darkBlueColor),
           ),
@@ -275,16 +275,12 @@ class _DoctorDetailsState extends State<DoctorDetails> {
   }
 
   Widget docImage() => Container(
-      child: Image.asset(widget.data.doctorImg, fit: BoxFit.contain),
+      child: Image.network(widget.data.avatar, fit: BoxFit.contain),
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.only(bottom: 55),
       // height: 300,
       decoration: BoxDecoration(
         color: backGroundColor,
-        // image: DecorationImage(
-        //   image: AssetImage(widget.data.doctorImg),
-        //   fit: BoxFit.cover,
-        // ),
         borderRadius: BorderRadius.only(
             bottomRight: Radius.circular(35), bottomLeft: Radius.circular(35)),
       ));

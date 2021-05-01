@@ -1,14 +1,18 @@
+import 'dart:convert';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/models/ApiCookies.dart';
+import 'package:the_disease_fighter/services/reviews/models/get_doctor_reviews_model.dart';
+import 'package:the_disease_fighter/services/reviews/sessions/models/get_all_sessions-model.dart';
 
-class CurrentUserController {
+class GetAllSessionsController {
   Dio _dio = Dio();
   var cookieJar = CookieJar();
+  GetSessionsController _session = GetSessionsController();
 
-  Future getCurrentUser() async {
+  Future _getSessions() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final _token = prefs.getString('access_token') ?? '';
 
@@ -27,15 +31,21 @@ class CurrentUserController {
 
     _dio.interceptors.add(CookieManager(await ApiCookies.cookieJar));
 
-    var response = await _dio.get('/user');
+    var response = await _dio.get('/doctors/6/reviews');
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
-      print(response.data.toString());
-
-      print('response success');
-    } else {
-      print(response.statusCode.toString());
       print(response.toString());
-      throw Exception('Failed to get user data');
+
+      return response;
+    } else {
+      print(response.toString());
+      return response;
+      // throw Exception('Failed to get user data');
     }
+  }
+
+  Future<GetSessionsController?> loadSessionsList() async {
+    var jsonString = await _getSessions();
+    _session = GetSessionsController.fromJson(jsonString);
+    return _session;
   }
 }
