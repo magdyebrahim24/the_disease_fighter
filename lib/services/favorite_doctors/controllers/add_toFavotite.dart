@@ -30,7 +30,7 @@ class AddToFavoriteController {
     Map data = {
       'is_in_favorite_list': isFavorite,
     };
-    var response = await _dio.post('/doctors/1/favorite', data: data);
+    var response = await _dio.post('/doctors/7/favorite', data: data);
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
       print(response.data.toString());
     } else {

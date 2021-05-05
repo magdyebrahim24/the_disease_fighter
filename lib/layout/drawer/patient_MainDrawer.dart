@@ -3,13 +3,27 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/patient_profile/patient_profile.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+import 'package:the_disease_fighter/services/logged_user/get_user_info_controller.dart';
+import 'package:the_disease_fighter/services/logged_user/models/user_data_model.dart';
 import 'drawer_screens/about.dart';
 import 'drawer_screens/patient/favorite/favorite_doctors.dart';
 import 'drawer_screens/patient/my_appointments/my_appointments.dart';
 import 'drawer_screens/setting/settings.dart';
 
 // ignore: must_be_immutable
-class PatientMainDrawer extends StatelessWidget {
+class PatientMainDrawer extends StatefulWidget {
+  @override
+  _PatientMainDrawerState createState() => _PatientMainDrawerState();
+}
+
+class _PatientMainDrawerState extends State<PatientMainDrawer> {
+  CurrentUserInfoController _userInfoController = CurrentUserInfoController();
+
+  Future _getUserData() async {
+    var data = await _userInfoController.loadUserData();
+    return Future.value(data);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -24,63 +38,107 @@ class PatientMainDrawer extends StatelessWidget {
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PatientProfile()));
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 35),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: subTextColor,
-                                        offset: Offset(0.0, 1.0),
-                                        blurRadius: 6.0,
-                                        spreadRadius: 1.5),
-                                  ],
-                                  image: DecorationImage(
-                                      image:
-                                          AssetImage("assets/images/img_1.png"),
-                                      fit: BoxFit.cover),
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color: Color(0xffFDFDFD), width: 2),
-                                  color: backGroundColor),
-                              margin: EdgeInsets.all(10),
-                              height: 90,
-                              width: 90,
+                FutureBuilder<dynamic>(
+                    future: _getUserData(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<dynamic> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Container(
+                            height: 222,
+                            alignment: Alignment.center,
+                            child: CircularProgressIndicator());
+                      } else {
+                        if (snapshot.error != null) {
+                          return SizedBox(
+                            height: 222,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                    icon: Icon(
+                                      Icons.refresh,
+                                      color: Colors.white,
+                                      size: 40,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _getUserData();
+                                      });
+                                    }),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Text(
+                                  'Failed To Load',
+                                  style: TextStyle(
+                                      color: subTextColor, fontSize: 16),
+                                ),
+                              ],
                             ),
-                            Text(
-                              "ALia Ahmed Ali",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 16,
+                          );
+                        } else {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PatientProfile()));
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 35),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: subTextColor,
+                                                  offset: Offset(0.0, 1.0),
+                                                  blurRadius: 6.0,
+                                                  spreadRadius: 1.5),
+                                            ],
+                                            image: DecorationImage(
+                                                image: NetworkImage(snapshot
+                                                    .data.currentUser.avatar),
+                                                fit: BoxFit.cover),
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                                color: Color(0xffFDFDFD),
+                                                width: 2),
+                                            color: backGroundColor),
+                                        margin: EdgeInsets.all(10),
+                                        height: 90,
+                                        width: 90,
+                                      ),
+                                      Text(
+                                        "ALia Ahmed Ali",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 6,
+                                      ),
+                                      Text(
+                                        "magdyebrahim224@yahoo.com",
+                                        style: TextStyle(color: subTextColor),
+                                      )
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            Text(
-                              "magdyebrahim224@yahoo.com",
-                              style: TextStyle(color: subTextColor),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                          );
+                        }
+                      }
+                    }),
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),

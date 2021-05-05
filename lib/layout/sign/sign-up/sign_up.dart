@@ -39,14 +39,13 @@ class _SignUpState extends State<SignUp> {
         password: password,
         isDoctor: isDoctor,
       );
-      print(data.toString());
-      if (await data['success'] && isDoctor == true) {
+      if (await data['success'] == true && isDoctor == true) {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => DoctorInfo(),
             ));
-      } else if (await data['success'] && isDoctor == false) {
+      } else if (await data['success'] == true && isDoctor == false) {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(

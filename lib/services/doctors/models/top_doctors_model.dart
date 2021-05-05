@@ -1,69 +1,28 @@
 class TopDoctorsModel {
   bool? success;
-  List<Specializations>? specializations;
   List<TopDoctors>? topDoctors;
-  int? totalSpecializations;
   int? totalTopDoctors;
 
-  TopDoctorsModel(
-      {this.success,
-      this.specializations,
-      this.topDoctors,
-      this.totalSpecializations,
-      this.totalTopDoctors});
+  TopDoctorsModel({this.success, this.topDoctors, this.totalTopDoctors});
 
   TopDoctorsModel.fromJson(Map<String, dynamic> json) {
     success = json['Success'];
-    if (json['specializations'] != null) {
-      specializations = <Specializations>[];
-      json['specializations'].forEach((v) {
-        specializations!.add(new Specializations.fromJson(v));
-      });
-    }
     if (json['top_doctors'] != null) {
       topDoctors = <TopDoctors>[];
       json['top_doctors'].forEach((v) {
         topDoctors!.add(new TopDoctors.fromJson(v));
       });
     }
-    totalSpecializations = json['total_specializations'];
     totalTopDoctors = json['total_top_doctors'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Success'] = this.success;
-    if (this.specializations != null) {
-      data['specializations'] =
-          this.specializations!.map((v) => v.toJson()).toList();
-    }
     if (this.topDoctors != null) {
       data['top_doctors'] = this.topDoctors!.map((v) => v.toJson()).toList();
     }
-    data['total_specializations'] = this.totalSpecializations;
     data['total_top_doctors'] = this.totalTopDoctors;
-    return data;
-  }
-}
-
-class Specializations {
-  int? id;
-  String? image;
-  String? name;
-
-  Specializations({this.id, this.image, this.name});
-
-  Specializations.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    image = json['image'];
-    name = json['name'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['image'] = this.image;
-    data['name'] = this.name;
     return data;
   }
 }
@@ -77,11 +36,12 @@ class TopDoctors {
   String? email;
   String? gender;
   int? id;
+  bool? isInFavoriteList;
   String? name;
   String? phone;
   Reviews? reviews;
   int? specId;
-  List? specialization;
+  Null? xY;
 
   TopDoctors(
       {this.about,
@@ -92,11 +52,12 @@ class TopDoctors {
       this.email,
       this.gender,
       this.id,
+      this.isInFavoriteList,
       this.name,
       this.phone,
       this.reviews,
       this.specId,
-      this.specialization});
+      this.xY});
 
   TopDoctors.fromJson(Map<String, dynamic> json) {
     about = json['about'];
@@ -112,17 +73,13 @@ class TopDoctors {
     email = json['email'];
     gender = json['gender'];
     id = json['id'];
+    isInFavoriteList = json['is_in_favorite_list'];
     name = json['name'];
     phone = json['phone'];
     reviews =
         json['reviews'] != null ? new Reviews.fromJson(json['reviews']) : null;
     specId = json['spec_id'];
-    if (json['specialization'] != null) {
-      specialization = <Specializations>[];
-      json['specialization'].forEach((v) {
-        specialization!.add(new Specializations.fromJson(v));
-      });
-    }
+    xY = json['x_y'];
   }
 
   Map<String, dynamic> toJson() {
@@ -138,16 +95,14 @@ class TopDoctors {
     data['email'] = this.email;
     data['gender'] = this.gender;
     data['id'] = this.id;
+    data['is_in_favorite_list'] = this.isInFavoriteList;
     data['name'] = this.name;
     data['phone'] = this.phone;
     if (this.reviews != null) {
       data['reviews'] = this.reviews!.toJson();
     }
     data['spec_id'] = this.specId;
-    if (this.specialization != null) {
-      data['specialization'] =
-          this.specialization!.map((v) => v.toJson()).toList();
-    }
+    data['x_y'] = this.xY;
     return data;
   }
 }

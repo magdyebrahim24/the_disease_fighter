@@ -27,11 +27,13 @@ class LogOutController {
     var response = await _dio.get('/logout');
 
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
+      response.data.putIfAbsent('success', () => true);
       print(response.toString());
       return response.data;
     } else {
       print(response.toString());
       // throw Exception('Failed to log out');
+      response.data.putIfAbsent('success', () => false);
       return response.data;
     }
   }

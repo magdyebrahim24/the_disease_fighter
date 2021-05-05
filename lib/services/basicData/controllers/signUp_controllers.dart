@@ -54,6 +54,7 @@ class SignUpController {
     } else {
       // throw Exception('Failed to Log In');
       print(response.data);
+      response.data.putIfAbsent('success', () => false);
 
       return response.data;
     }

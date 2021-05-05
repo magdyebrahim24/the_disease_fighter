@@ -32,8 +32,6 @@ class _SignInState extends State<SignIn> {
 
   LogOutController _logOut = LogOutController();
 
-  CurrentUserInfoController _currentUser = CurrentUserInfoController();
-
   Future _userLogin() async {
     _formKey.currentState!.validate();
     _formKey.currentState!.save();
@@ -226,7 +224,6 @@ class _SignInState extends State<SignIn> {
                                 ),
                                 SocialButton(
                                   onTap: () {
-                                    _currentUser.getCurrentUser();
                                   },
                                   icon: FontAwesomeIcons.twitter,
                                   iconColor: primaryColor,

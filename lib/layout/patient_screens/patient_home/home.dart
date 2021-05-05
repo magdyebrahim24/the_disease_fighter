@@ -11,6 +11,7 @@ import 'package:the_disease_fighter/localizations/localization/language/language
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/services/doctors/controllers/top_doctors_controller.dart';
+import 'package:the_disease_fighter/services/favorite_doctors/controllers/add_toFavotite.dart';
 import 'package:the_disease_fighter/services/logged_user/get_user_info_controller.dart';
 import 'home_widgets/categories.dart';
 import 'home_widgets/doctor_card.dart';
@@ -31,10 +32,15 @@ class _HomeState extends State<Home> {
   bool showUpButton = false;
 
   TopDoctorsController _topDoctors = TopDoctorsController();
+  CurrentUserInfoController _getUserInfo = CurrentUserInfoController();
+
+  AddToFavoriteController _addFav = AddToFavoriteController();
+
+  Key centerKey = ValueKey<String>('bottom-sliver-list');
 
   Future _loadTopDoctors() async {
     var data = await _topDoctors.topDoctorsData();
-    return data;
+    return Future.value(data);
   }
 
   @override
@@ -50,7 +56,6 @@ class _HomeState extends State<Home> {
         });
       }
     });
-    getDoctorData();
     widget.showSnackBar
         ? Future.delayed(Duration.zero, () async {
             snackBarr();
@@ -84,8 +89,6 @@ class _HomeState extends State<Home> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  CurrentUserInfoController _getUserInfo = CurrentUserInfoController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,13 +100,11 @@ class _HomeState extends State<Home> {
           fun: () => WidgetsBinding.instance!.addPostFrameCallback((_) {
             _scaffoldKey.currentState!.openDrawer();
           }),
-          // fun: (){ _scaffoldKey.currentState!.openDrawer();},
           img: 'assets/icons/menu.png',
           imgWidth: 22.0,
           imgHigh: 15.0,
         ),
         actions: [
-          // SearchBar(inputTextFunction: _getSearchText),
           ImgButton(
             fun: () => WidgetsBinding.instance!.addPostFrameCallback((_) {
               Navigator.push(
@@ -113,59 +114,96 @@ class _HomeState extends State<Home> {
             imgHigh: 35.0,
             imgWidth: 35.0,
           ),
-          IconButton(
-              icon: Icon(Icons.done),
-              onPressed: () {
-                // _topDoctors.topDoctorsData();
-                _getUserInfo.getCurrentUser();
-              })
         ],
         centerTitle: true,
       ),
-      body: ListView(
-        controller: _scrollController,
-        children: [
-          SizedBox(
-            height: 15,
+      body: CustomScrollView(
+        // center: centerKey,
+
+        slivers: [
+          SliverToBoxAdapter(
+            child: listHead(
+                tittle: Languages.of(context)!.patientHome['clinics'],
+                fun: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AllClinics()))),
           ),
-          listHead(
-              tittle: Languages.of(context)!.patientHome['clinics'],
-              fun: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AllClinics()))),
-          Categories(),
-          Container(
-            height: 5,
-            margin: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
-            decoration: BoxDecoration(
-                color: backGroundColor, borderRadius: BorderRadius.circular(2)),
+          SliverToBoxAdapter(child: Categories()),
+          SliverToBoxAdapter(
+            child: Container(
+              height: 5,
+              margin: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+              decoration: BoxDecoration(
+                  color: backGroundColor,
+                  borderRadius: BorderRadius.circular(2)),
+            ),
           ),
-          listHead(
-              tittle: Languages.of(context)!.patientHome['topDoctors'],
-              fun: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ViewAllDoctors()))),
+          SliverToBoxAdapter(
+            child: listHead(
+                tittle: Languages.of(context)!.patientHome['topDoctors'],
+                fun: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ViewAllDoctors()))),
+          ),
           FutureBuilder<dynamic>(
               future: _loadTopDoctors(),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.hasData) {
-                  return snapshot.data.topDoctors.length != 0
-                      ? SizedBox(
-                          height: 400,
-                          child: ListView.builder(
-                              // physics: NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.symmetric(vertical: 15),
-                              itemCount: snapshot.data.topDoctors.length ?? 0,
-                              itemBuilder: (ctx, index) {
-                                return DoctorCard(
-                                  item: snapshot.data.topDoctors[index],
-                                );
-                              }),
-                        )
-                      : EmptyPage();
-                } else if (snapshot.hasError) {
-                  return EmptyPage();
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return SliverToBoxAdapter(
+                      child: Center(child: CircularProgressIndicator()));
                 } else {
-                  return Center(child: CircularProgressIndicator());
+                  if (snapshot.hasError) {
+                    return SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height * .15),
+                        child: Column(
+                          children: [
+                            IconButton(
+                                icon: Icon(
+                                  Icons.refresh,
+                                  color: primaryColor,
+                                  size: 40,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _loadTopDoctors();
+                                  });
+                                }),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Text(
+                              'Failed To Load',
+                              style:
+                                  TextStyle(color: subTextColor, fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  } else {
+                    return snapshot.data.topDoctors.length != 0
+                        ? SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return DoctorCard(
+                                item: snapshot.data.topDoctors[index],
+                              );
+                            },
+                            childCount: snapshot.data.topDoctors.length,
+                          ))
+                        : EmptyPage();
+                  }
                 }
+                // else if (snapshot.hasError) {
+                //   return Column(
+                //     children: [
+                //       IconButton(icon: Icon(Icons.refresh), onPressed: _loadTopDoctors),
+                //       Text('Failed To Load'),
+                //     ],
+                //   );
+                // } else {
+                //   return Center(child: CircularProgressIndicator());
+                // }
               }),
           // for (var item in snapshot.data.topDoctors)
           //   DoctorCard(

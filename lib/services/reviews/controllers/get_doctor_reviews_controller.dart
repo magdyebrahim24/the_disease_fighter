@@ -11,7 +11,7 @@ class GetDoctorReviewsController {
   var cookieJar = CookieJar();
   DoctorReviewsModel _docReviews = DoctorReviewsModel();
 
-  Future _getReviews() async {
+  Future _getReviews({docId}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final _token = prefs.getString('access_token') ?? '';
 
@@ -30,7 +30,7 @@ class GetDoctorReviewsController {
 
     _dio.interceptors.add(CookieManager(await ApiCookies.cookieJar));
 
-    var response = await _dio.get('/doctors/6/reviews');
+    var response = await _dio.get('/doctors/$docId/reviews');
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
       print(response.toString());
 
@@ -42,9 +42,9 @@ class GetDoctorReviewsController {
     }
   }
 
-  Future<DoctorReviewsModel?> loadReviewsList() async {
+  Future<DoctorReviewsModel?> loadReviewsList({docIdReviews}) async {
     var jsonString, jsonResponse;
-    jsonString = await _getReviews();
+    jsonString = await _getReviews(docId: docIdReviews);
     jsonResponse = json.decode(jsonString.toString());
     _docReviews = DoctorReviewsModel.fromJson(jsonResponse);
     return _docReviews;

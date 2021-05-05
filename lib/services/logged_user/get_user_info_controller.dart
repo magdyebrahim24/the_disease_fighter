@@ -1,14 +1,19 @@
+import 'dart:convert';
+
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/models/ApiCookies.dart';
+import 'package:the_disease_fighter/services/logged_user/models/user_data_model.dart';
 
 class CurrentUserInfoController {
   Dio _dio = Dio();
   var cookieJar = CookieJar();
 
-  Future getCurrentUser() async {
+  UserDataModel _userData = UserDataModel();
+
+  Future _getCurrentUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final _token = prefs.getString('access_token') ?? '';
 
@@ -30,12 +35,18 @@ class CurrentUserInfoController {
     var response = await _dio.get('/user');
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
       print(response.data.toString());
-
-      print('response success');
+      return response;
     } else {
-      print(response.statusCode.toString());
-      print(response.toString());
-      throw Exception('Failed to get user data');
+      return response;
     }
+  }
+
+  Future<UserDataModel?> loadUserData() async {
+    var jsonString, jsonResponse;
+    jsonString = await _getCurrentUser();
+    jsonResponse = json.decode(jsonString.toString());
+    _userData = UserDataModel.fromJson(jsonResponse);
+    print(_userData.currentUser!.name.toString());
+    return _userData;
   }
 }

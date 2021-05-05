@@ -168,9 +168,8 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                               fontSize: 17, fontWeight: FontWeight.w700),
                         ),
                       ),
-                      appointmentCard(context),
-                      appointmentCard(context),
-                      appointmentCard(context),
+                      for (var item in widget.data.availableDates)
+                        appointmentCard(context, clinicDatesData: item),
                     ],
                   ),
                 ),
@@ -182,7 +181,9 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => DoctorReviews())),
+                            builder: (context) => DoctorReviews(
+                                  docId: widget.data.id,
+                                ))),
                     tileColor: backGroundColor,
                     title: Text(
                       Languages.of(context)!.doctorDetails['patientReviews'],
@@ -251,7 +252,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
     );
   }
 
-  Container appointmentCard(BuildContext context) {
+  Container appointmentCard(BuildContext context, {clinicDatesData}) {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.symmetric(vertical: 17, horizontal: 15),
@@ -263,7 +264,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
             width: 10,
           ),
           Text(
-            '${widget.data.availableDates[0].day}, ${widget.data.availableDates[0].startTime} - ${widget.data.availableDates[0].endTime}',
+            '${clinicDatesData.day}, ${clinicDatesData.startTime} - ${clinicDatesData.endTime}',
             maxLines: 2,
             style: TextStyle(color: darkBlueColor),
           ),
@@ -275,12 +276,13 @@ class _DoctorDetailsState extends State<DoctorDetails> {
   }
 
   Widget docImage() => Container(
-      child: Image.network(widget.data.avatar, fit: BoxFit.contain),
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.only(bottom: 55),
-      // height: 300,
       decoration: BoxDecoration(
         color: backGroundColor,
+        image: DecorationImage(
+          image: NetworkImage(widget.data.avatar),
+        ),
         borderRadius: BorderRadius.only(
             bottomRight: Radius.circular(35), bottomLeft: Radius.circular(35)),
       ));

@@ -99,23 +99,25 @@ class _FavoriteDoctorsState extends State<FavoriteDoctors> {
 class EmptyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Icon(
-          FontAwesomeIcons.folderOpen,
-          color: darkBlueColor.withOpacity(.2),
-          size: 70,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 16),
-          child: Text(
-            'Empty Favorite List',
-            style:
-                TextStyle(color: darkBlueColor.withOpacity(.4), fontSize: 20),
+    return SliverToBoxAdapter(
+      child: Container(
+        alignment: Alignment.center,
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Icon(
+            FontAwesomeIcons.folderOpen,
+            color: darkBlueColor.withOpacity(.2),
+            size: 70,
           ),
-        )
-      ]),
+          Padding(
+            padding: const EdgeInsets.only(top: 16),
+            child: Text(
+              'Empty Favorite List',
+              style:
+                  TextStyle(color: darkBlueColor.withOpacity(.4), fontSize: 20),
+            ),
+          )
+        ]),
+      ),
     );
   }
 }

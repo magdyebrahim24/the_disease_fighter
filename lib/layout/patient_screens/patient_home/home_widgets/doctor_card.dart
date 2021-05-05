@@ -36,7 +36,9 @@ class DoctorCard extends StatelessWidget {
                   color: greyColor.withOpacity(.5),
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                    image: AssetImage("assets/doctors_img/doc3.jpg"),
+                    image: NetworkImage(
+                      item.avatar,
+                    ),
                     fit: BoxFit.cover,
                   ),
                 )),
@@ -62,7 +64,8 @@ class DoctorCard extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    '${item.specialization[0].name}',
+                    // '${item.specialization[0].name}',
+                    'doctor spec need',
                     style: TextStyle(
                       color: subTextColor,
                       fontSize: 14,

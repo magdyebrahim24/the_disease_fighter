@@ -6,6 +6,10 @@ import 'package:the_disease_fighter/material/widgets/rate_bar.dart';
 import 'package:the_disease_fighter/services/reviews/controllers/get_doctor_reviews_controller.dart';
 
 class DoctorReviews extends StatefulWidget {
+  final docId;
+
+  DoctorReviews({this.docId});
+
   @override
   _DoctorReviewsState createState() => _DoctorReviewsState();
 }
@@ -19,7 +23,7 @@ class _DoctorReviewsState extends State<DoctorReviews> {
   }
 
   Future _getReviewsFun() async {
-    return await _getReviews.loadReviewsList();
+    return await _getReviews.loadReviewsList(docIdReviews: widget.docId);
   }
 
   @override
@@ -45,15 +49,23 @@ class _DoctorReviewsState extends State<DoctorReviews> {
             future: _getReviewsFun(),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.hasData) {
-                return ListView.builder(
-                  itemBuilder: (ctx, index) {
-                    return card(data: snapshot.data.reviews[index]);
-                  },
-                  itemCount: snapshot.data.reviews.length,
-                  padding: EdgeInsets.symmetric(vertical: 15),
-                );
+                return snapshot.data.reviews != null
+                    ? ListView.builder(
+                        itemBuilder: (ctx, index) {
+                          return card(data: snapshot.data.reviews[index]);
+                        },
+                        itemCount: snapshot.data.reviews.length ?? 0,
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                      )
+                    : emptyPage();
               } else if (snapshot.hasError) {
-                return emptyPage();
+                return Column(
+                  children: [
+                    IconButton(
+                        icon: Icon(Icons.refresh), onPressed: _getReviewsFun),
+                    Text('Failed To Load'),
+                  ],
+                );
               } else {
                 return Center(child: CircularProgressIndicator());
               }

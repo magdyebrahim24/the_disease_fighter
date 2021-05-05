@@ -32,12 +32,11 @@ class TopDoctorsController {
 
     var response = await _dio.get('/doctors/top');
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
-      print(response);
+      // print(response);
       return response;
     } else {
-      print(response);
+      // print(response);
       return response;
-      // throw Exception('Failed to get user data');
     }
   }
 
@@ -46,7 +45,6 @@ class TopDoctorsController {
     jsonString = await _getTopDoctors();
     jsonResponse = json.decode(jsonString.toString());
     _topDoctorsList = TopDoctorsModel.fromJson(jsonResponse);
-    // print(_favoriteData!.doctors![1].name.toString());
     return _topDoctorsList;
   }
 }
