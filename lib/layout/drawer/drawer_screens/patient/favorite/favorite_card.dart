@@ -36,7 +36,7 @@ class FavoriteCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.grey,
                   image: DecorationImage(
-                    image: AssetImage('${doctorsData[0].doctorImg}'),
+                    image: NetworkImage("https://thediseasefighter.herokuapp.com/static/${data.avatar}"),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(10),

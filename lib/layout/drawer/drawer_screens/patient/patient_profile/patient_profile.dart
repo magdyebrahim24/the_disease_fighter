@@ -1,14 +1,12 @@
-import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
-import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
-import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
-import 'package:the_disease_fighter/services/logged_user/update_avatar.dart';
+import 'package:the_disease_fighter/services/logged_user/get_user_info_controller.dart';
+import 'edit_patient_profile.dart';
 
 // ignore: must_be_immutable
 class PatientProfile extends StatefulWidget {
@@ -17,76 +15,13 @@ class PatientProfile extends StatefulWidget {
 }
 
 class _PatientProfileState extends State<PatientProfile> {
-  String phone = '';
-  String email = '';
-  String address = '';
-  bool readOnly = true;
-  File? _pickerImage;
+  CurrentUserInfoController _userInfoController=CurrentUserInfoController();
+  var info;
 
-  UpdateAvatarController _updateAvatar = UpdateAvatarController();
-
-  Future _updateAvatarFun() async {
-    if (_pickerImage != null) {
-      // LoaderDialog().onLoading(context);
-      final data = await _updateAvatar.updateAvatar(
-        file: _pickerImage,
-      );
-      print(data);
-      // if (await data['success']) {
-      //   AlertDialog(
-      //       title: Text('AlertDialog Title'),
-      //       content: SingleChildScrollView(
-      //         child: ListBody(
-      //           children: <Widget>[
-      //             Text('This is a demo alert dialog.'),
-      //             Text('Would you like to approve of this message?'),
-      //           ],
-      //         ),
-      //       ),
-      //       actions: <Widget>[
-      //         TextButton(
-      //           child: Text('Approve'),
-      //           onPressed: () {
-      //             Navigator.of(context).pop();
-      //           },
-      //         )
-      //       ]);
-      // } else {
-      //   Navigator.of(context).pop();
-      // }
-    }
-  }
-
-  _getPhone(String email) {
-    setState(() {
-      this.phone = email;
-    });
-  }
-
-  _getEmail(String email) {
-    setState(() {
-      this.email = email;
-    });
-  }
-
-  _getAddress(String email) {
-    setState(() {
-      this.address = email;
-    });
-  }
-
-  final ImagePicker _picker = ImagePicker();
-
-  void _pickImage(ImageSource src) async {
-    final pickedImageFile = await _picker.getImage(source: src);
-    // _pickerImage = File(await ImagePicker().getImage(source: src).then((pickedFile) =>pickedFile!.path));
-    if (pickedImageFile != null) {
-      setState(() {
-        _pickerImage = File(pickedImageFile.path);
-      });
-    } else {
-      print('No Image Selected');
-    }
+  Future _getUserData() async {
+    var data = await _userInfoController.loadUserData();
+    info=data;
+    return data ;
   }
 
   @override
@@ -96,151 +31,143 @@ class _PatientProfileState extends State<PatientProfile> {
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: primaryColor.withOpacity(.1),
-        leading: readOnly
-            ? CircleButton(
+        leading: CircleButton(
                 color: primaryColor,
-                fun: () => Navigator.pop(context),
+                fun: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Home())),
                 icn: Icons.arrow_back,
-              )
-            : SizedBox(),
+              ),
+
         actions: [
-          readOnly
-              ? IconButton(
+          IconButton(
                   color: primaryColor,
                   icon: Icon(
                     FontAwesomeIcons.solidEdit,
                     size: 20,
                   ),
-                  onPressed: () {
-                    setState(() {
-                      if (readOnly = true) {
-                        setState(() {
-                          readOnly = false;
-                        });
-                      }
-                    });
-                  },
+                  onPressed: () =>
+                   Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>EditPatientProfile(data: info.currentUser,))),
+
                 )
-              : SizedBox(),
-          IconButton(icon: Icon(Icons.done), onPressed: _updateAvatarFun)
         ],
       ),
       body: SingleChildScrollView(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              _profilePicCard(context),
-              item(
-                label: Languages.of(context)!.patientProfile['phoneLabel'],
-                initialValue: '01552154105',
-                hintText: Languages.of(context)!.patientProfile['phoneHint'],
-                fun: _getPhone,
-                textInputType: TextInputType.phone,
-                readOnly: readOnly,
-              ),
-              item(
-                  label: Languages.of(context)!.patientProfile['email'],
-                  initialValue: 'magdyebrahim224@yahoo.com',
-                  hintText: Languages.of(context)!.patientProfile['emailHint'],
-                  fun: _getEmail,
-                  readOnly: readOnly,
-                  textInputType: TextInputType.emailAddress),
-              item(
-                  label: Languages.of(context)!.patientProfile['addressLabel'],
-                  initialValue: 'Mansoura - Meet Mazah',
-                  hintText:
-                      Languages.of(context)!.patientProfile['addressHint'],
-                  fun: _getAddress,
-                  readOnly: readOnly,
-                  textInputType: TextInputType.streetAddress),
-              readOnly
-                  ? Row(
+        child: FutureBuilder<dynamic>(
+            future: _getUserData(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.connectionState==ConnectionState.waiting) {
+                return Container(
+                    height: 222,
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator());
+              } else if(snapshot.hasError) {
+                  return Container(
+                    height: MediaQuery.of(context).size.height-200,
+                    width: MediaQuery.of(context).size.width,
+                    alignment: Alignment.center,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          child: item(
-                              label: Languages.of(context)!
-                                  .patientProfile['DateLabel'],
-                              initialValue: '1/3/1999',
-                              readOnly: true,
-                              hintText: Languages.of(context)!
-                                  .patientProfile['helperText'],
-                              fun: _getAddress,
-                              textInputType: TextInputType.streetAddress),
+                        IconButton(
+                            icon: Icon(
+                              Icons.refresh,
+                              color: primaryColor,
+                              size: 40,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _getUserData();
+                              });
+                            }),
+                        SizedBox(
+                          height: 15,
                         ),
-                        Expanded(
-                          child: item(
-                              label: Languages.of(context)!
-                                  .patientProfile['genderLabel'],
-                              initialValue: 'Male',
-                              readOnly: true,
-                              hintText: Languages.of(context)!
-                                  .patientProfile['genderHint'],
-                              fun: _getAddress,
-                              textInputType: TextInputType.streetAddress),
+                        Text(
+                          'Failed To Load',
+                          style: TextStyle(color: subTextColor, fontSize: 16),
                         ),
                       ],
-                    )
-                  : SizedBox(
-                      height: 10,
                     ),
-            ]),
+                  );
+                } else {
+                  return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        _profilePicCard(context,
+                            imgUrl: snapshot.data.currentUser.avatar.toString(),
+                            name: snapshot.data.currentUser.name.toString()),
+                        item(
+                          label: Languages.of(context)!
+                              .patientProfile['phoneLabel'],
+                          initialValue:
+                              snapshot.data.currentUser.phone.toString(),
+                          hintText: Languages.of(context)!
+                              .patientProfile['phoneHint'],
+                          textInputType: TextInputType.phone,
+                        ),
+                        item(
+
+                            label: Languages.of(context)!
+                                .patientProfile['email'],
+                            initialValue:
+                                snapshot.data.currentUser.email.toString(),
+                            hintText: Languages.of(context)!
+                                .patientProfile['emailHint'],
+                            textInputType: TextInputType.emailAddress),
+                        item(
+
+                            label: Languages.of(context)!
+                                .patientProfile['addressLabel'],
+                            initialValue:
+                                snapshot.data.currentUser.location.toString(),
+                            hintText: Languages.of(context)!
+                                .patientProfile['addressHint'],
+
+                            textInputType: TextInputType.streetAddress),
+                         Row(
+                                children: [
+                                  Expanded(
+                                    child: item(
+                                        label: Languages.of(context)!
+                                            .patientProfile['DateLabel'],
+                                        initialValue: snapshot
+                                            .data.currentUser.dob
+                                            .toString(),
+                                        hintText: Languages.of(context)!
+                                            .patientProfile['helperText'],
+                                        textInputType:
+                                            TextInputType.streetAddress),
+                                  ),
+                                  Expanded(
+                                    child: item(
+                                        label: Languages.of(context)!
+                                            .patientProfile['genderLabel'],
+                                        initialValue: snapshot
+                                            .data.currentUser.gender
+                                            .toString(),
+
+                                        hintText: Languages.of(context)!
+                                            .patientProfile['genderHint'],
+                                        textInputType:
+                                            TextInputType.streetAddress),
+                                  ),
+                                ],
+                              )
+
+                      ]);
+                }
+              }
+            ),
       ),
-      bottomNavigationBar: !readOnly
-          ? BottomAppBar(
-              color: Colors.transparent,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    MaterialButton(
-                      minWidth: MediaQuery.of(context).size.width * .3,
-                      height: 50,
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(color: subTextColor),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          readOnly = true;
-                        });
-                      },
-                      child: Text(
-                        Languages.of(context)!.patientProfile['cancelBtn'],
-                        style: TextStyle(fontSize: 16, color: subTextColor),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    RoundedButton(
-                      minWdthRatio: .5,
-                      fun: () {
-                        setState(() {
-                          readOnly = true;
-                        });
-                      },
-                      text: Languages.of(context)!.patientProfile['saveBtn'],
-                      borderRadious: 50,
-                    ),
-                  ],
-                ),
-              ),
-              elevation: 0.0,
-            )
-          : SizedBox(),
     );
   }
 
   Widget item(
       {required label,
       hintText,
-      fun,
       initialValue,
-      textInputType,
-      required readOnly}) {
+      textInputType,}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 10),
@@ -265,27 +192,20 @@ class _PatientProfileState extends State<PatientProfile> {
               children: [
                 Expanded(
                   child: TextFormField(
-                      initialValue: initialValue,
-                      decoration: InputDecoration(
-                        hintText: hintText,
-                        hintStyle: TextStyle(
-                          color: subTextColor.withOpacity(.6),
-                        ),
-                        border: InputBorder.none,
+                    readOnly: true,
+                    initialValue: initialValue,
+                    decoration: InputDecoration(
+                      hintText: hintText,
+                      hintStyle: TextStyle(
+                        color: subTextColor.withOpacity(.6),
                       ),
-                      keyboardType: textInputType,
-                      cursorColor: primaryColor,
-                      readOnly: readOnly,
-                      style: TextStyle(color: darkBlueColor.withOpacity(.8)),
-                      onChanged: fun),
+                      border: InputBorder.none,
+                    ),
+                    keyboardType: textInputType,
+                    cursorColor: primaryColor,
+                    style: TextStyle(color: darkBlueColor.withOpacity(.8)),
+                  ),
                 ),
-                !readOnly
-                    ? Icon(
-                        Icons.edit_outlined,
-                        size: 17,
-                        color: darkBlueColor,
-                      )
-                    : SizedBox()
               ],
             ),
           ),
@@ -294,7 +214,7 @@ class _PatientProfileState extends State<PatientProfile> {
     );
   }
 
-  Widget _profilePicCard(BuildContext context) {
+  Widget _profilePicCard(BuildContext context, {imgUrl,name}) {
     return Stack(
       children: [
         Container(
@@ -315,63 +235,33 @@ class _PatientProfileState extends State<PatientProfile> {
             children: [
               Column(
                 children: [
-                  InkWell(
-                    onTap: () => _showModalBottomSheet(),
-                    child: Stack(
-                      fit: StackFit.loose,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: subTextColor,
-                                    offset: Offset(0.0, 1.0),
-                                    blurRadius: 6.0,
-                                    spreadRadius: 1),
-                              ],
-                              image: DecorationImage(
-                                  image:
-                                  // ignore: unnecessary_null_comparison
-                                      (_pickerImage == null
-                                              ? AssetImage(
-                                                  "assets/images/img_1.png")
-                                              : FileImage(_pickerImage!))
-                                          as ImageProvider<Object>,
-                                  fit: BoxFit.cover),
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                  color: Color(0xffFDFDFD), width: 2),
-                              color: backGroundColor),
-                          height: 145,
-                          width: 145,
-                        ),
-                        Positioned(
-                          bottom: 25,
-                          right: 4,
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: backGroundColor),
-                            child: Icon(
-                              Icons.add_a_photo_rounded,
-                              size: 13,
-                              color: darkBlueColor,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: subTextColor,
+                              offset: Offset(0.0, 1.0),
+                              blurRadius: 6.0,
+                              spreadRadius: 1),
+                        ],
+                        image: DecorationImage(
+                            image: NetworkImage(imgUrl.toString()),
+                            fit: BoxFit.cover),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                            color: Color(0xffFDFDFD), width: 2),
+                        color: backGroundColor),
+                    height: 145,
+                    width: 145,
                   ),
                   Text(
-                    "ALia Ahmed Ali",
+                    name.toString(),
                     style: TextStyle(
                       color: darkBlueColor,
                       fontSize: 23,
                     ),
-                  ),
+                 ),
                   SizedBox(
                     height: 15,
                   ),
@@ -381,80 +271,6 @@ class _PatientProfileState extends State<PatientProfile> {
           ),
         ),
       ],
-    );
-  }
-
-  _showModalBottomSheet() {
-    return showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.transparent,
-        builder: (builder) {
-          return Container(
-            height: 250,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25.0),
-                    topRight: Radius.circular(25.0))),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  BottomSheetItem(
-                    label: 'Take New Profile Picture',
-                    icon: Icons.camera_alt_rounded,
-                    fun: () => _pickImage(ImageSource.camera),
-                  ),
-                  BottomSheetItem(
-                    label: 'Select Picture From Gallery',
-                    icon: Icons.photo_library_outlined,
-                    fun: () => _pickImage(ImageSource.gallery),
-                  ),
-                  BottomSheetItem(
-                    label: 'Delete Profile Picture',
-                    icon: FontAwesomeIcons.solidTrashAlt,
-                    fun: () {},
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-}
-
-class BottomSheetItem extends StatelessWidget {
-  final label;
-  final icon;
-  final fun;
-
-  const BottomSheetItem({
-    this.label,
-    this.icon,
-    this.fun,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.only(left: 40, bottom: 10),
-      onTap: fun,
-      leading: Container(
-        width: 45,
-        height: 45,
-        decoration: BoxDecoration(
-            color: backGroundColor, borderRadius: BorderRadius.circular(10)),
-        child: Icon(
-          icon,
-          color: darkBlueColor,
-        ),
-      ),
-      title: Text(
-        label,
-        style: TextStyle(
-            color: darkBlueColor, fontSize: 16, fontWeight: FontWeight.w700),
-      ),
     );
   }
 }

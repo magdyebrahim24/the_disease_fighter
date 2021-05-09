@@ -31,7 +31,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
       ),
       backgroundColor: primaryColor,
       action:
-          SnackBarAction(label: label, textColor: Colors.white, onPressed: fun),
+      SnackBarAction(label: label, textColor: Colors.white, onPressed: fun),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
@@ -55,7 +55,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                   icon: Icon(
                     isFavorite ? Icons.favorite : Icons.favorite_border,
                     color:
-                        isFavorite ? Colors.red : darkBlueColor.withOpacity(.7),
+                    isFavorite ? Colors.red : darkBlueColor.withOpacity(.7),
                   ),
                   onPressed: () {
                     setState(() {
@@ -67,19 +67,19 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                     });
                     isFavorite
                         ? snackBarr(
-                            label: Languages.of(context)!
-                                .doctorDetails['snackBarAddBTN'],
-                            text: Languages.of(context)!
-                                .doctorDetails['snackBarAddLabel'],
-                            fun: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => FavoriteDoctors())),
-                          )
+                      label: Languages.of(context)!
+                          .doctorDetails['snackBarAddBTN'],
+                      text: Languages.of(context)!
+                          .doctorDetails['snackBarAddLabel'],
+                      fun: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FavoriteDoctors())),
+                    )
                         : snackBarr(
-                            text: Languages.of(context)!
-                                .doctorDetails['snackBarRemove'],
-                            fun: () {});
+                        text: Languages.of(context)!
+                            .doctorDetails['snackBarRemove'],
+                        fun: () {});
                   }),
             ],
             pinned: true,
@@ -123,7 +123,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                       ),
                       Padding(
                         padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                         child: Text(
                           widget.data.about,
                           style: kSubStyle,
@@ -182,8 +182,8 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => DoctorReviews(
-                                  docId: widget.data.id,
-                                ))),
+                              docId: widget.data.id,
+                            ))),
                     tileColor: backGroundColor,
                     title: Text(
                       Languages.of(context)!.doctorDetails['patientReviews'],
@@ -199,14 +199,14 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                       size: 20,
                     ),
                     contentPadding:
-                        EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   ),
                 ),
                 SizedBox(
                   height: double.infinity < MediaQuery.of(context).size.height
                       ? MediaQuery.of(context).size.height -
-                          double.infinity +
-                          10
+                      double.infinity +
+                      10
                       : 0,
                 ),
               ],

@@ -25,8 +25,8 @@ class DoctorCard extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => DoctorDetails(
-                      data: item,
-                    ))),
+                  data: item,
+                ))),
         child: Row(
           children: [
             Container(

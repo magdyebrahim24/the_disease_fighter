@@ -5,6 +5,8 @@ import 'package:the_disease_fighter/layout/patient_screens/search/search.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+import 'package:the_disease_fighter/services/doctors/controllers/get_all_doctors_controller.dart';
+import 'package:the_disease_fighter/services/doctors/models/get_all_doctors_model.dart';
 import 'view_doc_builder.dart';
 
 class ViewAllDoctors extends StatefulWidget {
@@ -14,7 +16,14 @@ class ViewAllDoctors extends StatefulWidget {
 
 class _ViewAllDoctorsState extends State<ViewAllDoctors>
     with SingleTickerProviderStateMixin {
+  GetAllDoctorsController _getAllDoctorsController=GetAllDoctorsController();
+  GetAllDoctorsModel _getAllDoctorsModel=GetAllDoctorsModel();
+  Future _loadAllDoctors() async {
+    var data = await _getAllDoctorsController.allDoctorsData();
+    return data;
+  }
   TabController? _tabController;
+  bool _loading=true;
 
   @override
   void initState() {
@@ -32,7 +41,8 @@ class _ViewAllDoctorsState extends State<ViewAllDoctors>
             SliverAppBar(
               leading: CircleButton(
                 color: primaryColor,
-                fun: () => Navigator.pushReplacement(
+                fun: () =>
+                    Navigator.pushReplacement(
                     context, MaterialPageRoute(builder: (context) => Home())),
                 icn: Icons.arrow_back,
               ),

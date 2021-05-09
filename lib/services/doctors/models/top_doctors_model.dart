@@ -45,19 +45,19 @@ class TopDoctors {
 
   TopDoctors(
       {this.about,
-      this.availableDates,
-      this.avatar,
-      this.clinicLocation,
-      this.dob,
-      this.email,
-      this.gender,
-      this.id,
-      this.isInFavoriteList,
-      this.name,
-      this.phone,
-      this.reviews,
-      this.specId,
-      this.xY});
+        this.availableDates,
+        this.avatar,
+        this.clinicLocation,
+        this.dob,
+        this.email,
+        this.gender,
+        this.id,
+        this.isInFavoriteList,
+        this.name,
+        this.phone,
+        this.reviews,
+        this.specId,
+        this.xY});
 
   TopDoctors.fromJson(Map<String, dynamic> json) {
     about = json['about'];
@@ -77,7 +77,7 @@ class TopDoctors {
     name = json['name'];
     phone = json['phone'];
     reviews =
-        json['reviews'] != null ? new Reviews.fromJson(json['reviews']) : null;
+    json['reviews'] != null ? new Reviews.fromJson(json['reviews']) : null;
     specId = json['spec_id'];
     xY = json['x_y'];
   }

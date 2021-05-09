@@ -4,8 +4,8 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:the_disease_fighter/data/doctor_data.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_profile/edit_doctor_info/edit_doctor_info.dart';
+import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/favorite/favorite_doctors.dart';
 import 'package:the_disease_fighter/layout/notification/notification.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home_widgets/doctor_card.dart';
 import 'package:the_disease_fighter/layout/patient_screens/search/search.dart';
@@ -14,11 +14,13 @@ import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/inductors/arc_inductor.dart';
 import 'package:the_disease_fighter/material/widgets/model_result.dart';
+import 'package:the_disease_fighter/services/specialization/one_specialization_controller.dart';
 
 class BrainClinic extends StatefulWidget {
   final clinicTittle;
+  final clinicId;
 
-  const BrainClinic({Key? key, this.clinicTittle}) : super(key: key);
+  const BrainClinic({Key? key, this.clinicTittle, this.clinicId}) : super(key: key);
 
   @override
   _BrainClinicState createState() => _BrainClinicState();
@@ -31,9 +33,16 @@ class _BrainClinicState extends State<BrainClinic> {
   int _show = 0;
   ScrollController _scrollController = new ScrollController();
   bool showUpButton = false;
-
   PickedFile? _pickerImage;
   final ImagePicker _picker = ImagePicker();
+
+
+  OneSpecializationController _oneSpecializationController=OneSpecializationController();
+
+  Future _loadOneSpecialization() async {
+    var data = await _oneSpecializationController.getOneSpecialization(clinicId: widget.clinicId);
+    return Future.value(data);
+  }
 
   void _pickImage(ImageSource src) async {
     final pickedImageFile = await _picker.getImage(source: src);
@@ -191,14 +200,56 @@ class _BrainClinicState extends State<BrainClinic> {
             ),
           ],
         ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-                (context, index) => DoctorCard(
-              item: doctorsData[index],
-            ),
-            childCount: doctorsData.length,
-          ),
-        ),
+        FutureBuilder<dynamic>(
+            future:_loadOneSpecialization(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return SliverToBoxAdapter(
+                    child: Center(child: CircularProgressIndicator()));
+              } else {
+                if (snapshot.hasError) {
+                  return SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * .15),
+                      child: Column(
+                        children: [
+                          IconButton(
+                              icon: Icon(
+                                Icons.refresh,
+                                color: primaryColor,
+                                size: 40,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _loadOneSpecialization();
+                                });
+                              }),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Text(
+                            'Failed To Load',
+                            style:
+                            TextStyle(color: subTextColor, fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                } else {
+                  return  snapshot.data.success==true
+                      ?  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                          (context, index) => DoctorCard(
+                        item: snapshot.data.doctors[index],
+                      ),
+                      childCount: snapshot.data.doctors.length,
+                    ),
+                  ) : SliverToBoxAdapter(child: EmptyPage());
+                }
+              }
+            }),
       ]),
       floatingActionButton: AnimatedOpacity(
         opacity: showUpButton ? 1 : 0.0,

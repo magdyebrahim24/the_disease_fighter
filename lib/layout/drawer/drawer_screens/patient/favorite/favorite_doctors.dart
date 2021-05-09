@@ -16,7 +16,7 @@ class FavoriteDoctors extends StatefulWidget {
 class _FavoriteDoctorsState extends State<FavoriteDoctors> {
   GetFavoriteController _getFavoriteDoctors = GetFavoriteController();
   DeleteFromFavoriteController _deleteFromFavorite =
-      DeleteFromFavoriteController();
+  DeleteFromFavoriteController();
 
   bool isFavorite = false;
 
@@ -48,28 +48,28 @@ class _FavoriteDoctorsState extends State<FavoriteDoctors> {
           if (snapshot.hasData) {
             return snapshot.data.doctors.length != 0
                 ? ListView.builder(
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                    itemCount: snapshot.data.doctors.length ?? 0,
-                    itemBuilder: (ctx, index) {
-                      return FavoriteCard(
-                        data: snapshot.data.doctors[index],
-                        deleteFun: () async {
-                          await _deleteFromFavorite
-                              .deleteFromFavorite(
-                                  index: snapshot.data.doctors[index].id)
-                              .whenComplete(() {
-                            setState(() {
-                              snapshot.data.doctors.removeAt(index);
-                              snackBarr(
-                                  text: Languages.of(context)!
-                                      .doctorDetails['snackBarRemove'],
-                                  fun: () {},
-                                  label: '');
-                            });
-                          });
-                        },
-                      );
-                    })
+                padding: EdgeInsets.symmetric(vertical: 15),
+                itemCount: snapshot.data.doctors.length ?? 0,
+                itemBuilder: (ctx, index) {
+                  return FavoriteCard(
+                    data: snapshot.data.doctors[index],
+                    deleteFun: () async {
+                      await _deleteFromFavorite
+                          .deleteFromFavorite(
+                          index: snapshot.data.doctors[index].id)
+                          .whenComplete(() {
+                        setState(() {
+                          snapshot.data.doctors.removeAt(index);
+                          snackBarr(
+                              text: Languages.of(context)!
+                                  .doctorDetails['snackBarRemove'],
+                              fun: () {},
+                              label: '');
+                        });
+                      });
+                    },
+                  );
+                })
                 : EmptyPage();
           } else if (snapshot.hasError) {
             return EmptyPage();
@@ -90,7 +90,7 @@ class _FavoriteDoctorsState extends State<FavoriteDoctors> {
       ),
       backgroundColor: primaryColor,
       action:
-          SnackBarAction(label: label, textColor: Colors.white, onPressed: fun),
+      SnackBarAction(label: label, textColor: Colors.white, onPressed: fun),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
@@ -99,25 +99,23 @@ class _FavoriteDoctorsState extends State<FavoriteDoctors> {
 class EmptyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Container(
-        alignment: Alignment.center,
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Icon(
-            FontAwesomeIcons.folderOpen,
-            color: darkBlueColor.withOpacity(.2),
-            size: 70,
+    return Container(
+      alignment: Alignment.center,
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Icon(
+          FontAwesomeIcons.folderOpen,
+          color: darkBlueColor.withOpacity(.2),
+          size: 70,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 16),
+          child: Text(
+            'Empty List',
+            style:
+            TextStyle(color: darkBlueColor.withOpacity(.4), fontSize: 20),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: Text(
-              'Empty Favorite List',
-              style:
-                  TextStyle(color: darkBlueColor.withOpacity(.4), fontSize: 20),
-            ),
-          )
-        ]),
-      ),
+        )
+      ]),
     );
   }
 }

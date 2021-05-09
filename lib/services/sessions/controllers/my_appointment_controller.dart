@@ -1,14 +1,18 @@
-
+import 'dart:convert';
+import 'dart:core';
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/models/ApiCookies.dart';
-class LogOutController {
+import 'package:the_disease_fighter/services/sessions/models/my_appointment_model.dart';
+class MyAppointmentsController {
   Dio _dio = Dio();
-  Future userLogOut() async {
+  var cookieJar = CookieJar();
+  MyAppointmentsModel _appointmentsModel=MyAppointmentsModel();
+  Future _myAppointmentsData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final _token = prefs.getString('access_token') ?? '';
-
     _dio.options
       ..baseUrl = BaseUrl.url
       ..connectTimeout = 10000 //5s
@@ -23,17 +27,21 @@ class LogOutController {
     (await ApiCookies.cookieJar).loadForRequest(Uri.parse(BaseUrl.url));
     _dio.interceptors.add(CookieManager(await ApiCookies.cookieJar));
 
-    var response = await _dio.get('/logout');
-
+    var response = await _dio.get('/sessions');
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
-      response.data.putIfAbsent('success', () => true);
-      print(response.toString());
-      return response.data;
+      print(response.data);
+      return response;
     } else {
-      print(response.toString());
-      // throw Exception('Failed to log out');
-      response.data.putIfAbsent('success', () => false);
-      return response.data;
+      print(response);
+      return response
+      ;
     }
+  }
+  Future<MyAppointmentsModel>getMyAppointments() async {
+    var jsonString, jsonResponse;
+    jsonString = await _myAppointmentsData();
+    jsonResponse = json.decode(jsonString.toString());
+    _appointmentsModel = MyAppointmentsModel.fromJson(jsonResponse);
+    return _appointmentsModel;
   }
 }

@@ -9,9 +9,7 @@ import 'package:the_disease_fighter/services/doctors/models/top_doctors_model.da
 class TopDoctorsController {
   Dio _dio = Dio();
   var cookieJar = CookieJar();
-
   TopDoctorsModel _topDoctorsList = TopDoctorsModel();
-
   Future _getTopDoctors() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final _token = prefs.getString('access_token') ?? '';
@@ -39,7 +37,6 @@ class TopDoctorsController {
       return response;
     }
   }
-
   Future<TopDoctorsModel> topDoctorsData() async {
     var jsonString, jsonResponse;
     jsonString = await _getTopDoctors();

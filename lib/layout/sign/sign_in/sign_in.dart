@@ -97,16 +97,16 @@ class _SignInState extends State<SignIn> {
                   ),
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width * .05,
-                      vertical: 30),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(50),
-                        topLeft: Radius.circular(50)),
-                    color: Colors.white,
-                  ),
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * .05,
+                        vertical: 30),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(50),
+                          topLeft: Radius.circular(50)),
+                      color: Colors.white,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.max,
@@ -116,150 +116,150 @@ class _SignInState extends State<SignIn> {
                           child: Text(
                             Languages.of(context)!.signIn['welcome'],
                             style:
-                                TextStyle(fontSize: 32, color: darkBlueColor),
+                            TextStyle(fontSize: 32, color: darkBlueColor),
                           ),
                         ),
-                            TxtField(
-                              labelText: Languages.of(context)!.signIn['email'],
-                              hintText:
-                                  Languages.of(context)!.signIn['emailHint'],
-                              inputTextFunction: (String email) {
-                                setState(() {
-                                  this.email = email.trim();
-                                });
-                              },
-                              textInputType: TextInputType.emailAddress,
-                              validatorFun: (value) {
-                                if (value.toString().isEmpty) {
-                                  return 'Email Required';
-                                }
-                              },
-                            ),
-                            SizedBox(
-                              height: 7,
-                            ),
-                            TxtField(
-                              labelText:
-                                  Languages.of(context)!.signIn['password'],
-                              hintText:
-                                  Languages.of(context)!.signIn['passwordHint'],
-                              inputTextFunction: (String password) {
-                                setState(() {
-                                  this.password = password.trim();
-                                });
-                              },
-                              obSecure: true,
-                              textInputType: TextInputType.visiblePassword,
-                              validatorFun: (value) {
-                                if (value.toString().isEmpty) {
-                                  return 'Password Required';
-                                }
-                              },
-                            ),
-                            errorMessage != ''
-                                ? Text(
-                                    errorMessage,
-                                    style: TextStyle(
-                                        color: Colors.red.withOpacity(.6)),
-                                  )
-                                : SizedBox(),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  bottom: 35, right: 5, left: 5),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  InkWell(
-                                      onTap: () => Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ForgetPassword(),
-                                            ),
-                                          ),
-                                      child: Text(
-                                        Languages.of(context)!
-                                            .signIn['forgetPassword'],
-                                        style: TextStyle(color: subTextColor),
-                                      )),
-                                ],
-                              ),
-                            ),
-                            RoundedButton(
-                              fun: () => _userLogin(),
-                              text: Languages.of(context)!
-                                  .signIn['signButtonTxt'],
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(top: 30, bottom: 10),
+                        TxtField(
+                          labelText: Languages.of(context)!.signIn['email'],
+                          hintText:
+                          Languages.of(context)!.signIn['emailHint'],
+                          inputTextFunction: (String email) {
+                            setState(() {
+                              this.email = email.trim();
+                            });
+                          },
+                          textInputType: TextInputType.emailAddress,
+                          validatorFun: (value) {
+                            if (value.toString().isEmpty) {
+                              return 'Email Required';
+                            }
+                          },
+                        ),
+                        SizedBox(
+                          height: 7,
+                        ),
+                        TxtField(
+                          labelText:
+                          Languages.of(context)!.signIn['password'],
+                          hintText:
+                          Languages.of(context)!.signIn['passwordHint'],
+                          inputTextFunction: (String password) {
+                            setState(() {
+                              this.password = password.trim();
+                            });
+                          },
+                          obSecure: true,
+                          textInputType: TextInputType.visiblePassword,
+                          validatorFun: (value) {
+                            if (value.toString().isEmpty) {
+                              return 'Password Required';
+                            }
+                          },
+                        ),
+                        errorMessage != ''
+                            ? Text(
+                          errorMessage,
+                          style: TextStyle(
+                              color: Colors.red.withOpacity(.6)),
+                        )
+                            : SizedBox(),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              bottom: 35, right: 5, left: 5),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              InkWell(
+                                  onTap: () => Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ForgetPassword(),
+                                    ),
+                                  ),
                                   child: Text(
-                                    Languages.of(context)!.signIn['orSignWith'],
-                                    style: TextStyle(color: subTextColor),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SocialButton(
-                                  onTap: () {
-                                    _logOut.userLogOut();
-                                  },
-                                  icon: FontAwesomeIcons.google,
-                                  iconColor: Colors.blue,
-                                ),
-                                SocialButton(
-                                  onTap: () {
-                                    _loginController.userLogin(
-                                        email: email, password: password);
-                                  },
-                                  icon: FontAwesomeIcons.facebookF,
-                                  iconColor: darkBlueColor.withOpacity(.8),
-                                ),
-                                SocialButton(
-                                  onTap: () {
-                                  },
-                                  icon: FontAwesomeIcons.twitter,
-                                  iconColor: primaryColor,
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 35, bottom: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
                                     Languages.of(context)!
-                                        .signIn['dontHaveAccount'],
+                                        .signIn['forgetPassword'],
                                     style: TextStyle(color: subTextColor),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  InkWell(
-                                      onTap: () => Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => SignUp(),
-                                          )),
-                                      child: Text(
-                                        Languages.of(context)!
-                                            .signIn['signUpTxt'],
-                                        style: TextStyle(
-                                            color: darkBlueColor, fontSize: 15),
-                                      )),
-                                ],
+                                  )),
+                            ],
+                          ),
+                        ),
+                        RoundedButton(
+                          fun: () => _userLogin(),
+                          text: Languages.of(context)!
+                              .signIn['signButtonTxt'],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(top: 30, bottom: 10),
+                              child: Text(
+                                Languages.of(context)!.signIn['orSignWith'],
+                                style: TextStyle(color: subTextColor),
                               ),
-                            )
+                            ),
                           ],
-                        )),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SocialButton(
+                              onTap: () {
+                                _logOut.userLogOut();
+                              },
+                              icon: FontAwesomeIcons.google,
+                              iconColor: Colors.blue,
+                            ),
+                            SocialButton(
+                              onTap: () {
+                                _loginController.userLogin(
+                                    email: email, password: password);
+                              },
+                              icon: FontAwesomeIcons.facebookF,
+                              iconColor: darkBlueColor.withOpacity(.8),
+                            ),
+                            SocialButton(
+                              onTap: () {
+                              },
+                              icon: FontAwesomeIcons.twitter,
+                              iconColor: primaryColor,
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 35, bottom: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                Languages.of(context)!
+                                    .signIn['dontHaveAccount'],
+                                style: TextStyle(color: subTextColor),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              InkWell(
+                                  onTap: () => Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SignUp(),
+                                      )),
+                                  child: Text(
+                                    Languages.of(context)!
+                                        .signIn['signUpTxt'],
+                                    style: TextStyle(
+                                        color: darkBlueColor, fontSize: 15),
+                                  )),
+                            ],
+                          ),
+                        )
+                      ],
+                    )),
               ],
             ),
           ),

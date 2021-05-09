@@ -134,11 +134,11 @@ class _SignUpState extends State<SignUp> {
                                 children: [
                                   isDoctor
                                       ? Image.asset(
-                                          'assets/icons/patientGrey.png',
-                                          width: 20)
+                                      'assets/icons/patientGrey.png',
+                                      width: 20)
                                       : Image.asset(
-                                          'assets/icons/patientWhite.png',
-                                          width: 20),
+                                      'assets/icons/patientWhite.png',
+                                      width: 20),
                                   SizedBox(
                                     width: 10,
                                   ),
@@ -178,11 +178,11 @@ class _SignUpState extends State<SignUp> {
                                 children: [
                                   isDoctor
                                       ? Image.asset(
-                                          'assets/icons/doctorWhite.png',
-                                          width: 20)
+                                      'assets/icons/doctorWhite.png',
+                                      width: 20)
                                       : Image.asset(
-                                          'assets/icons/doctorGrey.png',
-                                          width: 20),
+                                      'assets/icons/doctorGrey.png',
+                                      width: 20),
                                   SizedBox(
                                     width: 10,
                                   ),
@@ -236,7 +236,7 @@ class _SignUpState extends State<SignUp> {
                         TxtField(
                           labelText: Languages.of(context)!.signUp['password'],
                           hintText:
-                              Languages.of(context)!.signUp['passwordHint'],
+                          Languages.of(context)!.signUp['passwordHint'],
                           inputTextFunction: (String password) {
                             setState(() {
                               this.password = password.trim();
@@ -259,7 +259,7 @@ class _SignUpState extends State<SignUp> {
                         ),
                         TxtField(
                           labelText:
-                              Languages.of(context)!.signUp['confirmPassword'],
+                          Languages.of(context)!.signUp['confirmPassword'],
                           hintText: Languages.of(context)!
                               .signUp['confirmPasswordHint'],
                           inputTextFunction: (String confirmPassword) {
@@ -284,10 +284,10 @@ class _SignUpState extends State<SignUp> {
                         ),
                         errorMessage != ''
                             ? Text(
-                                errorMessage,
-                                style: TextStyle(
-                                    color: Colors.red.withOpacity(.6)),
-                              )
+                          errorMessage,
+                          style: TextStyle(
+                              color: Colors.red.withOpacity(.6)),
+                        )
                             : SizedBox(),
                         SizedBox(
                           height: 10,

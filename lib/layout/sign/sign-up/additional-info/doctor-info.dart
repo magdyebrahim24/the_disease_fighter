@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/terms_of_use.dart';
-import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
+import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -143,15 +142,13 @@ class _DoctorInfoState extends State<DoctorInfo> {
                     Padding(
                       padding: EdgeInsets.only(top: 25, bottom: 30),
                       child: Text(
-                        Languages.of(context)!.signUpDoctorInfo['header'],
+                        'You\'re Almost Done!',
                         style: TextStyle(fontSize: 30, color: darkBlueColor),
                       ),
                     ),
                     TxtField(
-                      labelText:
-                          Languages.of(context)!.signUpDoctorInfo['phoneLabel'],
-                      hintText:
-                          Languages.of(context)!.signUpDoctorInfo['phoneHint'],
+                      labelText: 'Phone',
+                      hintText: 'Enter your Phone',
                       inputTextFunction: _getPhone,
                       textInputType: TextInputType.phone,
                     ),
@@ -159,16 +156,12 @@ class _DoctorInfoState extends State<DoctorInfo> {
                       value: genderValue,
                       getValue: _getGender,
                       items: ["Male", "Female"],
-                      hintText:
-                          Languages.of(context)!.signUpDoctorInfo['genderHint'],
-                      labelText: Languages.of(context)!
-                          .signUpDoctorInfo['genderLabel'],
+                      hintText: 'Select Gender',
+                      labelText: 'Gender',
                     ),
                     BasicDateField(
-                      helperText:
-                          Languages.of(context)!.signUpDoctorInfo['helperText'],
-                      label:
-                          Languages.of(context)!.signUpDoctorInfo['DateLabel'],
+                      helperText: 'Select Date Of Birth',
+                      label: 'Date Of Birth',
                       fun: _getDateOfBirth,
                     ),
                     DropDownList(
@@ -185,22 +178,17 @@ class _DoctorInfoState extends State<DoctorInfo> {
                         'Psychiatry',
                         'Pediatrics',
                       ],
-                      hintText: Languages.of(context)!
-                          .signUpDoctorInfo['specialistHint'],
-                      labelText: Languages.of(context)!
-                          .signUpDoctorInfo['specialistLabel'],
+                      hintText: 'Select Your Specialist',
+                      labelText: 'Specialist',
                     ),
                     TxtField(
-                      labelText: Languages.of(context)!
-                          .signUpDoctorInfo['clinicLocationLabel'],
-                      hintText: Languages.of(context)!
-                          .signUpDoctorInfo['clinicLocationHint'],
+                      labelText: 'Clinic Location',
+                      hintText: 'Enter your Clinic Location',
                       inputTextFunction: _getClinicLocation,
                       textInputType: TextInputType.text,
                     ),
                     Text(
-                      Languages.of(context)!
-                          .signUpDoctorInfo['clinicDaterHeader'],
+                      'Enter Dates Clinic Available',
                       style: TextStyle(fontSize: 15, color: subTextColor),
                     ),
                     Container(
@@ -229,8 +217,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                   return Container(
                                     height: 60,
                                     width: MediaQuery.of(context).size.width,
-                                    padding:
-                                        EdgeInsets.fromLTRB(15, 10, 10, 10),
+                                    padding: EdgeInsets.fromLTRB(15, 10, 5, 10),
                                     margin: EdgeInsets.symmetric(vertical: 5),
                                     child: Row(
                                       children: [
@@ -275,8 +262,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  Languages.of(context)!
-                                      .signUpDoctorInfo['clinicOpen'],
+                                  'Day Clinic Open In :',
                                   style: TextStyle(
                                       fontSize: 15, color: darkBlueColor),
                                 ),
@@ -300,8 +286,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                         value: day,
                                         elevation: 1,
                                         hint: Text(
-                                          Languages.of(context)!
-                                              .signUpDoctorInfo['dayHint'],
+                                          'Select Day Clinic Open In',
                                           style: TextStyle(color: subTextColor),
                                         ),
                                         icon: Icon(Icons.arrow_drop_down,
@@ -342,11 +327,9 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                   child: BasicTimeField(
                                     backgroundColor: Colors.white,
                                     labelColor: darkBlueColor,
-                                    label: Languages.of(context)!
-                                        .signUpDoctorInfo['from'],
+                                    label: 'From :',
                                     fun: _getTimeFrom,
-                                    helperText: Languages.of(context)!
-                                        .signUpDoctorInfo['fromHelper'],
+                                    helperText: 'Enter Time Clinic Opens In',
                                   )),
                               SizedBox(
                                 width: 10,
@@ -357,11 +340,9 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                   child: BasicTimeField(
                                     backgroundColor: Colors.white,
                                     labelColor: darkBlueColor,
-                                    label: Languages.of(context)!
-                                        .signUpDoctorInfo['to'],
+                                    label: 'To :',
                                     fun: _getTimeTo,
-                                    helperText: Languages.of(context)!
-                                        .signUpDoctorInfo['toHelper'],
+                                    helperText: 'Enter Time Clinic Close In',
                                   )),
                             ],
                           ),
@@ -373,9 +354,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
                             padding: EdgeInsets.only(top: 5),
                             child: RoundedButton(
                               fun: () {
-                                // ignore: unnecessary_null_comparison
                                 if (fromTime != null ||
-                                    // ignore: unnecessary_null_comparison
                                     toTime != null ||
                                     day != null) {
                                   var from = fromTime.toString().split(' ');
@@ -398,8 +377,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                   });
                                 }
                               },
-                              text: Languages.of(context)!
-                                  .signUpDoctorInfo['addBTN'],
+                              text: 'Add',
                               borderRadious: 10,
                               minWdthRatio: .8,
                             ),
@@ -416,38 +394,9 @@ class _DoctorInfoState extends State<DoctorInfo> {
                     SizedBox(
                       height: 10,
                     ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 15),
-                      width: MediaQuery.of(context).size.width,
-                      alignment: Alignment.center,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            Languages.of(context)!.signUpDoctorInfo['subText'],
-                            style: TextStyle(color: subTextColor),
-                          ),
-                          InkWell(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => TermsOfUse(),
-                              ),
-                            ),
-                            child: Text(
-                              Languages.of(context)!.signUpDoctorInfo['terms'],
-                              style: TextStyle(
-                                  color: Colors.orangeAccent,
-                                  decoration: TextDecoration.underline,
-                                  decorationThickness: 2),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                     RoundedButton(
                       fun: _onSubmitSignUp,
-                      text: Languages.of(context)!.signUpDoctorInfo['submit'],
+                      text: 'Submit',
                     ),
                   ],
                 ),

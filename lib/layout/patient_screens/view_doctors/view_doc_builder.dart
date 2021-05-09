@@ -4,12 +4,19 @@ import 'package:the_disease_fighter/layout/patient_screens/the_appointment/book_
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/rate_bar.dart';
+import 'package:the_disease_fighter/services/doctors/controllers/get_all_doctors_controller.dart';
+import 'package:the_disease_fighter/services/doctors/models/get_all_doctors_model.dart';
 
 class ViewDocBuilder extends StatelessWidget {
   ViewDocBuilder({required this.data});
+  GetAllDoctorsController _getAllDoctorsController=GetAllDoctorsController();
+  GetAllDoctorsModel _getAllDoctorsModel=GetAllDoctorsModel();
+  Future _loadAllDoctors() async {
+    var data = await _getAllDoctorsController.allDoctorsData();
+    return data;
+  }
 
   final List data;
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(

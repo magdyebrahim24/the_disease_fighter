@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'language/language_ar.dart';
 import 'language/language_en.dart';
 import 'language/languages.dart';

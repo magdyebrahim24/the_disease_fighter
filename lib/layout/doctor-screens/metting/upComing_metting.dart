@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctot_home.dart';
+import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
+//import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctot_home.dart';
 import 'package:the_disease_fighter/layout/doctor-screens/metting/start_meeting.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/drop-downlist.dart';
@@ -10,12 +11,12 @@ class UpComingMeeting extends StatefulWidget {
   _UpComingMeetingState createState() => _UpComingMeetingState();
 }
 class _UpComingMeetingState extends State<UpComingMeeting> {
-  String appointmentTime;
-  DateTime fromTime;
+  late String appointmentTime;
+  late DateTime fromTime;
 
   _getAppointmentDate(DateTime phone) {
     setState(() {
-      this.fromTime = phone;
+     // this.fromTime = phone;
     });
   }
   _getAppointmentTime(String val) {
@@ -247,7 +248,7 @@ class _UpComingMeetingState extends State<UpComingMeeting> {
       );
     }
 
-    Widget _infoCard(double width,
+    Widget _infoCard(double?width,
         String text,
         Widget widget,) {
       return Container(

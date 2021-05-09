@@ -1,22 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:the_disease_fighter/data/doctor_data.dart';
+import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/favorite/favorite_doctors.dart';
 import 'package:the_disease_fighter/layout/notification/notification.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home_widgets/doctor_card.dart';
 import 'package:the_disease_fighter/layout/patient_screens/search/search.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+import 'package:the_disease_fighter/services/specialization/one_specialization_controller.dart';
 
 class Clinic extends StatefulWidget {
-  Clinic({this.clinicTittle});
+  Clinic({this.clinicTittle, this.clinicId});
   final clinicTittle;
+  final clinicId;
   @override
   _ClinicState createState() => _ClinicState();
 }
-
 class _ClinicState extends State<Clinic> {
+  OneSpecializationController _oneSpecializationController=OneSpecializationController();
   ScrollController _scrollController = new ScrollController();
   bool showUpButton = false;
+
+
+  Future _loadOneSpecialization() async {
+    var data = await _oneSpecializationController.getOneSpecialization(clinicId: widget.clinicId);
+    return Future.value(data);
+  }
 
   @override
   void initState() {
@@ -88,14 +96,57 @@ class _ClinicState extends State<Clinic> {
               ),
             ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) => DoctorCard(
-                item: doctorsData[index],
-              ),
-              childCount: doctorsData.length,
-            ),
-          ),
+          FutureBuilder<dynamic>(
+              future:_loadOneSpecialization(),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return SliverToBoxAdapter(
+                      child: Center(child: CircularProgressIndicator()));
+                } else {
+                  if (snapshot.hasError) {
+                    return SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height * .15),
+                        child: Column(
+                          children: [
+                            IconButton(
+                                icon: Icon(
+                                  Icons.refresh,
+                                  color: primaryColor,
+                                  size: 40,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _loadOneSpecialization();
+                                  });
+                                }),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Text(
+                              'Failed To Load',
+                              style:
+                              TextStyle(color: subTextColor, fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  } else {
+                    return  snapshot.data.success==true
+                        ?  SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                            (context, index) => DoctorCard(
+                          item: snapshot.data.doctors[index],
+                        ),
+                        childCount: snapshot.data.doctors.length,
+                      ),
+                    ) :  SliverToBoxAdapter(child: EmptyPage()
+                    );
+                  }
+                }
+              }),
         ],
       ),
       floatingActionButton: AnimatedOpacity(

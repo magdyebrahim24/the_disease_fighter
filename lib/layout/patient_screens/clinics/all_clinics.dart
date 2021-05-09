@@ -44,6 +44,7 @@ class _AllClinicsState extends State<AllClinics> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ClinicItem(
+
                     clinicLogo: 'assets/clinics_logo/Brain.png',
                     clinicName:
                         Languages.of(context)!.allClinicsScreen['brain'],
@@ -51,6 +52,7 @@ class _AllClinicsState extends State<AllClinics> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => BrainClinic(
+                              clinicId: 1,
                                   clinicTittle: Languages.of(context)!
                                       .allClinicsScreen['brainDoctors'],
                                 ))),
@@ -63,6 +65,7 @@ class _AllClinicsState extends State<AllClinics> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => BrainClinic(
+                              clinicId: 11,
                                   clinicTittle: Languages.of(context)!
                                       .allClinicsScreen['chestDoctors'],
                                 ))),
@@ -76,6 +79,7 @@ class _AllClinicsState extends State<AllClinics> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => Clinic(
+                          clinicId: 6,
                               clinicTittle: Languages.of(context)!
                                   .allClinicsScreen['physicalDoctors'],
                             ))),
@@ -91,6 +95,7 @@ class _AllClinicsState extends State<AllClinics> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => Clinic(
+                              clinicId: 5,
                                   clinicTittle: Languages.of(context)!
                                       .allClinicsScreen['boneDoctors'],
                                 ))),
@@ -103,6 +108,7 @@ class _AllClinicsState extends State<AllClinics> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => Clinic(
+                              clinicId: 10,
                                   clinicTittle: Languages.of(context)!
                                       .allClinicsScreen['internalDoctors'],
                                 ))),
@@ -121,6 +127,7 @@ class _AllClinicsState extends State<AllClinics> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => Clinic(
+                              clinicId: 8,
                                   clinicTittle: Languages.of(context)!
                                       .allClinicsScreen['surgeryDoctors'],
                                 ))),
@@ -133,6 +140,7 @@ class _AllClinicsState extends State<AllClinics> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => Clinic(
+                              clinicId: 4,
                                   clinicTittle: Languages.of(context)!
                                       .allClinicsScreen['teethDoctors'],
                                 ))),
@@ -145,7 +153,9 @@ class _AllClinicsState extends State<AllClinics> {
                 fun: () => Navigator.push(
                     context,
                     MaterialPageRoute(
+
                         builder: (context) => Clinic(
+                          clinicId: 7,
                               clinicTittle: Languages.of(context)!
                                   .allClinicsScreen['urologyDoctors'],
                             ))),
@@ -162,6 +172,7 @@ class _AllClinicsState extends State<AllClinics> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => Clinic(
+                              clinicId: 2,
                                   clinicTittle: Languages.of(context)!
                                       .allClinicsScreen['heartDoctors'],
                                 ))),
@@ -173,6 +184,7 @@ class _AllClinicsState extends State<AllClinics> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => Clinic(
+                              clinicId: 9,
                                   clinicTittle: Languages.of(context)!
                                       .allClinicsScreen['kidsDoctors'],
                                 ))),
@@ -187,6 +199,7 @@ class _AllClinicsState extends State<AllClinics> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => Clinic(
+                          clinicId: 3,
                               clinicTittle: Languages.of(context)!
                                   .allClinicsScreen['dermatologyDoctors'],
                             ))),

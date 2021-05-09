@@ -10,26 +10,31 @@ class Categories extends StatelessWidget {
   Widget build(BuildContext context) {
     List clinicsInfo = [
       {
+        'id': 1,
         'img': 'assets/clinics_logo/Brain.png',
         'name': '${Languages.of(context)!.allClinicsScreen['brainDoctors']}',
         'docName': '${Languages.of(context)!.allClinicsScreen['brainDoctors']}',
       },
       {
+        'id': 4,
         'img': 'assets/clinics_logo/Teeth.png',
         'name': '${Languages.of(context)!.allClinicsScreen['teeth']}',
         'docName': '${Languages.of(context)!.allClinicsScreen['teethDoctors']}',
       },
       {
+        'id': 11,
         'img': 'assets/clinics_logo/chest.png',
         'name': '${Languages.of(context)!.allClinicsScreen['chest']}',
         'docName': '${Languages.of(context)!.allClinicsScreen['chestDoctors']}',
       },
       {
+        'id': 2,
         'img': 'assets/clinics_logo/heart.png',
         'name': '${Languages.of(context)!.allClinicsScreen['heart']}',
         'docName': '${Languages.of(context)!.allClinicsScreen['heartDoctors']}',
       },
       {
+        'id': 5,
         'img': 'assets/clinics_logo/bone.png',
         'name': '${Languages.of(context)!.allClinicsScreen['bone']}',
         'docName': '${Languages.of(context)!.allClinicsScreen['boneDoctors']}',
@@ -47,9 +52,11 @@ class Categories extends StatelessWidget {
                 MaterialPageRoute(
                     builder: (context) => index == 0 || index == 2
                         ? BrainClinic(
+                            clinicId: clinicsInfo[index]['id'],
                             clinicTittle: clinicsInfo[index]['docName'],
                           )
                         : Clinic(
+                            clinicId: clinicsInfo[index]['id'],
                             clinicTittle: clinicsInfo[index]['docName'],
                           ))),
             child: Container(

@@ -51,12 +51,12 @@ class _DoctorReviewsState extends State<DoctorReviews> {
               if (snapshot.hasData) {
                 return snapshot.data.reviews != null
                     ? ListView.builder(
-                        itemBuilder: (ctx, index) {
-                          return card(data: snapshot.data.reviews[index]);
-                        },
-                        itemCount: snapshot.data.reviews.length ?? 0,
-                        padding: EdgeInsets.symmetric(vertical: 15),
-                      )
+                  itemBuilder: (ctx, index) {
+                    return card(data: snapshot.data.reviews[index]);
+                  },
+                  itemCount: snapshot.data.reviews.length ?? 0,
+                  padding: EdgeInsets.symmetric(vertical: 15),
+                )
                     : emptyPage();
               } else if (snapshot.hasError) {
                 return Column(
@@ -150,7 +150,7 @@ class _DoctorReviewsState extends State<DoctorReviews> {
           child: Text(
             'Empty Reviews List',
             style:
-                TextStyle(color: darkBlueColor.withOpacity(.4), fontSize: 20),
+            TextStyle(color: darkBlueColor.withOpacity(.4), fontSize: 20),
           ),
         )
       ]),
