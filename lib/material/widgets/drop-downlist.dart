@@ -26,7 +26,8 @@ class DropDownList extends StatelessWidget {
         children: [
           Text(
             labelText,
-            style: TextStyle(fontSize: 15, color: subTextColor),
+            style:
+                TextStyle(fontSize: 15, color: darkBlueColor.withOpacity(.8)),
           ),
           Container(
               margin: EdgeInsets.symmetric(

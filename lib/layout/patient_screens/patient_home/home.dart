@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:the_disease_fighter/data/doctor_data.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/favorite/favorite_doctors.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/my_appointments/my_appointments.dart';
 import 'package:the_disease_fighter/layout/drawer/patient_MainDrawer.dart';
@@ -10,10 +9,7 @@ import 'package:the_disease_fighter/layout/patient_screens/view_doctors/view_all
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
-import 'package:the_disease_fighter/services/doctors/controllers/get_all_doctors_controller.dart';
 import 'package:the_disease_fighter/services/doctors/controllers/top_doctors_controller.dart';
-import 'package:the_disease_fighter/services/favorite_doctors/controllers/add_toFavotite.dart';
-import 'package:the_disease_fighter/services/logged_user/get_user_info_controller.dart';
 import 'home_widgets/categories.dart';
 import 'home_widgets/doctor_card.dart';
 
@@ -33,19 +29,12 @@ class _HomeState extends State<Home> {
   bool showUpButton = false;
 
   TopDoctorsController _topDoctors = TopDoctorsController();
-  CurrentUserInfoController _getUserInfo = CurrentUserInfoController();
-  AddToFavoriteController _addFav = AddToFavoriteController();
-  GetAllDoctorsController _allDoctorsController=GetAllDoctorsController();
 
   Key centerKey = ValueKey<String>('bottom-sliver-list');
 
   Future _loadTopDoctors() async {
     var data = await _topDoctors.topDoctorsData();
     return Future.value(data);
-  }
-  Future _loadallDoctors() async {
-    var data = await _allDoctorsController.getAllDoctors();
-    return data ;
   }
 
   @override
@@ -63,9 +52,9 @@ class _HomeState extends State<Home> {
     });
     widget.showSnackBar
         ? Future.delayed(Duration.zero, () async {
-      snackBarr();
-    })
-    // ignore: unnecessary_statements
+            snackBarr();
+          })
+        // ignore: unnecessary_statements
         : null;
 
     super.initState();
@@ -119,8 +108,6 @@ class _HomeState extends State<Home> {
             imgHigh: 35.0,
             imgWidth: 35.0,
           ),
-          IconButton(icon: Icon(Icons.done), onPressed: (){ _loadallDoctors();})
-
         ],
         centerTitle: true,
       ),
@@ -181,7 +168,7 @@ class _HomeState extends State<Home> {
                             Text(
                               'Failed To Load',
                               style:
-                              TextStyle(color: subTextColor, fontSize: 16),
+                                  TextStyle(color: subTextColor, fontSize: 16),
                             ),
                           ],
                         ),
@@ -190,22 +177,18 @@ class _HomeState extends State<Home> {
                   } else {
                     return snapshot.data.topDoctors.length != 0
                         ? SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                            return DoctorCard(
-                              item: snapshot.data.topDoctors[index],
-                            );
-                          },
-                          childCount: snapshot.data.topDoctors.length,
-                        ))
-                        : SliverToBoxAdapter(child: EmptyPage());
+                            delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return DoctorCard(
+                                item: snapshot.data.topDoctors[index],
+                              );
+                            },
+                            childCount: snapshot.data.topDoctors.length,
+                          ))
+                        : EmptyPage();
                   }
                 }
               }),
-          // for (var item in snapshot.data.topDoctors)
-          //   DoctorCard(
-          //     item: item,
-          //   )
         ],
       ),
       floatingActionButton: AnimatedOpacity(

@@ -29,7 +29,7 @@ class GetAllSessionsController {
 
     _dio.interceptors.add(CookieManager(await ApiCookies.cookieJar));
 
-    var response = await _dio.get('/doctors/6/reviews');
+    var response = await _dio.get('/doctors/1/reviews');
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
       print(response.toString());
 

@@ -3,19 +3,52 @@ import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/my_appo
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
-import 'package:the_disease_fighter/material/widgets/patient-logo.dart';
+import 'package:the_disease_fighter/material/widgets/materialBanner.dart';
+import 'package:the_disease_fighter/services/sessions/controllers/deleteSession.dart';
 import 'edit_apppointment.dart';
 
 // ignore: must_be_immutable
-class ShowAppointment extends StatelessWidget {
-  // Map appointmentData = {
-  //   'date':'4/4/2021',
-  //   'time':'05:30 PM',
-  //   'name':'Magdy Ebrahim Ali',
-  //   'gender':'Male',
-  //   'phone':'01552154105',
-  //   'Comment': 'I have a severe headache and the abdomen and suffer from your diversity and a cold and a cold ',
-  // };
+class ShowAppointment extends StatefulWidget {
+  final data;
+
+  ShowAppointment({this.data});
+
+  @override
+  _ShowAppointmentState createState() => _ShowAppointmentState();
+}
+
+class _ShowAppointmentState extends State<ShowAppointment> {
+  bool _isLoading = false;
+  bool _showBanner = false;
+  String? _errorMessage;
+
+  DeleteSessionController _deleteSessionController = DeleteSessionController();
+
+  Future _deleteSession() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final data =
+        await _deleteSessionController.deleteSession(index: widget.data.id);
+    if (await data['success']) {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MyAppointments(
+                    showSnackBar: true,
+                  )));
+    } else {
+      setState(() {
+        _errorMessage = data['message'].toString();
+        _isLoading = false;
+        _showBanner = true;
+      });
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,57 +70,114 @@ class ShowAppointment extends StatelessWidget {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(bottom: 25),
-              padding: EdgeInsets.only(top: 25),
-              width: MediaQuery.of(context).size.width,
-              height: 230,
-              decoration: BoxDecoration(
-                  color: primaryColor.withOpacity(.8),
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(40),
-                    bottomLeft: Radius.circular(40),
-                  )),
-              child: PatientLogo(
-                imgWidth: 120.0,
-                imgHigh: 120.0,
-                nameColor: darkBlueColor,
-                nameSize: 20.0,
+      body: !_isLoading
+          ? SingleChildScrollView(
+              child: Stack(
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.only(bottom: 25),
+                          padding: EdgeInsets.only(top: 25),
+                          width: MediaQuery.of(context).size.width,
+                          height: 240,
+                          decoration: BoxDecoration(
+                              color: primaryColor.withOpacity(.8),
+                              borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(40),
+                                bottomLeft: Radius.circular(40),
+                              )),
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: subTextColor,
+                                          offset: Offset(1.0, 2.0),
+                                          blurRadius: 6.0,
+                                          spreadRadius: 1),
+                                    ],
+                                    image: DecorationImage(
+                                        image: NetworkImage(widget
+                                            .data.doctorAvatar
+                                            .toString()),
+                                        fit: BoxFit.cover),
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        color: Color(0xffFDFDFD), width: 2),
+                                    color: backGroundColor),
+                                margin: EdgeInsets.all(10),
+                                height: 120,
+                                width: 120,
+                              ),
+                              Text(
+                                widget.data.doctorName,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: darkBlueColor,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 7,
+                              ),
+                              Text(
+                                'doc Specialist need',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          )),
+                      _item(context,
+                          labelText: Languages.of(context)!
+                              .bookAppointment['appointmentDateLabel'],
+                          data: widget.data.date.toString()),
+                      _item(context,
+                          labelText: Languages.of(context)!
+                              .bookAppointment['appointmentTimeLabel'],
+                          data:
+                              '${widget.data.time.toString()} ${widget.data.amPm.toString()}'),
+                      _item(context,
+                          labelText: Languages.of(context)!
+                              .bookAppointment['nameLabel'],
+                          data: widget.data.name.toString()),
+                      _item(context,
+                          labelText: Languages.of(context)!
+                              .bookAppointment['genderLabel'],
+                          data: widget.data.gender.toString()),
+                      _item(context,
+                          labelText: Languages.of(context)!
+                              .bookAppointment['phoneLabel'],
+                          data: widget.data.phone.toString()),
+                      _item(context,
+                          labelText: Languages.of(context)!
+                              .bookAppointment['appointmentNote'],
+                          data: widget.data.comment.toString()),
+                      SizedBox(
+                        height: 15,
+                      )
+                    ],
+                  ),
+                  _showBanner
+                      ? ErrorMaterialBanner(
+                          errorMessage: _errorMessage,
+                          fun: () => setState(() {
+                                _showBanner = false;
+                              }))
+                      : SizedBox()
+                ],
               ),
-            ),
-            _item(context,
-                labelText: Languages.of(context)!
-                    .bookAppointment['appointmentDateLabel'],
-                data: '4/4/2021'),
-            _item(context,
-                labelText: Languages.of(context)!
-                    .bookAppointment['appointmentTimeLabel'],
-                data: '05:30 PM'),
-            _item(context,
-                labelText: Languages.of(context)!.bookAppointment['nameLabel'],
-                data: 'Magdy Ebrahim Ali'),
-            _item(context,
-                labelText:
-                    Languages.of(context)!.bookAppointment['genderLabel'],
-                data: 'Male'),
-            _item(context,
-                labelText: Languages.of(context)!.bookAppointment['phoneLabel'],
-                data: '01552154105'),
-            _item(context,
-                labelText:
-                    Languages.of(context)!.bookAppointment['appointmentNote'],
-                data:
-                    'I have a severe headache and the abdomen and suffer from your diversity and a cold and a cold '),
-            SizedBox(
-              height: 15,
             )
-          ],
-        ),
-      ),
+          : Center(child: CircularProgressIndicator()),
       bottomNavigationBar: BottomAppBar(
         color: Colors.transparent,
         child: Padding(
@@ -103,8 +193,7 @@ class ShowAppointment extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
                 ),
-                onPressed: () => Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => MyAppointments())),
+                onPressed: _showDialog,
                 child: Text(
                   Languages.of(context)!.bookAppointment['deleteBTN'],
                   style: TextStyle(fontSize: 16, color: Colors.white),
@@ -157,6 +246,39 @@ class ShowAppointment extends StatelessWidget {
               )),
         ],
       ),
+    );
+  }
+
+  Future<void> _showDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Are You Sure You Want To Delete Appointment',
+            style: TextStyle(color: darkBlueColor, fontSize: 17),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Delete',
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _deleteSession();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

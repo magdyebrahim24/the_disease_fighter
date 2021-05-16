@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/data/doctor_data.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
 import 'package:the_disease_fighter/layout/patient_screens/search/search.dart';
+import 'package:the_disease_fighter/layout/patient_screens/view_doctors/builder/all_builder.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/services/doctors/controllers/get_all_doctors_controller.dart';
 import 'package:the_disease_fighter/services/doctors/models/get_all_doctors_model.dart';
-import 'view_doc_builder.dart';
+import 'builder/specialist_builder.dart';
 
 class ViewAllDoctors extends StatefulWidget {
   @override
@@ -23,7 +23,6 @@ class _ViewAllDoctorsState extends State<ViewAllDoctors>
     return data;
   }
   TabController? _tabController;
-  bool _loading=true;
 
   @override
   void initState() {
@@ -72,7 +71,7 @@ class _ViewAllDoctorsState extends State<ViewAllDoctors>
                       color: Color(0xffE6F7FD)),
                   tabs: [
                     tapBarWidget(
-                      label: Languages.of(context)!.allDoctors['all'],
+                      label: 'all',
                     ),
                     tapBarWidget(
                       label: Languages.of(context)!.allDoctors['brain'],
@@ -116,18 +115,40 @@ class _ViewAllDoctorsState extends State<ViewAllDoctors>
         body: TabBarView(
           controller: _tabController,
           children: [
-            ViewDocBuilder(data: doctorsData),
-            ViewDocBuilder(data: doctorsData5),
-            ViewDocBuilder(data: doctorsData10),
-            ViewDocBuilder(data: doctorsData15),
-            ViewDocBuilder(data: doctorsData5),
-            ViewDocBuilder(data: doctorsData15),
-            ViewDocBuilder(data: doctorsData10),
-            ViewDocBuilder(data: doctorsData20),
-            ViewDocBuilder(data: doctorsData5),
-            ViewDocBuilder(data: doctorsData15),
-            ViewDocBuilder(data: doctorsData10),
-            ViewDocBuilder(data: doctorsData20),
+            ViewDocAllBuilder(),
+            ViewDocSpecialistBuilder(
+              clinicId: 1,
+            ),
+            ViewDocSpecialistBuilder(
+              clinicId: 11,
+            ),
+            ViewDocSpecialistBuilder(
+              clinicId: 6,
+            ),
+            ViewDocSpecialistBuilder(
+              clinicId: 5,
+            ),
+            ViewDocSpecialistBuilder(
+              clinicId: 10,
+            ),
+            ViewDocSpecialistBuilder(
+              clinicId: 8,
+            ),
+            ViewDocSpecialistBuilder(
+              clinicId: 4,
+            ),
+            ViewDocSpecialistBuilder(
+              clinicId: 7,
+            ),
+            ViewDocSpecialistBuilder(
+              clinicId: 2,
+            ),
+            ViewDocSpecialistBuilder(
+              clinicId: 9,
+            ),
+            ViewDocSpecialistBuilder(
+              clinicId: 3,
+            ),
           ],
         ),
       ),

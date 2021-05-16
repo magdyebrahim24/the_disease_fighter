@@ -325,10 +325,9 @@ class _EditPatientProfileState extends State<EditPatientProfile> {
                               image:
                                   // ignore: unnecessary_null_comparison
                                   (_pickerImage == null
-                                      ? NetworkImage(imgUrl.toString())
-                                      : FileImage(
-                                          _pickerImage!)) as ImageProvider<
-                                      Object>,
+                                          ? NetworkImage(imgUrl.toString())
+                                          : FileImage(_pickerImage!))
+                                      as ImageProvider<Object>,
                               fit: BoxFit.cover),
                           shape: BoxShape.circle,
                           border:

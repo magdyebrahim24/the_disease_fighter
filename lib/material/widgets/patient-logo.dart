@@ -32,7 +32,7 @@ class _PatientLogoState extends State<PatientLogo> {
             future: _getUserData(),
             builder: (BuildContext context,
                 AsyncSnapshot<dynamic> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
+              if (!snapshot.hasData && !snapshot.hasError) {
                 return Container(
                     height: 120,
                     alignment: Alignment.center,

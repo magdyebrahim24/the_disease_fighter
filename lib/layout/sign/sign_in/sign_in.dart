@@ -13,7 +13,6 @@ import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/bottons/socialBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/txt_field.dart';
-import '../../../services/logged_user/get_user_info_controller.dart';
 import 'forget_password/forget_password.dart';
 
 class SignIn extends StatefulWidget {

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:http_parser/http_parser.dart';
 import 'package:dio/dio.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -35,17 +34,6 @@ class UpdateAvatarController {
     String fileName = file!.path.split('/').last;
     FormData formData = FormData.fromMap(
         {"file": await MultipartFile.fromFile(file.path, filename: fileName)});
-
-    Map data = {
-      'file': MultipartFile.fromFile(file.path,
-          filename: fileName, contentType: MediaType('image', 'png'))
-      // 'file': await MultipartFile.fromFile(file.path,
-      //     filename: fileName, contentType: MediaType('image', 'png')),
-    };
-
-    var formDataa = FormData();
-    formDataa.files.add(MapEntry(
-        'file', MultipartFile.fromFileSync(file.path, filename: fileName)));
 
     var response = await _dio.patch(
       '/avatar',

@@ -33,7 +33,7 @@ class FullImage extends StatelessWidget {
             child: MaterialButton(
               minWidth: 30,
               height: 55,
-              color: backGroundColor,
+              color: Colors.black,
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50),
@@ -44,7 +44,7 @@ class FullImage extends StatelessWidget {
               },
               child: Icon(
                 Icons.close,
-                // color: Colors.white,
+                color: Colors.white,
               ),
               // color: backGroundColor
             ),

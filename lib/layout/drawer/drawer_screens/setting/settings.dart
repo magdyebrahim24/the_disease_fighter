@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
+import 'package:the_disease_fighter/material/widgets/materialBanner.dart';
 import 'package:the_disease_fighter/services/basicData/controllers/logOutController.dart';
 import 'package:the_disease_fighter/layout/sign/sign_in/sign_in.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
@@ -24,21 +25,36 @@ class Setting extends StatefulWidget {
 
 class _SettingState extends State<Setting> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _isLoading = false;
+  String? _errorMessage;
+  bool _showBanner = false;
 
   LogOutController _logOut = LogOutController();
 
   Future _userLogOut() async {
-    LoaderDialog().onLoading(context);
+    setState(() {
+      _isLoading = true;
+    });
     final data = await _logOut.userLogOut();
+
     if (await data['success']) {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => SignIn(),
           ));
+      print('done');
     } else {
-      Navigator.of(context).pop();
+      print('else');
+      setState(() {
+        _errorMessage = data['message'].toString();
+        _isLoading = false;
+        _showBanner = true;
+      });
     }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -61,110 +77,131 @@ class _SettingState extends State<Setting> {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: EdgeInsets.only(top: 25),
-                alignment: Alignment.bottomCenter,
-                width: MediaQuery.of(context).size.width,
-                height: 200,
-                child: PatientLogo(
-                  imgWidth: 92.0,
-                  imgHigh: 92.0,
-                  nameSize: 17.0,
-                  nameColor: Colors.white,
-                ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-                decoration: BoxDecoration(
-                    color: backGroundColor,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(25),
-                        topRight: Radius.circular(25))),
-                child: Text(
-                  Languages.of(context)!.setting['settingLabel'],
-                  style: TextStyle(
-                    color: darkBlueColor,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-              DrawerTile(
-                icon: Icons.lock_open_outlined,
-                fun: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ChangePassword())),
-                tittle: Languages.of(context)!.setting['password'],
-                leadingIconColor: primaryColor.withOpacity(.7),
-              ),
-              DrawerTile(
-                icon: Icons.notifications_none_rounded,
-                fun: () {},
-                tittle: Languages.of(context)!.setting['notification'],
-                leadingIconColor: primaryColor.withOpacity(.7),
-              ),
-              _createLanguageDropDown(),
-              Divider(
-                height: 1,
-                color: backGroundColor,
-                thickness: 1,
-              ),
-              DrawerTile(
-                leadingIconColor: primaryColor.withOpacity(.7),
-                fun: _userLogOut,
-                icon: Icons.logout,
-                tittle: Languages.of(context)!.setting['logOut'],
-              ),
-              Container(
-                color: backGroundColor,
-                padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-                child: Row(
-                  children: [
-                    Text(
-                      Languages.of(context)!.setting['shareApp'],
-                      textAlign: TextAlign.end,
-                      style: TextStyle(
-                        color: darkBlueColor,
-                        fontSize: 16,
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+      ),
+      body: !_isLoading
+          ? SingleChildScrollView(
+              child: Stack(
+                children: [
+                  _showBanner
+                      ? ErrorMaterialBanner(
+                          errorMessage: _errorMessage.toString(),
+                          fun: () {
+                            setState(() {
+                              _showBanner = false;
+                            });
+                          },
+                        )
+                      : SizedBox(),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(top: 25),
+                        alignment: Alignment.bottomCenter,
+                        width: MediaQuery.of(context).size.width,
+                        height: 200,
+                        child: PatientLogo(
+                          imgWidth: 92.0,
+                          imgHigh: 92.0,
+                          nameSize: 17.0,
+                          nameColor: Colors.white,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding:
+                            EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+                        decoration: BoxDecoration(
+                            color: backGroundColor,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(25),
+                                topRight: Radius.circular(25))),
+                        child: Text(
+                          Languages.of(context)!.setting['settingLabel'],
+                          style: TextStyle(
+                            color: darkBlueColor,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      DrawerTile(
+                        icon: Icons.lock_open_outlined,
+                        fun: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChangePassword())),
+                        tittle: Languages.of(context)!.setting['password'],
+                        leadingIconColor: primaryColor.withOpacity(.7),
+                      ),
+                      DrawerTile(
+                        icon: Icons.notifications_none_rounded,
+                        fun: () {},
+                        tittle: Languages.of(context)!.setting['notification'],
+                        leadingIconColor: primaryColor.withOpacity(.7),
+                      ),
+                      _createLanguageDropDown(),
+                      Divider(
+                        height: 1,
+                        color: backGroundColor,
+                        thickness: 1,
+                      ),
+                      DrawerTile(
+                        leadingIconColor: primaryColor.withOpacity(.7),
+                        fun: _userLogOut,
+                        icon: Icons.logout,
+                        tittle: Languages.of(context)!.setting['logOut'],
+                      ),
+                      Container(
+                        color: backGroundColor,
+                        padding:
+                            EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+                        child: Row(
+                          children: [
+                            Text(
+                              Languages.of(context)!.setting['shareApp'],
+                              textAlign: TextAlign.end,
+                              style: TextStyle(
+                                color: darkBlueColor,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      DrawerTile(
+                          leadingIconColor: darkBlueColor.withOpacity(.8),
+                          icon: FontAwesomeIcons.facebookF,
+                          tittle: Languages.of(context)!.setting['faceBook'],
+                          fun: () => launch('https://www.facebook.com/')),
+                      DrawerTile(
+                        leadingIconColor: primaryColor.withOpacity(.8),
+                        icon: FontAwesomeIcons.twitter,
+                        tittle: Languages.of(context)!.setting['twitter'],
+                        fun: () => launch('https://www.twitter.com/'),
+                      ),
+                      DrawerTile(
+                          leadingIconColor: Colors.green,
+                          icon: FontAwesomeIcons.whatsapp,
+                          tittle: Languages.of(context)!.setting['whatsApp'],
+                          fun: () async => await launch(
+                              "https://wa.me/01552154105?text=Share The Medical Solution App With Your Friends - link :https://twitter.com/migoo_1_3?s=09&fbclid=IwAR3k92gBqVe_OWHYwn2jsvsdV7hpO_lCB9dqJdS2SSM-7yhlaD_i8S7nsKM")),
+                    ],
+                  ),
+                ],
               ),
-              DrawerTile(
-                  leadingIconColor: darkBlueColor.withOpacity(.8),
-                  icon: FontAwesomeIcons.facebookF,
-                  tittle: Languages.of(context)!.setting['faceBook'],
-                  fun: () => launch('https://www.facebook.com/')),
-              DrawerTile(
-                leadingIconColor: primaryColor.withOpacity(.8),
-                icon: FontAwesomeIcons.twitter,
-                tittle: Languages.of(context)!.setting['twitter'],
-                fun: () => launch('https://www.twitter.com/'),
-              ),
-              DrawerTile(
-                  leadingIconColor: Colors.green,
-                  icon: FontAwesomeIcons.whatsapp,
-                  tittle: Languages.of(context)!.setting['whatsApp'],
-                  fun: () async => await launch(
-                      "https://wa.me/01552154105?text=Share The Medical Solution App With Your Friends - link :https://twitter.com/migoo_1_3?s=09&fbclid=IwAR3k92gBqVe_OWHYwn2jsvsdV7hpO_lCB9dqJdS2SSM-7yhlaD_i8S7nsKM")),
-            ],
-          ),
-        ));
+            )
+          : Center(child: CircularProgressIndicator()),
+    );
   }
 
   _createLanguageDropDown() {

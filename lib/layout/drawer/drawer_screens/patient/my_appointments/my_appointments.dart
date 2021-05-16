@@ -3,13 +3,18 @@ import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dar
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+import 'package:the_disease_fighter/services/sessions/controllers/my_appointment_controller.dart';
 import 'appointments_screens/appointments.dart';
 import 'appointments_screens/previous_appointments.dart';
-import 'package:the_disease_fighter/services/sessions/controllers/my_appointment_controller.dart';
 class MyAppointments extends StatefulWidget {
+  final showSnackBar;
+
+  MyAppointments({this.showSnackBar = false});
+
   @override
   _MyAppointmentsState createState() => _MyAppointmentsState();
 }
+
 class _MyAppointmentsState extends State<MyAppointments>{
   MyAppointmentsController _appointmentsController=MyAppointmentsController();
 
@@ -42,6 +47,18 @@ class _MyAppointmentsState extends State<MyAppointments>{
         ),
       ],
     );
+  }
+
+  @override
+  void initState() {
+    widget.showSnackBar
+        ? Future.delayed(Duration.zero, () async {
+            snackBarr();
+          })
+        // ignore: unnecessary_statements
+        : null;
+
+    super.initState();
   }
 
   @override
@@ -107,13 +124,13 @@ class _MyAppointmentsState extends State<MyAppointments>{
                 future: _loadMyAppointments(),
                 builder: (BuildContext context,
                     AsyncSnapshot<dynamic> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
+                  if (!snapshot.hasData && !snapshot.hasError) {
                     return Container(
                         height: 222,
                         alignment: Alignment.center,
                         child: CircularProgressIndicator());
                   } else {
-                    if (snapshot.error==null) {
+                    if (snapshot.hasError) {
                       return SizedBox(
                         height: 222,
                         child: Column(
@@ -145,14 +162,20 @@ class _MyAppointmentsState extends State<MyAppointments>{
                     } else {
                       return  TabBarView(
                         children: [
-                          AppointmentsBuilder(),
-                          PreviousAppointments(),
+                          AppointmentsBuilder(
+                              data: snapshot.data.futureAppointments != null
+                                  ? snapshot.data.futureAppointments
+                                  : []),
+                          PreviousAppointments(
+                            data: snapshot.data.previousAppointments != null
+                                ? snapshot.data.previousAppointments
+                                : [],
+                          ),
                         ],
                       );
                     }
                   }
                 }),
-
           ),
         ));
   }
@@ -162,6 +185,18 @@ class _MyAppointmentsState extends State<MyAppointments>{
       child: Text(label!),
       alignment: Alignment.center,
     );
+  }
+
+  snackBarr() {
+    final snackBar = SnackBar(
+      content: Text(
+        'Appointment Deleted Successfully',
+        style: TextStyle(
+            fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+      ),
+      backgroundColor: primaryColor,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
 

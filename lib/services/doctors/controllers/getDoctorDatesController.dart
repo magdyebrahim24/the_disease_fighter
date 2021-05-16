@@ -4,16 +4,16 @@ import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/models/ApiCookies.dart';
-import 'package:the_disease_fighter/services/doctors/models/top_doctors_model.dart';
+import 'package:the_disease_fighter/services/doctors/models/getDoctorDatesModel.dart';
 
-class TopDoctorsController {
+class GetDoctorDatesController {
   Dio _dio = Dio();
   var cookieJar = CookieJar();
-  TopDoctorsModel _topDoctorsList = TopDoctorsModel();
-  Future _getTopDoctors() async {
+  GetDoctorDatesModel _getDoctorDatesModel = GetDoctorDatesModel();
+
+  Future _getDoctorDatesData({doctorId}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final _token = prefs.getString('access_token') ?? '';
-
     _dio.options
       ..baseUrl = BaseUrl.url
       ..connectTimeout = 10000 //5s
@@ -24,24 +24,28 @@ class TopDoctorsController {
       ..headers = {
         'authorization': 'Bearer ' + _token,
       };
-
     (await ApiCookies.cookieJar).loadForRequest(Uri.parse(BaseUrl.url));
     _dio.interceptors.add(CookieManager(await ApiCookies.cookieJar));
 
-    var response = await _dio.get('/doctors/top');
+    var response = await _dio.get('/doctors/$doctorId/dates');
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
       print(response);
+      response.data.putIfAbsent('success', () => true);
       return response;
     } else {
-      // print(response);
+      print(response);
+      response.data.putIfAbsent('success', () => false);
+
       return response;
     }
   }
-  Future<TopDoctorsModel> topDoctorsData() async {
+
+  Future<GetDoctorDatesModel?> getDoctorDates({doctorId}) async {
     var jsonString, jsonResponse;
-    jsonString = await _getTopDoctors();
+    jsonString = await _getDoctorDatesData(doctorId: doctorId);
     jsonResponse = json.decode(jsonString.toString());
-    _topDoctorsList = TopDoctorsModel.fromJson(jsonResponse);
-    return _topDoctorsList;
+    _getDoctorDatesModel = GetDoctorDatesModel.fromJson(jsonResponse);
+    print(_getDoctorDatesModel.success.toString());
+    return _getDoctorDatesModel;
   }
 }

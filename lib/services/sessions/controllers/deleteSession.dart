@@ -1,16 +1,14 @@
-import 'dart:convert';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/models/ApiCookies.dart';
-import 'package:the_disease_fighter/services/doctors/models/top_doctors_model.dart';
 
-class TopDoctorsController {
+class DeleteSessionController {
   Dio _dio = Dio();
   var cookieJar = CookieJar();
-  TopDoctorsModel _topDoctorsList = TopDoctorsModel();
-  Future _getTopDoctors() async {
+
+  Future deleteSession({required index}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final _token = prefs.getString('access_token') ?? '';
 
@@ -26,22 +24,25 @@ class TopDoctorsController {
       };
 
     (await ApiCookies.cookieJar).loadForRequest(Uri.parse(BaseUrl.url));
+
     _dio.interceptors.add(CookieManager(await ApiCookies.cookieJar));
 
-    var response = await _dio.get('/doctors/top');
-    if (response.statusCode! >= 200 && response.statusCode! < 300) {
-      print(response);
-      return response;
-    } else {
-      // print(response);
-      return response;
+    try {
+      var response = await _dio.delete('/sessions/${index.toString()}');
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        print(response.data.toString());
+        response.data.putIfAbsent('success', () => true);
+        print('response success');
+        return response.data;
+      } else {
+        print(response.toString());
+        response.data.putIfAbsent('success', () => false);
+        return response.data;
+      }
+    } on DioError catch (e) {
+      print(e);
+      Map error = {'success': false, 'message': 'Fail to delete try again '};
+      return error;
     }
-  }
-  Future<TopDoctorsModel> topDoctorsData() async {
-    var jsonString, jsonResponse;
-    jsonString = await _getTopDoctors();
-    jsonResponse = json.decode(jsonString.toString());
-    _topDoctorsList = TopDoctorsModel.fromJson(jsonResponse);
-    return _topDoctorsList;
   }
 }

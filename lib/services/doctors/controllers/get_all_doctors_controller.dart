@@ -5,10 +5,11 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/models/ApiCookies.dart';
 import 'package:the_disease_fighter/services/doctors/models/get_all_doctors_model.dart';
+
 class GetAllDoctorsController {
   Dio _dio = Dio();
   var cookieJar = CookieJar();
-  GetAllDoctorsModel _getAllDoctorsModel=GetAllDoctorsModel();
+  GetAllDoctorsModel _getAllDoctorsModel = GetAllDoctorsModel();
 
   Future getAllDoctors() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -29,17 +30,20 @@ class GetAllDoctorsController {
     var response = await _dio.get('/doctors');
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
       print(response);
-    } else {
+      response.data.putIfAbsent('success', () => true);
       return response;
-      // throw Exception('Failed to get user data');
+    } else {
+      print(response);
+      return response;
     }
   }
+
   Future<GetAllDoctorsModel?> allDoctorsData() async {
     var jsonString, jsonResponse;
     jsonString = await getAllDoctors();
     jsonResponse = json.decode(jsonString.toString());
+    print(jsonResponse.toString());
     _getAllDoctorsModel = GetAllDoctorsModel.fromJson(jsonResponse);
     return _getAllDoctorsModel;
   }
-  }
-
+}

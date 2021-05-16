@@ -1,109 +1,221 @@
-// To parse this JSON data, do
-//
-//     final myAppointmentsModel = myAppointmentsModelFromMap(jsonString);
-
-import 'dart:convert';
 class MyAppointmentsModel {
-  MyAppointmentsModel({
-    this.futureAppointments,
-    this.previousAppointments,
-    this.success,
-    this.totalAppointments,
-  });
-
-  List<Appointment>? futureAppointments;
-  List<Appointment>? previousAppointments;
+  List<FutureAppointments>? futureAppointments;
+  List<PreviousAppointments>? previousAppointments;
   bool? success;
   int? totalAppointments;
 
-  factory MyAppointmentsModel.fromJson(String str) => MyAppointmentsModel.fromMap(json.decode(str));
+  MyAppointmentsModel(
+      {this.futureAppointments,
+      this.previousAppointments,
+      this.success,
+      this.totalAppointments});
 
-  String toJson() => json.encode(toMap());
+  MyAppointmentsModel.fromJson(Map<String, dynamic> json) {
+    if (json['future_appointments'] != null) {
+      futureAppointments = <FutureAppointments>[];
+      json['future_appointments'].forEach((v) {
+        futureAppointments!.add(new FutureAppointments.fromJson(v));
+      });
+    }
+    if (json['previous_appointments'] != null) {
+      previousAppointments = <PreviousAppointments>[];
+      json['previous_appointments'].forEach((v) {
+        previousAppointments!.add(new PreviousAppointments.fromJson(v));
+      });
+    }
+    success = json['success'];
+    totalAppointments = json['total_appointments'];
+  }
 
-  factory MyAppointmentsModel.fromMap(Map<String, dynamic> json) => MyAppointmentsModel(
-    futureAppointments: List<Appointment>.from(json["future_appointments"].map((x) => Appointment.fromMap(x))),
-    previousAppointments: List<Appointment>.from(json["previous_appointments"].map((x) => Appointment.fromMap(x))),
-    success: json["success"],
-    totalAppointments: json["total_appointments"],
-  );
-
-  Map<String, dynamic> toMap() => {
-    "future_appointments": List<dynamic>.from(futureAppointments!.map((x) => x.toMap())),
-    "previous_appointments": List<dynamic>.from(previousAppointments!.map((x) => x.toMap())),
-    "success": success,
-    "total_appointments": totalAppointments,
-  };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.futureAppointments != null) {
+      data['future_appointments'] =
+          this.futureAppointments!.map((v) => v.toJson()).toList();
+    }
+    if (this.previousAppointments != null) {
+      data['previous_appointments'] =
+          this.previousAppointments!.map((v) => v.toJson()).toList();
+    }
+    data['success'] = this.success;
+    data['total_appointments'] = this.totalAppointments;
+    return data;
+  }
 }
 
-class Appointment {
-  Appointment({
-    this.amPm,
-    this.comment,
-    this.date,
-    this.day,
-    this.diagnosis,
-    this.doctorId,
-    this.files,
-    this.gender,
-    this.id,
-    this.medicines,
-    this.name,
-    this.patientId,
-    this.phone,
-    this.time,
-  });
-
+class FutureAppointments {
   String? amPm;
   String? comment;
-  DateTime? date;
+  String? date;
+  String? day;
+  Null? diagnosis;
+  String? doctorAvatar;
+  int? doctorId;
+  String? doctorName;
+  List? files;
+  String? gender;
+  int? id;
+  Null? medicines;
+  String? name;
+  String? patientAvatar;
+  int? patientId;
+  int? periodId;
+  String? phone;
+  String? time;
+
+  FutureAppointments(
+      {this.amPm,
+      this.comment,
+      this.date,
+      this.day,
+      this.diagnosis,
+      this.doctorAvatar,
+      this.doctorId,
+      this.doctorName,
+      this.files,
+      this.gender,
+      this.id,
+      this.medicines,
+      this.name,
+      this.patientAvatar,
+      this.patientId,
+      this.periodId,
+      this.phone,
+      this.time});
+
+  FutureAppointments.fromJson(Map<String, dynamic> json) {
+    amPm = json['am_pm'];
+    comment = json['comment'];
+    date = json['date'];
+    day = json['day'];
+    diagnosis = json['diagnosis'];
+    doctorAvatar = json['doctor_avatar'];
+    doctorId = json['doctor_id'];
+    doctorName = json['doctor_name'];
+    if (json['files'] != null) {
+      files = <String>[];
+      json['files'].forEach((v) {
+        files!.add(v.fromJson(v));
+      });
+    }
+    gender = json['gender'];
+    id = json['id'];
+    medicines = json['medicines'];
+    name = json['name'];
+    patientAvatar = json['patient_avatar'];
+    patientId = json['patient_id'];
+    periodId = json['period_id'];
+    phone = json['phone'];
+    time = json['time'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['am_pm'] = this.amPm;
+    data['comment'] = this.comment;
+    data['date'] = this.date;
+    data['day'] = this.day;
+    data['diagnosis'] = this.diagnosis;
+    data['doctor_avatar'] = this.doctorAvatar;
+    data['doctor_id'] = this.doctorId;
+    data['doctor_name'] = this.doctorName;
+    if (this.files != null) {
+      data['files'] = this.files!.map((v) => v.toJson()).toList();
+    }
+    data['gender'] = this.gender;
+    data['id'] = this.id;
+    data['medicines'] = this.medicines;
+    data['name'] = this.name;
+    data['patient_avatar'] = this.patientAvatar;
+    data['patient_id'] = this.patientId;
+    data['period_id'] = this.periodId;
+    data['phone'] = this.phone;
+    data['time'] = this.time;
+    return data;
+  }
+}
+
+class PreviousAppointments {
+  String? amPm;
+  String? comment;
+  String? date;
   String? day;
   String? diagnosis;
+  String? doctorAvatar;
   int? doctorId;
+  String? doctorName;
   List<String>? files;
   String? gender;
   int? id;
   String? medicines;
   String? name;
+  String? patientAvatar;
   int? patientId;
+  int? periodId;
   String? phone;
   String? time;
 
-  factory Appointment.fromJson(String str) => Appointment.fromMap(json.decode(str));
+  PreviousAppointments(
+      {this.amPm,
+      this.comment,
+      this.date,
+      this.day,
+      this.diagnosis,
+      this.doctorAvatar,
+      this.doctorId,
+      this.doctorName,
+      this.files,
+      this.gender,
+      this.id,
+      this.medicines,
+      this.name,
+      this.patientAvatar,
+      this.patientId,
+      this.periodId,
+      this.phone,
+      this.time});
 
-  String toJson() => json.encode(toMap());
+  PreviousAppointments.fromJson(Map<String, dynamic> json) {
+    amPm = json['am_pm'];
+    comment = json['comment'];
+    date = json['date'];
+    day = json['day'];
+    diagnosis = json['diagnosis'];
+    doctorAvatar = json['doctor_avatar'];
+    doctorId = json['doctor_id'];
+    doctorName = json['doctor_name'];
+    files = json['files'].cast<String>();
+    gender = json['gender'];
+    id = json['id'];
+    medicines = json['medicines'];
+    name = json['name'];
+    patientAvatar = json['patient_avatar'];
+    patientId = json['patient_id'];
+    periodId = json['period_id'];
+    phone = json['phone'];
+    time = json['time'];
+  }
 
-  factory Appointment.fromMap(Map<String, dynamic> json) => Appointment(
-    amPm: json["am_pm"],
-    comment: json["comment"],
-    date: DateTime.parse(json["date"]),
-    day: json["day"],
-    diagnosis: json["diagnosis"] == null ? null : json["diagnosis"],
-    doctorId: json["doctor_id"],
-    files: List<String>.from(json["files"].map((x) => x)),
-    gender: json["gender"],
-    id: json["id"],
-    medicines: json["medicines"] == null ? null : json["medicines"],
-    name: json["name"],
-    patientId: json["patient_id"],
-    phone: json["phone"],
-    time: json["time"],
-  );
-
-  Map<String, dynamic> toMap() => {
-    "am_pm": amPm,
-    "comment": comment,
-    "date": "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
-    "day": day,
-    "diagnosis": diagnosis == null ? null : diagnosis,
-    "doctor_id": doctorId,
-    "files": List<dynamic>.from(files!.map((x) => x)),
-    "gender": gender,
-    "id": id,
-    "medicines": medicines == null ? null : medicines,
-    "name": name,
-    "patient_id": patientId,
-    "phone": phone,
-    "time": time,
-  };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['am_pm'] = this.amPm;
+    data['comment'] = this.comment;
+    data['date'] = this.date;
+    data['day'] = this.day;
+    data['diagnosis'] = this.diagnosis;
+    data['doctor_avatar'] = this.doctorAvatar;
+    data['doctor_id'] = this.doctorId;
+    data['doctor_name'] = this.doctorName;
+    data['files'] = this.files;
+    data['gender'] = this.gender;
+    data['id'] = this.id;
+    data['medicines'] = this.medicines;
+    data['name'] = this.name;
+    data['patient_avatar'] = this.patientAvatar;
+    data['patient_id'] = this.patientId;
+    data['period_id'] = this.periodId;
+    data['phone'] = this.phone;
+    data['time'] = this.time;
+    return data;
+  }
 }
-

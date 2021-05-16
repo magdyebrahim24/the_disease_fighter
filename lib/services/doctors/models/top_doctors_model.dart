@@ -41,23 +41,25 @@ class TopDoctors {
   String? phone;
   Reviews? reviews;
   int? specId;
+  Specialization? specialization;
   Null? xY;
 
   TopDoctors(
       {this.about,
-        this.availableDates,
-        this.avatar,
-        this.clinicLocation,
-        this.dob,
-        this.email,
-        this.gender,
-        this.id,
-        this.isInFavoriteList,
-        this.name,
-        this.phone,
-        this.reviews,
-        this.specId,
-        this.xY});
+      this.availableDates,
+      this.avatar,
+      this.clinicLocation,
+      this.dob,
+      this.email,
+      this.gender,
+      this.id,
+      this.isInFavoriteList,
+      this.name,
+      this.phone,
+      this.reviews,
+      this.specId,
+      this.specialization,
+      this.xY});
 
   TopDoctors.fromJson(Map<String, dynamic> json) {
     about = json['about'];
@@ -77,8 +79,11 @@ class TopDoctors {
     name = json['name'];
     phone = json['phone'];
     reviews =
-    json['reviews'] != null ? new Reviews.fromJson(json['reviews']) : null;
+        json['reviews'] != null ? new Reviews.fromJson(json['reviews']) : null;
     specId = json['spec_id'];
+    specialization = json['specialization'] != null
+        ? new Specialization.fromJson(json['specialization'])
+        : null;
     xY = json['x_y'];
   }
 
@@ -102,6 +107,9 @@ class TopDoctors {
       data['reviews'] = this.reviews!.toJson();
     }
     data['spec_id'] = this.specId;
+    if (this.specialization != null) {
+      data['specialization'] = this.specialization!.toJson();
+    }
     data['x_y'] = this.xY;
     return data;
   }
@@ -154,6 +162,28 @@ class Reviews {
     data['avatars'] = this.avatars;
     data['no.patients'] = this.noPatients;
     data['rates'] = this.rates;
+    return data;
+  }
+}
+
+class Specialization {
+  int? id;
+  String? image;
+  String? name;
+
+  Specialization({this.id, this.image, this.name});
+
+  Specialization.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    image = json['image'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['image'] = this.image;
+    data['name'] = this.name;
     return data;
   }
 }

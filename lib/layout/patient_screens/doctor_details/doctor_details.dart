@@ -231,15 +231,23 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40.0),
                 ),
-                onPressed: () => launch("tel://01552154105"),
+                onPressed: () => launch(widget.data.phone != null
+                    ? "tel://${widget.data.phone.toString()}"
+                    : "01552154105"),
                 child: Icon(
                   Icons.phone,
                   color: primaryColor,
                 ),
               ),
               RoundedButton(
-                fun: () => Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => BookAppointment())),
+                fun: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BookAppointment(
+                              docId: widget.data.id,
+                              docName: widget.data.name,
+                              docImage: widget.data.avatar,
+                            ))),
                 minWdthRatio: .63,
                 text: Languages.of(context)!.doctorDetails['bookBtn'],
                 borderRadious: 50,

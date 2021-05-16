@@ -4,7 +4,7 @@ import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/rate_bar.dart';
 
 class DoctorCard extends StatelessWidget {
-  const DoctorCard({
+   DoctorCard({
     required this.item,
   });
 
@@ -65,7 +65,7 @@ class DoctorCard extends StatelessWidget {
                   ),
                   Text(
                     // '${item.specialization[0].name}',
-                    'doctor spec need',
+                    item.specialization.name.toString(),
                     style: TextStyle(
                       color: subTextColor,
                       fontSize: 14,

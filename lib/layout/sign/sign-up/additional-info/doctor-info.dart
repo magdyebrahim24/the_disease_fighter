@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
-import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -354,7 +353,9 @@ class _DoctorInfoState extends State<DoctorInfo> {
                             padding: EdgeInsets.only(top: 5),
                             child: RoundedButton(
                               fun: () {
+                                // ignore: unnecessary_null_comparison
                                 if (fromTime != null ||
+                                    // ignore: unnecessary_null_comparison
                                     toTime != null ||
                                     day != null) {
                                   var from = fromTime.toString().split(' ');
