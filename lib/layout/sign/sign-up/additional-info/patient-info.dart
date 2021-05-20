@@ -10,6 +10,7 @@ import 'package:the_disease_fighter/material/widgets/time-date-field.dart';
 import 'package:the_disease_fighter/material/widgets/txt_field.dart';
 import 'package:the_disease_fighter/services/logged_user/update_user_info.dart';
 
+
 class PatientInfo extends StatefulWidget {
   @override
   _PatientInfoState createState() => _PatientInfoState();

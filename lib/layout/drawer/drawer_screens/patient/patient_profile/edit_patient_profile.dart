@@ -3,16 +3,19 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_profile/edit_doctor_info/edit_doctor_info.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/patient_profile/patient_profile.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
-import 'package:the_disease_fighter/services/logged_user/get_user_info_controller.dart';
-import 'package:the_disease_fighter/services/logged_user/update_avatar.dart';
-import 'package:the_disease_fighter/services/logged_user/update_patient_profile.dart';
+import 'package:the_disease_fighter/material/widgets/bottom_sheet_item.dart';
+import 'package:the_disease_fighter/material/widgets/materialBanner.dart';
+import 'package:the_disease_fighter/services/logged_user/controllers/get_user_info_controller.dart';
+import 'package:the_disease_fighter/services/logged_user/controllers/update_avatar.dart';
+import 'package:the_disease_fighter/services/logged_user/controllers/update_patient_profile.dart';
+
+
 
 // ignore: must_be_immutable
 class EditPatientProfile extends StatefulWidget {
@@ -30,8 +33,11 @@ class _EditPatientProfileState extends State<EditPatientProfile> {
   String? phone;
   String? address;
   String? name;
+  String?about;
   File? _pickerImage;
   String? errorMessage;
+  String? _bannerMessage;
+  bool _showBanner = false;
   UpdateAvatarController _updateAvatar = UpdateAvatarController();
 
   Future _updatePatientProfile() async {
@@ -41,10 +47,12 @@ class _EditPatientProfileState extends State<EditPatientProfile> {
       LoaderDialog().onLoading(context);
       final data = await _updatePatientProfileController.updatePatientProfile(
         location: address,
+        about:about,
         phone: phone,
         name: name,
         dob: widget.data.dob.toString(),
         gender: widget.data.gender.toString(),
+
       );
       if (await data['success']) {
         Navigator.of(context).pop();
@@ -52,6 +60,8 @@ class _EditPatientProfileState extends State<EditPatientProfile> {
             context, MaterialPageRoute(builder: (context) => PatientProfile()));
       } else {
         setState(() {
+          _bannerMessage = data['message'].toString();
+          _showBanner = true;
           errorMessage = data['message'].toString();
         });
 
@@ -99,127 +109,189 @@ class _EditPatientProfileState extends State<EditPatientProfile> {
     phone = widget.data.phone.toString();
     address = widget.data.location.toString();
     name = widget.data.name.toString();
+    about=widget.data.about.toString();
+
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-            elevation: 0.0,
-            backgroundColor: primaryColor.withOpacity(.1),
-            leading: CircleButton(
-              color: primaryColor,
-              fun: () => Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => PatientProfile())),
-              icn: Icons.arrow_back,
+    return Stack(
+      children: [
+        Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+                elevation: 0.0,
+                backgroundColor: primaryColor.withOpacity(.1),
+                leading: CircleButton(
+                  color: primaryColor,
+                  fun: () => Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => PatientProfile())),
+                  icn: Icons.arrow_back,
+                )),
+            body:
+            SingleChildScrollView(
+                child: Form(
+              key: _formKey,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    _profilePicCard(
+                      context,
+                      imgUrl: widget.data.avatar.toString(),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    item(
+                      validateFun: (value) {},
+                      label: "About",
+                      initialValue: widget.data.about.toString(),
+                      hintText: "add a new information about you",
+                      fun: (value) {
+                        setState(() {
+                          about = value;
+                        });
+                      },
+                      textInputType: TextInputType.name,
+                      readOnly: false,
+                    ),
+                   /* Container(
+                      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                      padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 40),
+                      //padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                      //height: 110,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: backGroundColor,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "About",
+                            //style: TextStyle(
+                            //   color: darkBlueColor,
+                            //  fontSize: 12,
+                            //  fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 10,),
+                          Text(
+                            widget.data.about.toString(),
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: subTextColor,
+                            ),
+                          ),
+
+                        ],
+                      ),
+                    ),*/
+                    item(
+                      validateFun: (value) {
+                        if (value.toString().isEmpty) {
+                          return 'Name Required';
+                        }
+                      },
+                      label: "Name",
+                      initialValue: widget.data.name.toString(),
+                      hintText: "Enter your Name",
+                      fun: (value) {
+                        setState(() {
+                          name = value;
+                        });
+                      },
+                      textInputType: TextInputType.name,
+                      readOnly: false,
+                    ),
+                    item(
+                      validateFun: (value) {
+                        if (value.toString().isEmpty) {
+                          return 'Phone Required';
+                        }
+                      },
+                      label: Languages.of(context)!.patientProfile['phoneLabel'],
+                      initialValue: widget.data.phone.toString(),
+                      hintText: Languages.of(context)!.patientProfile['phoneHint'],
+                      fun: _getPhone,
+                      textInputType: TextInputType.phone,
+                      readOnly: false,
+                    ),
+                    item(
+                        validateFun: (value) {
+                          if (value.toString().isEmpty) {
+                            return 'Address Required';
+                          }
+                        },
+                        label:
+                            Languages.of(context)!.patientProfile['addressLabel'],
+                        initialValue: widget.data.location.toString(),
+                        hintText:
+                            Languages.of(context)!.patientProfile['addressHint'],
+                        fun: _getAddress,
+                        readOnly: false,
+                        textInputType: TextInputType.streetAddress),
+                  ]),
             )),
-        body: SingleChildScrollView(
-            child: Form(
-          key: _formKey,
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                _profilePicCard(
-                  context,
-                  imgUrl: widget.data.avatar.toString(),
+            bottomNavigationBar: BottomAppBar(
+              color: Colors.transparent,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    MaterialButton(
+                      minWidth: MediaQuery.of(context).size.width * .3,
+                      height: 50,
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(color: subTextColor),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PatientProfile()));
+                      },
+                      child: Text(
+                        Languages.of(context)!.patientProfile['cancelBtn'],
+                        style: TextStyle(fontSize: 16, color: subTextColor),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    RoundedButton(
+                      minWdthRatio: .5,
+                      fun: () {
+                        if (_pickerImage != null) {
+                          _updateAvatarFun();
+                        }
+                        _updatePatientProfile();
+                        // Navigator.pop(context);
+                      },
+                      text: Languages.of(context)!.patientProfile['saveBtn'],
+                      borderRadious: 50,
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                item(
-                  validateFun: (value) {
-                    if (value.toString().isEmpty) {
-                      return 'Name Required';
-                    }
-                  },
-                  label: "Name",
-                  initialValue: widget.data.name.toString(),
-                  hintText: "Enter your Name",
-                  fun: (value) {
-                    setState(() {
-                      name = value;
-                    });
-                  },
-                  textInputType: TextInputType.name,
-                  readOnly: false,
-                ),
-                item(
-                  validateFun: (value) {
-                    if (value.toString().isEmpty) {
-                      return 'Phone Required';
-                    }
-                  },
-                  label: Languages.of(context)!.patientProfile['phoneLabel'],
-                  initialValue: widget.data.phone.toString(),
-                  hintText: Languages.of(context)!.patientProfile['phoneHint'],
-                  fun: _getPhone,
-                  textInputType: TextInputType.phone,
-                  readOnly: false,
-                ),
-                item(
-                    validateFun: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'Address Required';
-                      }
-                    },
-                    label:
-                        Languages.of(context)!.patientProfile['addressLabel'],
-                    initialValue: widget.data.location.toString(),
-                    hintText:
-                        Languages.of(context)!.patientProfile['addressHint'],
-                    fun: _getAddress,
-                    readOnly: false,
-                    textInputType: TextInputType.streetAddress),
-              ]),
-        )),
-        bottomNavigationBar: BottomAppBar(
-          color: Colors.transparent,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                MaterialButton(
-                  minWidth: MediaQuery.of(context).size.width * .3,
-                  height: 50,
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(color: subTextColor),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PatientProfile()));
-                  },
-                  child: Text(
-                    Languages.of(context)!.patientProfile['cancelBtn'],
-                    style: TextStyle(fontSize: 16, color: subTextColor),
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                RoundedButton(
-                  minWdthRatio: .5,
-                  fun: () {
-                    if (_pickerImage != null) {
-                      _updateAvatarFun();
-                    }
-                    _updatePatientProfile();
-                    // Navigator.pop(context);
-                  },
-                  text: Languages.of(context)!.patientProfile['saveBtn'],
-                  borderRadious: 50,
-                ),
-              ],
-            ),
-          ),
-          elevation: 0.0,
-        ));
+              ),
+              elevation: 0.0,
+            )),
+        _showBanner?SizedBox(
+          height: 150,
+          child: ErrorMaterialBanner(fun:() {
+            setState(() {
+              _showBanner=false;
+            });
+
+          },errorMessage: _bannerMessage,),
+        ):SizedBox(),
+      ],
+    );
   }
 
   Widget item(

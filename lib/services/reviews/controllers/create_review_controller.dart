@@ -1,21 +1,24 @@
-import 'package:cookie_jar/cookie_jar.dart';
+import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/models/ApiCookies.dart';
-
 class CreateReviewController {
   Dio _dio = Dio();
-  var cookieJar = CookieJar();
+  late PersistCookieJar persistentCookies;
 
-  Future createReview({comment, stars}) async {
+  Future createReview(
+      {String? comment,
+        double? stars,
+        String? sessionId}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final _token = prefs.getString('access_token') ?? '';
 
     _dio.options
       ..baseUrl = BaseUrl.url
-      ..connectTimeout = 10000 //5s
-      ..receiveTimeout = 10000
+      ..connectTimeout = 20000
+      ..receiveTimeout = 20000
       ..validateStatus = (int? status) {
         return status != null && status > 0;
       }
@@ -24,17 +27,27 @@ class CreateReviewController {
       };
 
     (await ApiCookies.cookieJar).loadForRequest(Uri.parse(BaseUrl.url));
-
     _dio.interceptors.add(CookieManager(await ApiCookies.cookieJar));
-
-    Map data = {"comment": comment, "stars": stars};
-    var response =
-        await _dio.post('POST/session/{session_id}/reviews', data: data);
-    if (response.statusCode! >= 200 && response.statusCode! < 300) {
-      print(response.data.toString());
-    } else {
+    Map data = {
+      "comment":comment.toString(),
+      "stars":stars.toString()
+    };
+    try {
+      var response = await _dio.post('/sessions/${sessionId.toString()}/reviews', data: data);
       print(response.toString());
-      // throw Exception('Failed to add to fav ');
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        response.data.putIfAbsent('success', () => true);
+        print(response);
+        return response.data;
+      } else {
+        print(response.data);
+        response.data.putIfAbsent('success', () => false);
+        return response.data;
+      }
+    } on DioError catch (e) {
+      print(e);
+      Map error = {'success': false, 'message': 'Fail to add review , check your internet'};
+      return error;
     }
   }
 }

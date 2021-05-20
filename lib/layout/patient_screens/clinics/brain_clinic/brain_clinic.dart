@@ -13,6 +13,7 @@ import 'package:the_disease_fighter/localizations/localization/language/language
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/inductors/arc_inductor.dart';
+import 'package:the_disease_fighter/material/widgets/bottom_sheet_item.dart';
 import 'package:the_disease_fighter/material/widgets/model_result.dart';
 import 'package:the_disease_fighter/services/specialization/one_specialization_controller.dart';
 

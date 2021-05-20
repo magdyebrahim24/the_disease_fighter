@@ -1,26 +1,22 @@
 import 'dart:convert';
-
+import 'dart:core';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/models/ApiCookies.dart';
-import 'package:the_disease_fighter/services/logged_user/models/user_data_model.dart';
-
-class CurrentUserInfoController {
+import 'package:the_disease_fighter/services/doctorScreens/models/get_one_session_model.dart';
+class GetOneSessionController {
   Dio _dio = Dio();
   var cookieJar = CookieJar();
-
-  UserDataModel _userData = UserDataModel();
-
-  Future _getCurrentUser() async {
+  GetOneSessionModel _getOneSessionModel=GetOneSessionModel();
+  Future _getOneSession({sessionId}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final _token = prefs.getString('access_token') ?? '';
-
     _dio.options
       ..baseUrl = BaseUrl.url
-      ..connectTimeout = 10000 //5s
-      ..receiveTimeout = 10000
+      ..connectTimeout = 50000 //5s
+      ..receiveTimeout = 50000
       ..validateStatus = (int? status) {
         return status != null && status > 0;
       }
@@ -29,24 +25,24 @@ class CurrentUserInfoController {
       };
 
     (await ApiCookies.cookieJar).loadForRequest(Uri.parse(BaseUrl.url));
-
     _dio.interceptors.add(CookieManager(await ApiCookies.cookieJar));
 
-    var response = await _dio.get('/user');
+    var response = await _dio.get("/sessions/$sessionId");
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
-      print(response.data.toString());
+      print(response.data);
       return response;
     } else {
-      return response;
+      response.data.putIfAbsent('sessions', () => []);
+      print(response.data);
+      return response
+      ;
     }
   }
-
-  Future<UserDataModel?> loadUserData() async {
+  Future<GetOneSessionModel>getOneSession({sessionId}) async {
     var jsonString, jsonResponse;
-    jsonString = await _getCurrentUser();
+    jsonString = await _getOneSession(sessionId: sessionId.toString() );
     jsonResponse = json.decode(jsonString.toString());
-    _userData = UserDataModel.fromJson(jsonResponse);
-    print(_userData.currentUser!.name.toString());
-    return _userData;
+    _getOneSessionModel = GetOneSessionModel.fromJson(jsonResponse);
+    return _getOneSessionModel ;
   }
 }

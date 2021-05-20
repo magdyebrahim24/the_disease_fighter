@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
+import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/widgets/filter_dates.dart';
+import 'package:the_disease_fighter/layout/doctor-screens/metting/upComing_metting.dart';
+import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/patient_profile/patient_profile.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
+import 'package:the_disease_fighter/test_file.dart';
 import 'localizations/localization/locale_constant.dart';
 import 'localizations/localization/localizations_delegate.dart';
 
@@ -49,7 +54,9 @@ class _MyAppState extends State<MyApp> {
       title: 'The Disease Fighter',
       debugShowCheckedModeBanner: false,
       locale: _locale,
-      home: Home(),
+      //home: FilteredDates(),
+      //home: UpComingMeeting(),
+      home: DoctorHome(),
       theme: ThemeData(
         primaryColor: Colors.white,
         fontFamily: 'Rubik',
