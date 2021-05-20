@@ -36,13 +36,22 @@ class ChangePasswordController {
       "new_password": newPassword,
     };
 
-    var response = await _dio.patch('/password', data: data);
+    try {
+      var response = await _dio.patch('/password', data: data);
 
-    if (response.statusCode! >= 200 && response.statusCode! < 300) {
-      return response.data;
-    } else {
-      // throw Exception('Failed to Log In');
-      return response.data;
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        return response.data;
+      } else {
+        // throw Exception('Failed to Log In');
+        return response.data;
+      }
+    } on DioError catch (e) {
+      print(e);
+      Map error = {
+        'success': false,
+        'message': 'Fail to change in , check your internet '
+      };
+      return error;
     }
   }
 }

@@ -231,8 +231,8 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40.0),
                 ),
-                onPressed: () => launch(widget.data.phone != null
-                    ? "tel://${widget.data.phone.toString()}"
+                onPressed: () => launch(widget.data._phone != null
+                    ? "tel://${widget.data._phone.toString()}"
                     : "01552154105"),
                 child: Icon(
                   Icons.phone,

@@ -25,36 +25,32 @@ class Setting extends StatefulWidget {
 
 class _SettingState extends State<Setting> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  bool _isLoading = false;
   String? _errorMessage;
   bool _showBanner = false;
 
   LogOutController _logOut = LogOutController();
 
   Future _userLogOut() async {
+    LoaderDialog().onLoading(context);
     setState(() {
-      _isLoading = true;
+      _showBanner = false;
     });
     final data = await _logOut.userLogOut();
-
     if (await data['success']) {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => SignIn(),
+            builder: (context) => SignIn(
+              showLogOutSnackBar: true,
+            ),
           ));
-      print('done');
     } else {
-      print('else');
       setState(() {
         _errorMessage = data['message'].toString();
-        _isLoading = false;
         _showBanner = true;
       });
+      Navigator.of(context).pop();
     }
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   @override
@@ -76,38 +72,29 @@ class _SettingState extends State<Setting> {
         backgroundColor: primaryColor,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-      ),
-      body: !_isLoading
-          ? SingleChildScrollView(
-              child: Stack(
+          leading: !_showBanner
+              ? IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  })
+              : SizedBox(),
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+        ),
+        body: SingleChildScrollView(
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _showBanner
-                      ? ErrorMaterialBanner(
-                          errorMessage: _errorMessage.toString(),
-                          fun: () {
-                            setState(() {
-                              _showBanner = false;
-                            });
-                          },
-                        )
-                      : SizedBox(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(top: 25),
-                        alignment: Alignment.bottomCenter,
+                  Container(
+                    padding: EdgeInsets.only(top: 25),
+                    alignment: Alignment.bottomCenter,
                         width: MediaQuery.of(context).size.width,
                         height: 200,
                         child: PatientLogo(
@@ -187,21 +174,29 @@ class _SettingState extends State<Setting> {
                         leadingIconColor: primaryColor.withOpacity(.8),
                         icon: FontAwesomeIcons.twitter,
                         tittle: Languages.of(context)!.setting['twitter'],
-                        fun: () => launch('https://www.twitter.com/'),
-                      ),
-                      DrawerTile(
-                          leadingIconColor: Colors.green,
-                          icon: FontAwesomeIcons.whatsapp,
-                          tittle: Languages.of(context)!.setting['whatsApp'],
-                          fun: () async => await launch(
-                              "https://wa.me/01552154105?text=Share The Medical Solution App With Your Friends - link :https://twitter.com/migoo_1_3?s=09&fbclid=IwAR3k92gBqVe_OWHYwn2jsvsdV7hpO_lCB9dqJdS2SSM-7yhlaD_i8S7nsKM")),
-                    ],
+                    fun: () => launch('https://www.twitter.com/'),
                   ),
+                  DrawerTile(
+                      leadingIconColor: Colors.green,
+                      icon: FontAwesomeIcons.whatsapp,
+                      tittle: Languages.of(context)!.setting['whatsApp'],
+                      fun: () async => await launch(
+                          "https://wa.me/01552154105?text=Share The Medical Solution App With Your Friends - link :https://twitter.com/migoo_1_3?s=09&fbclid=IwAR3k92gBqVe_OWHYwn2jsvsdV7hpO_lCB9dqJdS2SSM-7yhlaD_i8S7nsKM")),
                 ],
               ),
-            )
-          : Center(child: CircularProgressIndicator()),
-    );
+              _showBanner
+                  ? ErrorMaterialBanner(
+                      errorMessage: _errorMessage.toString(),
+                      fun: () {
+                        setState(() {
+                          _showBanner = false;
+                        });
+                      },
+                    )
+                  : SizedBox(),
+            ],
+              ),
+            ));
   }
 
   _createLanguageDropDown() {

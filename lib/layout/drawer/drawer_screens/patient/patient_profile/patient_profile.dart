@@ -5,7 +5,7 @@ import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dar
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
-import 'package:the_disease_fighter/services/logged_user/get_user_info_controller.dart';
+import 'package:the_disease_fighter/services/logged_user/controllers/get_user_info_controller.dart';
 import 'edit_patient_profile.dart';
 
 // ignore: must_be_immutable

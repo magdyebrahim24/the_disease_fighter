@@ -12,7 +12,6 @@ class CurrentDoctorController {
   var cookieJar = CookieJar();
 
   LoggedDoctorData _doctorData = LoggedDoctorData();
-
   Future _getCurrentUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final _token = prefs.getString('access_token') ?? '';

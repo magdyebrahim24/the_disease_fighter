@@ -37,22 +37,31 @@ class LoginController {
       'password': password,
     };
 
-    var response = await _dio.post('/login', data: data);
+    try {
+      var response = await _dio.post('/login', data: data);
 
-    if (response.statusCode! >= 200 && response.statusCode! < 300) {
-      String accessToken = response.data['access_token'];
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('access_token', '$accessToken');
-      response.data.putIfAbsent('success', () => true);
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        String accessToken = response.data['access_token'];
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('access_token', '$accessToken');
+        response.data.putIfAbsent('success', () => true);
 
-      print(response.data);
-      return response.data;
-    } else {
-      // throw Exception('Failed to Log In');
-      print(response.data);
-      response.data.putIfAbsent('success', () => false);
+        print(response.data);
+        return response.data;
+      } else {
+        // throw Exception('Failed to Log In');
+        print(response.data);
+        response.data.putIfAbsent('success', () => false);
 
-      return response.data;
+        return response.data;
+      }
+    } on DioError catch (e) {
+      print(e);
+      Map error = {
+        'success': false,
+        'message': 'Fail to sign in , check your internet'
+      };
+      return error;
     }
   }
 }

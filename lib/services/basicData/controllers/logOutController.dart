@@ -23,8 +23,8 @@ class LogOutController {
     (await ApiCookies.cookieJar).loadForRequest(Uri.parse(BaseUrl.url));
     _dio.interceptors.add(CookieManager(await ApiCookies.cookieJar));
 
-    var response = await _dio.get('/logout');
     try {
+      var response = await _dio.get('/logout');
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
         response.data.putIfAbsent('success', () => true);
         print(response.toString());
@@ -35,8 +35,8 @@ class LogOutController {
         return response.data;
       }
     } on DioError catch (e) {
-      print(e);
-      Map error = {'success': false, 'message': 'Fail to delete try again '};
+      print(e.message);
+      Map error = {'success': false, 'message': 'Fail to log out try again '};
       return error;
     }
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/services/logged_user/get_user_info_controller.dart';
+import 'package:the_disease_fighter/services/logged_user/controllers/get_user_info_controller.dart';
 import '../constants.dart';
 
 class PatientLogo extends StatefulWidget {
@@ -105,13 +105,6 @@ class _PatientLogoState extends State<PatientLogo> {
               }
             }),
 
-       // SizedBox(
-        //  height: 7,
-       // ),
-       // Text(
-         // "Egypt - Mansoura",
-         // style: TextStyle(color: subTextColor),
-       // )
       ],
     );
   }

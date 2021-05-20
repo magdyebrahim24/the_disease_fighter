@@ -10,9 +10,7 @@ import 'package:the_disease_fighter/services/logged_user/controllers/getDoctorDa
 
 class UpdateDoctorDates extends StatefulWidget {
   final showSkip;
-
   UpdateDoctorDates({required this.showSkip});
-
   @override
   _UpdateDoctorDatesState createState() => _UpdateDoctorDatesState();
 }
@@ -149,7 +147,7 @@ class _UpdateDoctorDatesState extends State<UpdateDoctorDates> {
                     Padding(
                       padding: EdgeInsets.only(top: 5, bottom: 15),
                       child: Divider(
-                        thickness: 3,
+                        thickness: 4,
                       ),
                     ),
                     !_addDocDateLoading

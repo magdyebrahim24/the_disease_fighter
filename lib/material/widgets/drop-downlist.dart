@@ -33,37 +33,63 @@ class DropDownList extends StatelessWidget {
               margin: EdgeInsets.symmetric(
                 vertical: 7,
               ),
-              padding: EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                  border: Border.all(
-                      width: 1, color: Color(0xff707070).withOpacity(.15)),
-                  borderRadius: BorderRadius.circular(10),
-                  color: backGroundColor),
-              height: 52,
+              // padding: EdgeInsets.all(15),
+              // decoration: BoxDecoration(
+              //     border: Border.all(
+              //         width: 1, color: Color(0xff707070).withOpacity(.15)),
+              //     borderRadius: BorderRadius.circular(10),
+              //     color: backGroundColor),
+              // height: 52,
               width: MediaQuery.of(context).size.width * widthRatio,
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  onChanged: getValue,
-                  value: value,
-                  elevation: 1,
-                  hint: Text(
-                    hintText,
-                    style: TextStyle(color: subTextColor),
-                  ),
-                  icon: Icon(Icons.arrow_drop_down,
-                      color: darkBlueColor.withOpacity(.7)),
-                  isDense: false,
-                  items: items.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        style: TextStyle(
-                            fontSize: 15, color: darkBlueColor.withOpacity(.9)),
+              child: DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                    hintText: hintText,
+                    hintStyle: TextStyle(
+                      color: subTextColor.withOpacity(.6),
+                    ),
+                    // border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 14,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(
+                        color: primaryColor,
                       ),
-                    );
-                  }).toList(),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          width: 1, color: Color(0xff707070).withOpacity(.15)),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    fillColor: backGroundColor,
+                    filled: true),
+                onChanged: getValue,
+                validator: (value) {
+                  if (value == null) return 'Field Required';
+                },
+                value: value,
+                elevation: 1,
+                hint: Text(
+                  hintText,
+                  style: TextStyle(color: subTextColor),
                 ),
+                icon: Icon(Icons.arrow_drop_down,
+                    color: darkBlueColor.withOpacity(.6)),
+                isDense: false,
+                items: items.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: TextStyle(
+                          fontSize: 15, color: darkBlueColor.withOpacity(.9)),
+                    ),
+                  );
+                }).toList(),
               )),
         ],
       ),

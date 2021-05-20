@@ -3,11 +3,9 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/models/ApiCookies.dart';
-
 class UpdatePatientProfileController {
   Dio _dio = Dio();
   late PersistCookieJar persistentCookies;
-
   Future updatePatientProfile({
     String? phone,
     String? location,

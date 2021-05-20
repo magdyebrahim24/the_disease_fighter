@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../constants.dart';
 
+// ignore: must_be_immutable
 class ErrorMaterialBanner extends StatelessWidget {
   final errorMessage;
   final fun;
-
   ErrorMaterialBanner({this.errorMessage, this.fun});
 
   @override

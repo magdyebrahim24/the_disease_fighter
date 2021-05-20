@@ -8,7 +8,6 @@ import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
 import 'package:the_disease_fighter/material/widgets/patient-logo.dart';
 import 'package:the_disease_fighter/material/widgets/txt_field.dart';
 import 'package:the_disease_fighter/services/basicData/controllers/change_password_controller.dart';
-import 'package:the_disease_fighter/services/logged_user/get_user_info_controller.dart';
 
 class ChangePassword extends StatefulWidget {
   @override
@@ -19,11 +18,6 @@ class _ChangePasswordState extends State<ChangePassword> {
   String oldPassword = '';
   String newPassword = '';
   String confirmPassword = '';
-  CurrentUserInfoController _userInfoController = CurrentUserInfoController();
-  Future _getUserData() async {
-    var data = await _userInfoController.loadUserData();
-    return Future.value(data);
-  }
 
     ChangePasswordController _changePasswordController =
       ChangePasswordController();
@@ -149,7 +143,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     if (value.toString().isEmpty) {
                       return 'Confirm Password Required';
                     } else {
-                      if (value != confirmPassword) {
+                      if (value != newPassword) {
                         return 'Passwords Isn\'t Identical';
                       }
                       if (value.length < 8) {

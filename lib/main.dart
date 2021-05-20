@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_profile/edit_doctor_info/update_doctor_dates.dart';
+import 'package:the_disease_fighter/layout/drawer/drawer_screens/setting/settings.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
+import 'package:the_disease_fighter/layout/sign/sign-up/additional-info/doctor-info.dart';
+import 'package:the_disease_fighter/layout/sign/sign-up/sign_up.dart';
+import 'package:the_disease_fighter/layout/sign/sign_in/sign_in.dart';
 import 'localizations/localization/locale_constant.dart';
 import 'localizations/localization/localizations_delegate.dart';
 

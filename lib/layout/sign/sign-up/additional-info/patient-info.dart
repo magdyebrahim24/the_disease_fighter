@@ -8,7 +8,7 @@ import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
 import 'package:the_disease_fighter/material/widgets/drop-downlist.dart';
 import 'package:the_disease_fighter/material/widgets/time-date-field.dart';
 import 'package:the_disease_fighter/material/widgets/txt_field.dart';
-import 'package:the_disease_fighter/services/logged_user/update_user_info.dart';
+import 'package:the_disease_fighter/services/logged_user/controllers/update_patient_info.dart';
 
 class PatientInfo extends StatefulWidget {
   @override
@@ -16,16 +16,19 @@ class PatientInfo extends StatefulWidget {
 }
 
 class _PatientInfoState extends State<PatientInfo> {
-  String address = '';
-  String phone = '';
-  String errorMessage = '';
-  String genderValue = 'Male';
+  String? _address;
+  String? _phone;
 
-  late DateTime dateOfBirth;
+  String _errorMessage = '';
+  String? _genderValue;
+
+  String? _about;
+
+  DateTime? dateOfBirth;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  UpdateUserInfoController _updateUserInfoController =
-      UpdateUserInfoController();
+  UpdatePatientInfoController _updateUserInfoController =
+      UpdatePatientInfoController();
 
   Future _updateUserInfo() async {
     _formKey.currentState!.validate();
@@ -33,12 +36,12 @@ class _PatientInfoState extends State<PatientInfo> {
 
     if (_formKey.currentState!.validate()) {
       LoaderDialog().onLoading(context);
-      final data = await _updateUserInfoController.updateUserInfo(
-        location: address,
-        phone: phone,
-        dob: dateOfBirth.toString(),
-        gender: genderValue,
-      );
+      final data = await _updateUserInfoController.updatePatientInfo(
+          location: _address,
+          phone: _phone,
+          dob: dateOfBirth.toString(),
+          gender: _genderValue,
+          about: _about);
       if (await data['success']) {
         Navigator.pushReplacement(
             context,
@@ -47,7 +50,7 @@ class _PatientInfoState extends State<PatientInfo> {
             ));
       } else {
         setState(() {
-          errorMessage = data['message'].toString();
+          _errorMessage = data['message'].toString();
         });
         Navigator.of(context).pop();
       }
@@ -114,7 +117,7 @@ class _PatientInfoState extends State<PatientInfo> {
                             .signUpPatientInfo['addressHint'],
                         inputTextFunction: (String address) {
                           setState(() {
-                            this.address = address;
+                            this._address = address;
                           });
                         },
                         textInputType: TextInputType.text,
@@ -131,7 +134,7 @@ class _PatientInfoState extends State<PatientInfo> {
                             .signUpPatientInfo['phoneHint'],
                         inputTextFunction: (String phone) {
                           setState(() {
-                            this.phone = phone;
+                            this._phone = phone;
                           });
                         },
                         textInputType: TextInputType.phone,
@@ -153,10 +156,10 @@ class _PatientInfoState extends State<PatientInfo> {
                         },
                       ),
                       DropDownList(
-                        value: genderValue,
+                        value: _genderValue,
                         getValue: (val) {
                           setState(() {
-                            genderValue = val;
+                            _genderValue = val;
                           });
                         },
                         items: ["Male", "Female"],
@@ -165,9 +168,24 @@ class _PatientInfoState extends State<PatientInfo> {
                         labelText: Languages.of(context)!
                             .signUpPatientInfo['genderLabel'],
                       ),
-                      errorMessage != ''
+                      TxtField(
+                        labelText: 'Information About You',
+                        hintText: 'type any information',
+                        inputTextFunction: (value) {
+                          setState(() {
+                            value = _about;
+                          });
+                        },
+                        textInputType: TextInputType.text,
+                        validatorFun: (value) {
+                          if (value.toString().isEmpty) {
+                            return 'Information Required';
+                          }
+                        },
+                      ),
+                      _errorMessage != ''
                           ? Text(
-                              errorMessage,
+                              _errorMessage,
                               style:
                                   TextStyle(color: Colors.red.withOpacity(.6)),
                             )

@@ -10,9 +10,9 @@ import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
-import 'package:the_disease_fighter/services/logged_user/get_user_info_controller.dart';
-import 'package:the_disease_fighter/services/logged_user/update_avatar.dart';
-import 'package:the_disease_fighter/services/logged_user/update_patient_profile.dart';
+import 'package:the_disease_fighter/services/logged_user/controllers/get_user_info_controller.dart';
+import 'package:the_disease_fighter/services/logged_user/controllers/update_avatar.dart';
+import 'package:the_disease_fighter/services/logged_user/controllers/update_patient_profile.dart';
 
 // ignore: must_be_immutable
 class EditPatientProfile extends StatefulWidget {
