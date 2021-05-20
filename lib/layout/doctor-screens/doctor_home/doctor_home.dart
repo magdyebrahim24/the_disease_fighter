@@ -7,7 +7,7 @@ import 'package:the_disease_fighter/layout/notification/notification.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
-import 'package:the_disease_fighter/services/doctorScreens/controllers/get_all_doctors_sessions_controller.dart';
+
 class DoctorHome extends StatefulWidget {
   @override
   _DoctorHomeState createState() => _DoctorHomeState();
@@ -15,15 +15,6 @@ class DoctorHome extends StatefulWidget {
 
 class _DoctorHomeState extends State<DoctorHome> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  DoctorAppointmentsController _doctorAppointmentsController=DoctorAppointmentsController();
-
-
-
-
-  Future _loadDoctorAppointments() async {
-    var data = await _doctorAppointmentsController.getDoctorAppointments();
-    return Future.value(data);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +50,6 @@ class _DoctorHomeState extends State<DoctorHome> with TickerProviderStateMixin {
                 floating: true,
                 bottom: _CustomTabBar(
                   TabBar(
-
                     indicatorPadding:
                         EdgeInsets.symmetric(vertical: 8, horizontal: 15),
                     indicatorColor: primaryColor,
@@ -80,64 +70,12 @@ class _DoctorHomeState extends State<DoctorHome> with TickerProviderStateMixin {
               ),
             ];
           },
-          body: FutureBuilder<dynamic>(
-              future: _loadDoctorAppointments(),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (!snapshot.hasData && !snapshot.hasError) {
-                  return Container(
-                      height: 222,
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator());
-                } else {
-                  if (snapshot.hasError) {
-                    return SizedBox(
-                      height: 222,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                              icon: Icon(
-                                Icons.refresh,
-                                color: primaryColor,
-                                size: 40,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _loadDoctorAppointments();
-                                });
-                              }),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Text(
-                            'Failed To Load',
-                            style: TextStyle(color: subTextColor, fontSize: 16),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    return TabBarView(
-                      children: [
-                        TodayAppointments( data:snapshot.data.currentAppointments != null
-                    ? snapshot.data.currentAppointments
-                        : []),
-                        AllAppointments(data:snapshot.data.futureAppointments
-                            != null
-                          ? snapshot.data.futureAppointments
-                          : []),
-
-                      ],
-                    );
-                  }
-                }
-              }), /*TabBarView(
+          body: TabBarView(
             children: [
               TodayAppointments(),
               AllAppointments(),
             ],
-          ),*/
+          ),
         ),
       ),
       drawer: DoctorMainDrawer(),

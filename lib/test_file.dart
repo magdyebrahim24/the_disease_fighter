@@ -1,626 +1,445 @@
-/*import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
-import 'package:the_disease_fighter/layout/doctor-screens/metting/start_meeting.dart';
-import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
-import 'package:the_disease_fighter/material/constants.dart';
-import 'package:the_disease_fighter/material/widgets/drop-downlist.dart';
-import 'package:the_disease_fighter/material/widgets/meeting%20info.dart';
-import 'package:the_disease_fighter/material/widgets/time-date-field.dart';
-import 'package:the_disease_fighter/services/doctorScreens/controllers/get_one_session_controller.dart';
-
-import 'layout/drawer/drawer_screens/patient/my_appointments/my_appointments.dart';
-
-class UpComingMeeting extends StatefulWidget {
-  final sessionId;
-  const UpComingMeeting({ this.sessionId}) ;
-  @override
-  _UpComingMeetingState createState() => _UpComingMeetingState();
-}
-
-class _UpComingMeetingState extends State<UpComingMeeting> {
-  var info;
-  GetOneSessionController _getOneSessionController=GetOneSessionController();
-  Future _getSessionData() async {
-    var data = await _getOneSessionController.getOneSession(sessionId:widget.sessionId,);
-    info=data;
-    return data ;
-  }
-  late String appointmentTime;
-  late DateTime fromTime;
-
-  _getAppointmentDate(DateTime phone) {
-    setState(() {
-      // this.fromTime = phone;
-    });
-  }
-
-  _getAppointmentTime(String val) {
-    setState(() {
-      appointmentTime = val;
-    });
-  }
-
-  Future _asyncConfirmDialog(BuildContext context) async {
-    return showDialog(
-      context: context,
-      barrierDismissible: false, // user must tap button for close dialog!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          buttonPadding: EdgeInsets.symmetric(horizontal: 20),
-          content: Container(
-            height: 300,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                BasicDateField(
-                  helperText: 'Select Appointment Date',
-                  label: 'Date',
-                  fun: _getAppointmentDate,
-                ),
-                DropDownList(
-                  value: appointmentTime,
-                  getValue: _getAppointmentTime,
-                  items: [
-                    '08:00 pm',
-                    '08:30 pm',
-                    '09:00 pm',
-                    '09:30 pm',
-                    '10:00 pm',
-                    '10:30 pm',
-                  ],
-                  hintText: '${DateTime.now().hour}:${DateTime.now().minute}',
-                  labelText: 'Time',
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        height: 45,
-                        width: MediaQuery.of(context).size.width * .3,
-                        child: Center(
-                          child: Text(
-                            "Cancel",
-                            style: TextStyle(
-                                color: greyColor,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: backGroundColor,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    InkWell(
-                      onTap: () => Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DoctorHome())),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * .3,
-                        height: 45,
-                        child: Center(
-                          child: Text(
-                            "Done",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: primaryColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.pop(context, [true]);
-                  },
-                  //=> Navigator.pushReplacement(context,
-                  //MaterialPageRoute(builder: (context) => DoctorHome())),
-                  child: Container(
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 20,
-                    ),
-                    width: MediaQuery.of(context).size.width,
-                    height: 45,
-                    child: Center(
-                      child: Text(
-                        "Delete Meeting",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Color(0xffE13239),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-  Widget _profilePicCard(BuildContext context,imgUrl,name) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: primaryColor.withOpacity(.1),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            margin: EdgeInsets.only(bottom: 10),
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(imgUrl.toString()),
-                    fit: BoxFit.cover),
-                shape: BoxShape.circle,
-                border: Border.all(color: Color(0xffFDFDFD), width: 2),
-                color: backGroundColor),
-            height: 90,
-            width: 90,
-          ),
-          Text(
-            name.toString(),
-            style: TextStyle(
-                color: darkBlueColor,
-                fontSize: 23,
-                fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          InkWell(
-            onTap: () {
-              _asyncConfirmDialog(context);
-            },
-            child: Container(
-              width: MediaQuery.of(context).size.width * .7,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(
-                child: Text(
-                  "Delay Meeting",
-                  style: TextStyle(
-                      color: primaryColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => StartMeeting(data:info.session)));
-            },
-            child: Container(
-              width: MediaQuery.of(context).size.width * .7,
-              height: 50,
-              decoration: BoxDecoration(
-                color: primaryColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(
-                child: Text(
-                  "Start Meeting",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
-                ),
-              ),
-            ),
-          ),
+var data = {
+  "doctors": [
+    {
+      "about": "Hello, there! I'm Dr.Mohamed ",
+      "available_dates": [
+        {
+          "day": "Friday",
+          "doctor_id": 1,
+          "end_time": "5:00 pm",
+          "id": 12,
+          "start_time": "02:00 pm"
+        },
+        {
+          "day": "Sunday",
+          "doctor_id": 1,
+          "end_time": "11:00 pm",
+          "id": 13,
+          "start_time": "04:00 pm"
+        }
+      ],
+      "avatar": "https://thediseasefighter.herokuapp.com/static/default.png",
+      "clinic_location": "Egypt, Cairo, next to Cairo University",
+      "dob": "1980-06-12",
+      "email": "mohamed@mail.com",
+      "gender": "Male",
+      "id": 1,
+      "is_in_favorite_list": false,
+      "name": "Mohamed",
+      "phone": "8563415792",
+      "reviews": {
+        "avatars": [
+          "https://thediseasefighter.herokuapp.com/static/default.png"
         ],
-      ),
-    );
-  }
+        "no.patients": 1,
+        "rates": 4
+      },
+      "spec_id": 1,
+      "specialization": {
+        "id": 1,
+        "image":
+            "https://thediseasefighter.herokuapp.com/static/specializations/Brain.png",
+        "name": "Brain"
+      },
+      "x_y": null
+    },
+    {
+      "about": "Hey! I'm Dr.Ahmed. I'm a cardiologist ",
+      "available_dates": [
+        {
+          "day": "Saturday",
+          "doctor_id": 2,
+          "end_time": "10:00 pm",
+          "id": 9,
+          "start_time": "06:00 pm"
+        },
+        {
+          "day": "Monday",
+          "doctor_id": 2,
+          "end_time": "10:00 pm",
+          "id": 10,
+          "start_time": "06:00 pm"
+        },
+        {
+          "day": "Wednesday",
+          "doctor_id": 2,
+          "end_time": "10:00 pm",
+          "id": 11,
+          "start_time": "06:00 pm"
+        }
+      ],
+      "avatar": "https://thediseasefighter.herokuapp.com/static/default.png",
+      "clinic_location": "Saudi Arabia",
+      "dob": "1985-06-08",
+      "email": "ahmed@mail.com",
+      "gender": "Male",
+      "id": 2,
+      "is_in_favorite_list": false,
+      "name": "Ahmed",
+      "phone": "8563415792",
+      "reviews": {
+        "avatars": [
+          "https://thediseasefighter.herokuapp.com/static/128603700_889210841889836_6273212706355868656_o.jpg"
+        ],
+        "no.patients": 1,
+        "rates": 4
+      },
+      "spec_id": 2,
+      "specialization": {
+        "id": 2,
+        "image":
+            "https://thediseasefighter.herokuapp.com/static/specializations/Heart.png",
+        "name": "Heart"
+      },
+      "x_y": null
+    },
+    {
+      "about": "Hello! I'm Dr.Peter",
+      "available_dates": [
+        {
+          "day": "Thursday",
+          "doctor_id": 3,
+          "end_time": "10:00 pm",
+          "id": 7,
+          "start_time": "05:00 pm"
+        },
+        {
+          "day": "Friday",
+          "doctor_id": 3,
+          "end_time": "10:00 pm",
+          "id": 8,
+          "start_time": "05:00 pm"
+        }
+      ],
+      "avatar": "https://thediseasefighter.herokuapp.com/static/default.png",
+      "clinic_location": "Egypt, Alexandria",
+      "dob": "1980-06-12",
+      "email": "peter@mail.com",
+      "gender": "Male",
+      "id": 3,
+      "is_in_favorite_list": false,
+      "name": "Peter",
+      "phone": "54863258986",
+      "reviews": {
+        "avatars": [
+          "https://thediseasefighter.herokuapp.com/static/128603700_889210841889836_6273212706355868656_o.jpg"
+        ],
+        "no.patients": 1,
+        "rates": 4
+      },
+      "spec_id": 2,
+      "specialization": {
+        "id": 2,
+        "image":
+            "https://thediseasefighter.herokuapp.com/static/specializations/Heart.png",
+        "name": "Heart"
+      },
+      "x_y": null
+    },
+    {
+      "about": "Hi, I'm Dr.Osama ",
+      "available_dates": [
+        {
+          "day": "Saturday",
+          "doctor_id": 4,
+          "end_time": "10:00 pm",
+          "id": 4,
+          "start_time": "05:00 pm"
+        },
+        {
+          "day": "Sunday",
+          "doctor_id": 4,
+          "end_time": "6:00 pm",
+          "id": 5,
+          "start_time": "02:00 pm"
+        },
+        {
+          "day": "Wednesday",
+          "doctor_id": 4,
+          "end_time": "09:00 pm",
+          "id": 6,
+          "start_time": "05:00 pm"
+        }
+      ],
+      "avatar": "https://thediseasefighter.herokuapp.com/static/default.png",
+      "clinic_location": "Egypt",
+      "dob": "1990-06-06",
+      "email": "osama@mail.com",
+      "gender": "Male",
+      "id": 4,
+      "is_in_favorite_list": false,
+      "name": "Osama",
+      "phone": "1245757575",
+      "reviews": {"avatars": [], "no.patients": 0, "rates": 0},
+      "spec_id": 4,
+      "specialization": {
+        "id": 4,
+        "image":
+            "https://thediseasefighter.herokuapp.com/static/specializations/Teeth.png",
+        "name": "Teeth"
+      },
+      "x_y": null
+    },
+    {
+      "about": "I'm Dr.Jessica ",
+      "available_dates": [
+        {
+          "day": "Sunday",
+          "doctor_id": 5,
+          "end_time": "10:00 pm",
+          "id": 1,
+          "start_time": "04:00 pm"
+        },
+        {
+          "day": "Tuesday",
+          "doctor_id": 5,
+          "end_time": "10:00 pm",
+          "id": 2,
+          "start_time": "05:00 pm"
+        }
+      ],
+      "avatar": "https://thediseasefighter.herokuapp.com/static/default.png",
+      "clinic_location": "USA",
+      "dob": "1980-06-12",
+      "email": "jessica@mail.com",
+      "gender": "Female",
+      "id": 5,
+      "is_in_favorite_list": false,
+      "name": "Jessica",
+      "phone": "589766512",
+      "reviews": {
+        "avatars": [
+          "https://thediseasefighter.herokuapp.com/static/default.png"
+        ],
+        "no.patients": 1,
+        "rates": 5
+      },
+      "spec_id": 5,
+      "specialization": {
+        "id": 5,
+        "image":
+            "https://cdn.pixabay.com/photo/2017/11/08/17/09/ribs-front-2931058_960_720.png",
+        "name": "Bone"
+      },
+      "x_y": null
+    },
+    {
+      "about": "I'm Dr.Jean",
+      "available_dates": [
+        {
+          "day": "Monday",
+          "doctor_id": 6,
+          "end_time": "6:00 pm",
+          "id": 3,
+          "start_time": "02:00 pm"
+        }
+      ],
+      "avatar": "https://thediseasefighter.herokuapp.com/static/default.png",
+      "clinic_location": "USA",
+      "dob": "1995-06-12",
+      "email": "jean@mail.com",
+      "gender": "Female",
+      "id": 6,
+      "is_in_favorite_list": false,
+      "name": "Jean",
+      "phone": "9865671545",
+      "reviews": {
+        "avatars": [
+          "https://thediseasefighter.herokuapp.com/static/128603700_889210841889836_6273212706355868656_o.jpg",
+          "https://thediseasefighter.herokuapp.com/static/128603700_889210841889836_6273212706355868656_o.jpg"
+        ],
+        "no.patients": 2,
+        "rates": 4
+      },
+      "spec_id": 1,
+      "specialization": {
+        "id": 1,
+        "image":
+            "https://thediseasefighter.herokuapp.com/static/specializations/Brain.png",
+        "name": "Brain"
+      },
+      "x_y": null
+    },
+    {
+      "about": null,
+      "available_dates": [],
+      "avatar": "https://thediseasefighter.herokuapp.com/static/default.png",
+      "clinic_location": null,
+      "dob": null,
+      "email": "aaaaaaaaaaaaaaaaaaaaaaaaaaa@mail.com",
+      "gender": null,
+      "id": 7,
+      "is_in_favorite_list": false,
+      "name": "al123",
+      "phone": null,
+      "reviews": {"avatars": [], "no.patients": 0, "rates": 0},
+      "spec_id": null,
+      "specialization": null,
+      "x_y": null
+    },
+    {
+      "about": null,
+      "available_dates": [],
+      "avatar": "https://thediseasefighter.herokuapp.com/static/default.png",
+      "clinic_location": null,
+      "dob": null,
+      "email": "test",
+      "gender": null,
+      "id": 8,
+      "is_in_favorite_list": false,
+      "name": "test",
+      "phone": null,
+      "reviews": {"avatars": [], "no.patients": 0, "rates": 0},
+      "spec_id": null,
+      "specialization": null,
+      "x_y": null
+    },
+    {
+      "about": null,
+      "available_dates": [],
+      "avatar": "https://thediseasefighter.herokuapp.com/static/default.png",
+      "clinic_location": null,
+      "dob": null,
+      "email": "doctor@test",
+      "gender": null,
+      "id": 9,
+      "is_in_favorite_list": false,
+      "name": "doctor",
+      "phone": null,
+      "reviews": {"avatars": [], "no.patients": 0, "rates": 0},
+      "spec_id": null,
+      "specialization": null,
+      "x_y": null
+    },
+    {
+      "about": null,
+      "available_dates": [],
+      "avatar": "https://thediseasefighter.herokuapp.com/static/default.png",
+      "clinic_location": null,
+      "dob": null,
+      "email": "doctor1@test",
+      "gender": null,
+      "id": 10,
+      "is_in_favorite_list": false,
+      "name": "doctor1",
+      "phone": null,
+      "reviews": {"avatars": [], "no.patients": 0, "rates": 0},
+      "spec_id": null,
+      "specialization": null,
+      "x_y": null
+    },
+    {
+      "about": null,
+      "available_dates": [],
+      "avatar": "https://thediseasefighter.herokuapp.com/static/default.png",
+      "clinic_location": null,
+      "dob": null,
+      "email": "doctor2@test",
+      "gender": null,
+      "id": 11,
+      "is_in_favorite_list": false,
+      "name": "doctor2",
+      "phone": null,
+      "reviews": {"avatars": [], "no.patients": 0, "rates": 0},
+      "spec_id": null,
+      "specialization": null,
+      "x_y": null
+    },
+    {
+      "about": null,
+      "available_dates": [],
+      "avatar": "https://thediseasefighter.herokuapp.com/static/default.png",
+      "clinic_location": null,
+      "dob": null,
+      "email": "doctor5@test",
+      "gender": null,
+      "id": 12,
+      "is_in_favorite_list": false,
+      "name": "doctor5",
+      "phone": null,
+      "reviews": {"avatars": [], "no.patients": 0, "rates": 0},
+      "spec_id": null,
+      "specialization": null,
+      "x_y": null
+    },
+    {
+      "about": null,
+      "available_dates": [],
+      "avatar": "https://thediseasefighter.herokuapp.com/static/default.png",
+      "clinic_location": null,
+      "dob": null,
+      "email": "docotor8@test",
+      "gender": null,
+      "id": 13,
+      "is_in_favorite_list": false,
+      "name": "docotor8",
+      "phone": null,
+      "reviews": {"avatars": [], "no.patients": 0, "rates": 0},
+      "spec_id": null,
+      "specialization": null,
+      "x_y": null
+    }
+  ],
+  "success": true,
+  "total_doctors": 13
+};
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-     // key: _scaffoldKey,
-      backgroundColor: Colors.white,
-      body: DefaultTabController(
-        length: 2,
-        child:  FutureBuilder<dynamic>(
-            future: _getSessionData(),
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              if (!snapshot.hasData && !snapshot.hasError) {
-                return Container(
-                    height: 222,
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator());
-              } else {
-                if (snapshot.hasError) {
-                  return SizedBox(
-                    height: 222,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AppBar(
-                          elevation: 0.0,
-                          leading: IconButton(
-                            icon: Icon(
-                              Icons.arrow_back_outlined,
-                              color: primaryColor,
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context, [true]);
-                            },
-                          ),
-                          centerTitle: true,
-                          title: Text(
-                            "Meeting",
-                            style: TextStyle(color: primaryColor, fontSize: 16),
-                          ),
-                        ),
-                        IconButton(
-                            icon: Icon(
-                              Icons.refresh,
-                              color: primaryColor,
-                              size: 40,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _getSessionData();
-                              });
-                            }),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          'Failed To Load',
-                          style: TextStyle(color: subTextColor, fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  return  NestedScrollView(
-                      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                    return [
-                      SliverAppBar(
-                        elevation: 0.0,
-                        leading: IconButton(
-                          icon: Icon(
-                            Icons.arrow_back_outlined,
-                            color: primaryColor,
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context, [true]);
-                          },
-                        ),
-                        pinned: true,
-                        snap: false,
-                        floating: true,
-                        expandedHeight: 300.0,
-                        flexibleSpace: FlexibleSpaceBar(
-                          //title: Text(
-                           // "Meeting",
-                          //  style: TextStyle(color: primaryColor, fontSize: 16),
-                         // ),
-                          centerTitle: true,
-                          background:  _profilePicCard(context,snapshot.data.session.patientAvatar.toString().toString(),snapshot.data.session.name.toString()),
+class AllDoctors {
+  var brain,
+      heart,
+      dermatology,
+      teeth,
+      bone,
+      physical,
+      urology,
+      surgery,
+      kids,
+      internalMedicine,
+      chest;
 
-                        ),
-                      ),
-                      SliverPersistentHeader(
-                        delegate: SliverAppBarDelegate(
-                          TabBar(
-                            indicatorPadding:
-                            EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-                            indicatorColor: primaryColor,
-                            unselectedLabelColor: subTextColor,
-                            indicatorSize: TabBarIndicatorSize.tab,
-                            labelColor: primaryColor,
-                            indicator: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white),
-                            tabs: [
-                              tapBarWidget(
-                                  label: "Session Info"
-                              ),
-                              tapBarWidget(
-                                  label:"Patient Info"
-                              )
-                            ],
-                          ),
-                        ),
-                        pinned: true,
-                      ),
-                    ];
-                  }, body: TabBarView(
-                    children: [
-                      patientInfo(),
-                      sessionInfo(),
-                    ],
-                  )
-                 );
-                    //TabBarView(
-                   // children: [
-                    //  patientInfo(),
-                     // sessionInfo(),
-                   // ],
-                //  );
-                }
-              }
-            }),
-          /*FutureBuilder<dynamic>(
-              future: _getSessionData(),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (!snapshot.hasData && !snapshot.hasError) {
-                  return Container(
-                      height: 222,
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator());
-                } else {
-                  if (snapshot.hasError) {
-                    return SizedBox(
-                      height: 222,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                              icon: Icon(
-                                Icons.refresh,
-                                color: primaryColor,
-                                size: 40,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _getSessionData();
-                                });
-                              }),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Text(
-                            'Failed To Load',
-                            style: TextStyle(color: subTextColor, fontSize: 16),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    return TabBarView(
-                      children: [
-                        patientInfo(),
-                        sessionInfo(),
-                      ],
-                    );
-                  }
-                }
-              }),*/
+  handleDoctorsSpecializations({doctorsData}) {
+    for (var doctor in doctorsData['doctors']) {
+      if (doctor['spec_id'] == 1) {
+        brain.add(doctor);
+      } else if (doctor['spec_id'] == 2) {
+        heart.add(doctor);
+      } else if (doctor['spec_id'] == 3) {
+        dermatology.add(doctor);
+      } else if (doctor['spec_id'] == 4) {
+        teeth.add(doctor);
+      } else if (doctor['spec_id'] == 5) {
+        bone.add(doctor);
+      } else if (doctor['spec_id'] == 6) {
+        physical.add(doctor);
+      } else if (doctor['spec_id'] == 7) {
+        urology.add(doctor);
+      } else if (doctor['spec_id'] == 8) {
+        surgery.add(doctor);
+      } else if (doctor['spec_id'] == 9) {
+        kids.add(doctor);
+      } else if (doctor['spec_id'] == 10) {
+        internalMedicine.add(doctor);
+      } else {
+        chest.add(doctor);
+      }
+    }
 
+    var doctorsSpecializationsData = {
+      'all': data['doctors'],
+      'brain': brain,
+      'heart': heart,
+      'dermatology': dermatology,
+      'teeth': teeth,
+      'bone': bone,
+      'physical': physical,
+      'urology': urology,
+      'surgery': surgery,
+      'kids': kids,
+      'internalMedicine': internalMedicine,
+      'chest': chest,
+      'success': true,
+    };
 
-
-    ));
-  }
-
-  Widget tapBarWidget({required String label}) {
-    return Container(
-      child: Text(label),
-      alignment: Alignment.center,
-    );
-  }
-  Widget patientInfo(){
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              height: 110,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: lightGreyColor,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "About",
-                    style: TextStyle(
-                        color: darkBlueColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10,),
-                  Text(
-                    "Lorem Ipsum is simply dummy text the printing typesetting and  industry Lorem Ipsum has been the industry's standard dummy text  ever since the 1500s.",
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: subTextColor,
-                    ),
-                  ),
-
-                ],
-              ),
-            ),
-            MeetingInfo(
-              color: lightGreyColor,
-              width: MediaQuery.of(context).size.width,
-              text: "alia12@example.com",
-              widget: Icon(Icons.email, color: primaryColor),
-            ),
-
-            MeetingInfo(
-                color: lightGreyColor,
-                width: MediaQuery.of(context).size.width,
-                text: info.session.phone.toString(),
-                widget: Icon(Icons.phone, color: primaryColor)),
-            Row(
-              children: [
-                MeetingInfo(
-                  color: lightGreyColor,
-                  width: MediaQuery.of(context).size.width * .4,
-                  text: info.session.gender.toString(),
-                  widget: Icon(Icons.wc, color: primaryColor),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Expanded(
-                    child: MeetingInfo(
-                      color: lightGreyColor,
-                      width: null,
-                      text: "21 / 02 / 1999",
-                      widget: Icon(
-                        Icons.calendar_today_rounded,
-                        color: primaryColor,
-                      ),
-                    ))
-              ],
-            ),
-
-          ],
-        ),
-      ),
-    );
-
-  }
-  Widget sessionInfo(){
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              height: 110,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: lightGreyColor,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Comment",
-                    style: TextStyle(
-                        color: darkBlueColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10,),
-                  Text(
-                    info.session.comment.toString(),                    style: TextStyle(
-                      fontSize: 10,
-                      color: subTextColor,
-                    ),
-                  ),
-
-                ],
-              ),
-            ),
-            Text("Date"),
-            MeetingInfo(
-              color: lightGreyColor,
-              width: MediaQuery.of(context).size.width,
-              text: info.session.date.toString(),
-              widget: Icon(Icons.email, color: primaryColor),
-            ),
-            Text("Time"),
-            MeetingInfo(
-              color: lightGreyColor,
-              width: MediaQuery.of(context).size.width,
-              text: info.session.time.toString(),
-              widget: Icon(Icons.email, color: primaryColor),
-            ),
-            Text("Day"),
-            MeetingInfo(
-              color: lightGreyColor,
-              width: MediaQuery.of(context).size.width,
-              text: "day",
-              widget: Icon(Icons.email, color: primaryColor),
-            ),
-            Text("Name"),
-            MeetingInfo(
-              color: lightGreyColor,
-              width: MediaQuery.of(context).size.width,
-              text: "patient name",
-              widget: Icon(Icons.email, color: primaryColor),
-            ),
-            Text("phone"),
-            MeetingInfo(
-              color: lightGreyColor,
-              width: MediaQuery.of(context).size.width,
-              text: "patient phone",
-              widget: Icon(Icons.email, color: primaryColor),
-            ),
-            Text("gender"),
-            MeetingInfo(
-              color: lightGreyColor,
-              width: MediaQuery.of(context).size.width,
-              text: "gender",
-              widget: Icon(Icons.email, color: primaryColor),
-            ),
-
-          ],
-        ),
-      ),
-    ) ;
+    return doctorsSpecializationsData;
   }
 }
-
-
-class _CustomTabBar extends Container implements PreferredSizeWidget {
-  _CustomTabBar(this._tabBar);
-
-  final TabBar _tabBar;
-
-  @override
-  Size get preferredSize => _tabBar.preferredSize;
-
-  @override
-  Widget build(BuildContext context) => Container(
-    height: _tabBar.preferredSize.height,
-    margin: EdgeInsets.symmetric(horizontal: 15),
-    child: _tabBar,
-    decoration: BoxDecoration(
-        color: backGroundColor, borderRadius: BorderRadius.circular(10)),
-  );
-}
-*/

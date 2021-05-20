@@ -8,7 +8,6 @@ import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_p
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
-import 'package:the_disease_fighter/material/widgets/bottom_sheet_item.dart';
 import 'package:the_disease_fighter/material/widgets/model_result.dart';
 
 class ModelScreen extends StatefulWidget {

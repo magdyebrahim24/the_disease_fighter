@@ -8,8 +8,7 @@ import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
 import 'package:the_disease_fighter/material/widgets/patient-logo.dart';
 import 'package:the_disease_fighter/material/widgets/txt_field.dart';
 import 'package:the_disease_fighter/services/basicData/controllers/change_password_controller.dart';
-import 'package:the_disease_fighter/services/logged_user/controllers/get_user_info_controller.dart';
-
+import 'package:the_disease_fighter/services/logged_user/get_user_info_controller.dart';
 
 class ChangePassword extends StatefulWidget {
   @override

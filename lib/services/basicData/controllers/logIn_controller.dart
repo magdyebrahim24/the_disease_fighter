@@ -4,9 +4,12 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/models/ApiCookies.dart';
+
 class LoginController {
   Dio _dio = Dio();
+
   late PersistCookieJar persistentCookies;
+
   Future userLogin({
     String? email,
     String? password,
@@ -28,36 +31,28 @@ class LoginController {
         .saveFromResponse(Uri.parse(BaseUrl.url), cookies);
 
     _dio.interceptors.add(CookieManager(await ApiCookies.cookieJar));
+
     Map data = {
       'email': email,
       'password': password,
     };
 
-    try {
-      var response = await _dio.post('/login', data: data);
+    var response = await _dio.post('/login', data: data);
 
-      if (response.statusCode! >= 200 && response.statusCode! < 300) {
-        String accessToken = response.data['access_token'];
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('access_token', '$accessToken');
-        response.data.putIfAbsent('success', () => true);
+    if (response.statusCode! >= 200 && response.statusCode! < 300) {
+      String accessToken = response.data['access_token'];
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('access_token', '$accessToken');
+      response.data.putIfAbsent('success', () => true);
 
-        print(response.data);
-        return response.data;
-      } else {
-        // throw Exception('Failed to Log In');
-        print(response.data);
-        response.data.putIfAbsent('success', () => false);
+      print(response.data);
+      return response.data;
+    } else {
+      // throw Exception('Failed to Log In');
+      print(response.data);
+      response.data.putIfAbsent('success', () => false);
 
-        return response.data;
-      }
-    } on DioError catch (e) {
-      print(e);
-      Map error = {
-        'success': false,
-        'message': 'Fail to sign in , check your internet'
-      };
-      return error;
+      return response.data;
     }
   }
 }

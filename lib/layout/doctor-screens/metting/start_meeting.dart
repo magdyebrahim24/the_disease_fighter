@@ -7,9 +7,6 @@ import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_hom
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 class StartMeeting extends StatefulWidget {
-  final data;
-
-  const StartMeeting({Key? key, this.data}) : super(key: key);
   @override
   _StartMeetingState createState() => _StartMeetingState();
 }
@@ -164,14 +161,12 @@ class _StartMeetingState extends State<StartMeeting> {
           Row(
             children: [
               Container(
-
                 width: 50,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: backGroundColor,
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                        image: NetworkImage(widget.data.patientAvatar.toString()),
+                        image: AssetImage("assets/images/img_1.png"),
                         fit: BoxFit.cover)),
               ),
               SizedBox(
@@ -182,14 +177,14 @@ class _StartMeetingState extends State<StartMeeting> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.data.name.toString(),
+                    "Dr/Earl E. Hazel",
                     style: TextStyle(
                         fontSize: 14,
                         color: darkBlueColor,
                         fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    "specialization is needed",
+                    "Mansoura, Egypt",
                     style: TextStyle(
                       fontSize: 12,
                       color: subTextColor,

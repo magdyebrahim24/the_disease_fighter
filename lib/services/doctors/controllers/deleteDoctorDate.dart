@@ -4,11 +4,11 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/models/ApiCookies.dart';
 
-class CreateReviewController {
+class DeleteDoctorDateController {
   Dio _dio = Dio();
   var cookieJar = CookieJar();
 
-  Future createReview({comment, stars}) async {
+  Future deleteDate({required dateId}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final _token = prefs.getString('access_token') ?? '';
 
@@ -26,15 +26,24 @@ class CreateReviewController {
     (await ApiCookies.cookieJar).loadForRequest(Uri.parse(BaseUrl.url));
 
     _dio.interceptors.add(CookieManager(await ApiCookies.cookieJar));
-
-    Map data = {"comment": comment, "stars": stars};
-    var response =
-        await _dio.post('POST/session/{session_id}/reviews', data: data);
-    if (response.statusCode! >= 200 && response.statusCode! < 300) {
-      print(response.data.toString());
-    } else {
-      print(response.toString());
-      // throw Exception('Failed to add to fav ');
+    try {
+      var response = await _dio.delete('/doctors/dates/$dateId');
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        print(response.data.toString());
+        print('response success');
+        return response.data;
+      } else {
+        print(response.statusCode.toString());
+        print(response.toString());
+        return response.data;
+      }
+    } on DioError catch (e) {
+      print(e);
+      Map error = {
+        'success': false,
+        'message': 'Fail to delete , check your internet connection'
+      };
+      return error;
     }
   }
 }
