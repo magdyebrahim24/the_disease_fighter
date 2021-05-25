@@ -8,8 +8,9 @@ import 'appointments_screens/appointments.dart';
 import 'appointments_screens/previous_appointments.dart';
 class MyAppointments extends StatefulWidget {
   final showSnackBar;
+  final snackBarMessage;
 
-  MyAppointments({this.showSnackBar = false});
+  MyAppointments({this.showSnackBar = false, this.snackBarMessage});
 
   @override
   _MyAppointmentsState createState() => _MyAppointmentsState();
@@ -153,8 +154,8 @@ class _MyAppointmentsState extends State<MyAppointments>{
                             ),
                             Text(
                               'Failed To Load',
-                              style: TextStyle(
-                                  color: subTextColor, fontSize: 16),
+                              style:
+                                  TextStyle(color: subTextColor, fontSize: 16),
                             ),
                           ],
                         ),
@@ -190,7 +191,7 @@ class _MyAppointmentsState extends State<MyAppointments>{
   snackBarr() {
     final snackBar = SnackBar(
       content: Text(
-        'Appointment Deleted Successfully',
+        widget.snackBarMessage.toString(),
         style: TextStyle(
             fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
       ),

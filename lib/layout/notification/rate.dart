@@ -1,40 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
+import 'package:the_disease_fighter/layout/notification/notification.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
 import 'package:the_disease_fighter/material/rating_bar/flutter_rating_bar.dart';
+import 'package:the_disease_fighter/material/widgets/materialBanner.dart';
 import 'package:the_disease_fighter/services/reviews/controllers/create_review_controller.dart';
 
 class RateScreen extends StatefulWidget {
+  final sessionId;
+  final data;
+
+  const RateScreen({Key? key, this.sessionId, this.data}) : super(key: key);
+
   @override
   _RateScreenState createState() => _RateScreenState();
 }
 
 class _RateScreenState extends State<RateScreen> {
-  String _comment = '';
-  double? _rating;
+  String? comment;
+  String? name;
+  double? stars;
   String errorMessage = '';
+  String? _bannerMessage;
+  bool _showBanner = false;
   CreateReviewController _createReviewController = CreateReviewController();
 
-  Future _userLogin() async {
-    if (_comment != '' && _rating != 0) {
+  Future _createReview() async {
+    setState(() {
+      _showBanner = false;
+    });
+    if (comment != '' && stars != 0) {
       LoaderDialog().onLoading(context);
       final data = await _createReviewController.createReview(
-        comment: _comment,
-        stars: _rating,
-      );
+          comment: comment.toString(),
+          stars: stars,
+          sessionId: widget.sessionId.toString());
       if (await data['success'] ?? false) {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => Home(),
+              builder: (context) => Notifications(),
             ));
+      } else if (await data['success'] == false &&
+          await data['message'] == 'Fail to add review , check your internet') {
         setState(() {
-          errorMessage = '';
+          _bannerMessage = data['message'].toString();
+          _showBanner = true;
         });
+        Navigator.of(context).pop();
       } else {
         setState(() {
           errorMessage = data['message'].toString();
@@ -97,7 +113,7 @@ class _RateScreenState extends State<RateScreen> {
                       ],
                     ),
                     Text(
-                      "Dr. Christina Frazier",
+                      widget.data.doctorName.toString(),
                       style: TextStyle(
                           color: darkBlueColor,
                           fontSize: 23,
@@ -107,7 +123,7 @@ class _RateScreenState extends State<RateScreen> {
                       height: 15,
                     ),
                     Text(
-                      "Mansoura, Egypt",
+                      "Specialization is needed",
                       style: TextStyle(
                         color: subTextColor,
                         fontSize: 14,
@@ -122,85 +138,104 @@ class _RateScreenState extends State<RateScreen> {
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: CircleButton(
-          fun: () => Navigator.pop(context),
-          icn: Icons.arrow_back,
-          color: darkBlueColor,
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            leading: CircleButton(
+              fun: () => Navigator.pop(context),
+              icn: Icons.arrow_back,
+              color: darkBlueColor,
+            ),
+            backgroundColor: primaryColor.withOpacity(.1),
+            elevation: 0.0,
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                _profilePicCard(context),
+                Center(
+                    child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+                  child: _ratingBar(),
+                )),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * .05,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    Languages.of(context)!.rateScreen['reviewLabel'],
+                    style: TextStyle(color: subTextColor),
+                  ),
+                ),
+                Container(
+                  margin:
+                      EdgeInsets.only(top: 10, bottom: 20, left: 20, right: 20),
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          width: 1, color: Color(0xff707070).withOpacity(.15)),
+                      color: backGroundColor,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: TextFormField(
+                    onChanged: (String val) {
+                      setState(() {
+                        comment = val;
+                      });
+                    },
+                    keyboardType: TextInputType.text,
+                    maxLines: 4,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.all(10),
+                        hintText:
+                            Languages.of(context)!.rateScreen['reviewHint'],
+                        hintStyle: TextStyle(
+                            color: subTextColor.withOpacity(.8), fontSize: 16)),
+                  ),
+                ),
+                errorMessage != ''
+                    ? Padding(
+                        padding: EdgeInsets.fromLTRB(20, 0, 15, 20),
+                        child: Text(
+                          errorMessage,
+                          style: TextStyle(color: Colors.red.withOpacity(.6)),
+                        ),
+                      )
+                    : SizedBox(),
+                Center(
+                  child: RoundedButton(
+                    fun: _createReview,
+                    borderRadious: 15,
+                    text: Languages.of(context)!.rateScreen['done'],
+                    minWdthRatio: .5,
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                )
+              ],
+            ),
+          ),
         ),
-        backgroundColor: primaryColor.withOpacity(.1),
-        elevation: 0.0,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            _profilePicCard(context),
-            Center(
-                child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 30),
-              child: _ratingBar(),
-            )),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * .05,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                Languages.of(context)!.rateScreen['reviewLabel'],
-                style: TextStyle(color: subTextColor),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 10, bottom: 20, left: 20, right: 20),
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                  border: Border.all(
-                      width: 1, color: Color(0xff707070).withOpacity(.15)),
-                  color: backGroundColor,
-                  borderRadius: BorderRadius.circular(10)),
-              child: TextFormField(
-                onChanged: (String val) {
-                  setState(() {
-                    _comment = val;
-                  });
-                },
-                keyboardType: TextInputType.text,
-                maxLines: 4,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(10),
-                    hintText: Languages.of(context)!.rateScreen['reviewHint'],
-                    hintStyle: TextStyle(
-                        color: subTextColor.withOpacity(.8), fontSize: 16)),
-              ),
-            ),
-            errorMessage != ''
-                ? Padding(
-                    padding: EdgeInsets.fromLTRB(20, 0, 15, 20),
-                    child: Text(
-                      errorMessage,
-                      style: TextStyle(color: Colors.red.withOpacity(.6)),
-                    ),
-                  )
-                : SizedBox(),
-            Center(
-              child: RoundedButton(
-                fun: _userLogin,
-                borderRadious: 15,
-                text: Languages.of(context)!.rateScreen['done'],
-                minWdthRatio: .5,
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            )
-          ],
-        ),
-      ),
+        _showBanner
+            ? SizedBox(
+                height: 150,
+                child: ErrorMaterialBanner(
+                  fun: () {
+                    setState(() {
+                      _showBanner = false;
+                    });
+                  },
+                  errorMessage: _bannerMessage,
+                ),
+              )
+            : SizedBox()
+      ],
     );
   }
 

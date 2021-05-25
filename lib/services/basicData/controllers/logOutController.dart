@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/models/ApiCookies.dart';
-
 class LogOutController {
   Dio _dio = Dio();
   Future userLogOut() async {

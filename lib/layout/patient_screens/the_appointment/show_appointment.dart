@@ -36,6 +36,7 @@ class _ShowAppointmentState extends State<ShowAppointment> {
           MaterialPageRoute(
               builder: (context) => MyAppointments(
                     showSnackBar: true,
+                    snackBarMessage: "Appointment deleted successfully",
                   )));
     } else {
       setState(() {
@@ -204,8 +205,12 @@ class _ShowAppointmentState extends State<ShowAppointment> {
               ),
               RoundedButton(
                 minWdthRatio: .5,
-                fun: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => EditAppointment())),
+                fun: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EditAppointment(
+                              data: widget.data,
+                            ))),
                 text: Languages.of(context)!.bookAppointment['editBTN'],
                 borderRadious: 50,
               )

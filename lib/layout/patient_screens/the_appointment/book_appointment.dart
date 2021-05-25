@@ -23,7 +23,8 @@ class BookAppointment extends StatefulWidget {
 class _BookAppointmentState extends State<BookAppointment> {
   var appointmentTime;
   var appointmentDay;
-  String gender = 'Male';
+  String? gender;
+
   String? phone;
   String comment = ' ';
   String? patientName;
@@ -299,7 +300,8 @@ class _BookAppointmentState extends State<BookAppointment> {
                                             //           value: i.day,
                                             //         ))),
                                             //         onChanged: (value) async{
-                                            //           for(var item in snapshot.data.dates){
+
+//           for(var item in snapshot.data.dates){
                                             //             if(item.day == value){
                                             //               setState(() {
                                             //                 dayTimes = item.availableDates;

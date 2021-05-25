@@ -49,7 +49,7 @@ class ChangePasswordController {
       print(e);
       Map error = {
         'success': false,
-        'message': 'Fail to change in , check your internet '
+        'message': 'Fail to Change Password , check your internet '
       };
       return error;
     }

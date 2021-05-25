@@ -4,13 +4,15 @@ import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/time-date-field.dart';
-import 'package:the_disease_fighter/services/doctors/controllers/createDoctorDatesController.dart';
-import 'package:the_disease_fighter/services/doctors/controllers/deleteDoctorDate.dart';
+import 'package:the_disease_fighter/services/doctorScreens/controllers/createDoctorDatesController.dart';
+import 'package:the_disease_fighter/services/doctorScreens/controllers/deleteDoctorDate.dart';
 import 'package:the_disease_fighter/services/logged_user/controllers/getDoctorData.dart';
 
 class UpdateDoctorDates extends StatefulWidget {
   final showSkip;
+
   UpdateDoctorDates({required this.showSkip});
+
   @override
   _UpdateDoctorDatesState createState() => _UpdateDoctorDatesState();
 }
@@ -22,7 +24,6 @@ class _UpdateDoctorDatesState extends State<UpdateDoctorDates> {
   bool _addDocDateLoading = false;
   int? _deleteDocDateLoading;
   String _clinicError = '';
-
   DeleteDoctorDateController _doctorDateController =
       DeleteDoctorDateController();
   CreateDoctorDateController _createDoctorDateController =
@@ -107,7 +108,7 @@ class _UpdateDoctorDatesState extends State<UpdateDoctorDates> {
                   onPressed: () => Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) => DoctorHome())),
                   child: Text(
-                    'skip',
+                    'Save',
                     style: TextStyle(color: subTextColor, fontSize: 16),
                   ),
                   style: ButtonStyle(),

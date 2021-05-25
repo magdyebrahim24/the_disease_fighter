@@ -4,10 +4,10 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_profile/edit_doctor_info/edit_doctor_info.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+import 'package:the_disease_fighter/material/widgets/bottom_sheet_item.dart';
 import 'package:the_disease_fighter/material/widgets/model_result.dart';
 
 class ModelScreen extends StatefulWidget {

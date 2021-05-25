@@ -4,12 +4,9 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/models/ApiCookies.dart';
-
 class LoginController {
   Dio _dio = Dio();
-
   late PersistCookieJar persistentCookies;
-
   Future userLogin({
     String? email,
     String? password,
@@ -31,7 +28,6 @@ class LoginController {
         .saveFromResponse(Uri.parse(BaseUrl.url), cookies);
 
     _dio.interceptors.add(CookieManager(await ApiCookies.cookieJar));
-
     Map data = {
       'email': email,
       'password': password,

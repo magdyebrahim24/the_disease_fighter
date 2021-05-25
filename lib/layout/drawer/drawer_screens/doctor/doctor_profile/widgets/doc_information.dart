@@ -1,149 +1,180 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/patient_screens/the_appointment/show_appointment.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_profile/edit_doctor_info/update_doctor_dates.dart';
 import 'package:the_disease_fighter/material/constants.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:the_disease_fighter/material/widgets/meeting%20info.dart';
 
 class DocInformation extends StatelessWidget {
-  Widget _infoCard(
-    double width,
-    String text,
-    Widget widget,
-  ) {
-    return Container(
-      padding: EdgeInsets.only(
-        left: 10,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: lightGreyColor,
-      ),
-      width: width,
-      height: 50,
-      child: Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(7)),
-            width: 30,
-            height: 30,
-            child: Center(child: widget),
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          Text(
-            text,
-            style: TextStyle(color: darkBlueColor, fontSize: 12),
-          )
-        ],
-      ),
-    );
-  }
+  final data;
+
+  const DocInformation({Key? key, this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: 15,
-        itemBuilder: (ctx, index) {
-          return Container(
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                    color: subTextColor,
-                    offset: Offset(1.0, 2.0),
-                    blurRadius: 3.0,
-                    spreadRadius: .5),
-              ],
-              color: backGroundColor,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                        margin: EdgeInsets.only(right: 13),
-                        height: 45,
-                        width: 45,
-                        decoration: BoxDecoration(
-                          color: greyColor.withOpacity(.5),
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            image: AssetImage('assets/doctors_img/doc1.jpg'),
-                            fit: BoxFit.cover,
-                          ),
-                        )),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Dr.Magdy Ebrahim',
-                            style: TextStyle(
-                              color: darkBlueColor,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            'Mon, Feb 19, 08.00am - 10.00am',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: subTextColor,
-                            ),
-                          ),
-                        ],
-                      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              //height: 110,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: backGroundColor,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "About",
+                    style: TextStyle(
+                        color: darkBlueColor,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    data.about.toString(),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: subTextColor,
                     ),
-                    MaterialButton(
-                      onPressed: () => launch("tel://01552154105"),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
-                      child: Icon(
-                        Icons.phone_rounded,
-                        color: primaryColor,
-                        size: 16,
-                      ),
-                      height: 30,
-                      minWidth: 30,
-                      padding: EdgeInsets.zero,
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      color: Colors.white,
-                    )
-                  ],
+                  ),
+                ],
+              ),
+            ),
+            MeetingInfo(
+              color: backGroundColor,
+              width: MediaQuery.of(context).size.width,
+              text: data.email.toString(),
+              widget: Icon(Icons.email, color: primaryColor),
+            ),
+            MeetingInfo(
+                color: backGroundColor,
+                width: MediaQuery.of(context).size.width,
+                text: data.phone.toString(),
+                widget: Icon(Icons.phone, color: primaryColor)),
+            Row(
+              children: [
+                MeetingInfo(
+                  color: backGroundColor,
+                  width: MediaQuery.of(context).size.width * .4,
+                  text: data.gender.toString(),
+                  widget: Icon(Icons.wc, color: primaryColor),
                 ),
                 SizedBox(
-                  height: 10,
+                  width: 20,
                 ),
-                MaterialButton(
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ShowAppointment())),
-                  child: Text(
-                    'Appointment Details',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
+                Expanded(
+                    child: MeetingInfo(
+                  color: backGroundColor,
+                  width: null,
+                  text: data.dob.toString(),
+                  widget: Icon(
+                    Icons.calendar_today_rounded,
+                    color: primaryColor,
                   ),
-                  height: 40,
-                  minWidth: MediaQuery.of(context).size.width,
-                  color: primaryColor,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                )
+                ))
               ],
             ),
-          );
-        });
+            MeetingInfo(
+              color: backGroundColor,
+              width: MediaQuery.of(context).size.width,
+              text: data.clinicLocation.toString(),
+              widget: Icon(Icons.location_on_rounded, color: primaryColor),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.symmetric(
+                vertical: 15,
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 20),
+              decoration: BoxDecoration(
+                color: backGroundColor,
+                border: Border.all(
+                    width: 1, color: Color(0xff707070).withOpacity(.15)),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Your Clinic Dates :',
+                          style: TextStyle(
+                              color: darkBlueColor,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      IconButton(
+                        color: primaryColor,
+                        icon: Icon(
+                          FontAwesomeIcons.solidEdit,
+                          size: 20,
+                        ),
+                        onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (ctx) => UpdateDoctorDates(
+                                      showSkip: false,
+                                    ))),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 5, bottom: 10),
+                    child: Divider(
+                      thickness: 3,
+                    ),
+                  ),
+                  ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.all(0),
+                      shrinkWrap: true,
+                      itemCount: data.availableDates.length,
+                      itemBuilder: (ctx, index) {
+                        return Container(
+                          height: 60,
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.fromLTRB(15, 10, 5, 10),
+                          margin: EdgeInsets.symmetric(vertical: 5),
+                          child: Row(
+                            children: [
+                              Icon(Icons.access_time, color: darkBlueColor),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  '${data.availableDates[index].day}, ${data.availableDates[index].startTime} - ${data.availableDates[index].endTime},',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(color: darkBlueColor),
+                                ),
+                              ),
+                            ],
+                          ),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15)),
+                        );
+                      }),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

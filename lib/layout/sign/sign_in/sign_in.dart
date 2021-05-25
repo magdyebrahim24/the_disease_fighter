@@ -19,11 +19,9 @@ class SignIn extends StatefulWidget {
   final showLogOutSnackBar;
 
   SignIn({this.showLogOutSnackBar = false});
-
   @override
   _SignInState createState() => _SignInState();
 }
-
 class _SignInState extends State<SignIn> {
   String? email;
   String? password;
@@ -90,7 +88,6 @@ class _SignInState extends State<SignIn> {
 
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

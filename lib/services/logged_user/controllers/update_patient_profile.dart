@@ -6,13 +6,13 @@ import 'package:the_disease_fighter/models/ApiCookies.dart';
 class UpdatePatientProfileController {
   Dio _dio = Dio();
   late PersistCookieJar persistentCookies;
-  Future updatePatientProfile({
-    String? phone,
-    String? location,
-    String? gender,
-    String? name,
-    String? dob,
-  }) async {
+  Future updatePatientProfile(
+      {String? phone,
+      String? location,
+      String? gender,
+      String? name,
+      String? dob,
+      String? about}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final _token = prefs.getString('access_token') ?? '';
 
@@ -35,7 +35,7 @@ class UpdatePatientProfileController {
       "phone": phone,
       "location": location,
       "gender": gender,
-      "about": 'Hey Iam Eng/ Magdy',
+      "about": about,
       "dob": dob,
       "name": name,
     };

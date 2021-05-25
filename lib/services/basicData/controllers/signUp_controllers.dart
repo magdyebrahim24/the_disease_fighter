@@ -58,7 +58,7 @@ class SignUpController {
       print(e);
       Map error = {
         'success': false,
-        'message': 'Fail to sign in , check your internet'
+        'message': 'Fail to sign up , check your internet'
       };
       return error;
     }

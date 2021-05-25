@@ -38,15 +38,15 @@ class CreateSessionController {
     _dio.interceptors.add(CookieManager(await ApiCookies.cookieJar));
 
     Map data = {
-      "day": "Wednesday",
-      "time": "07:30",
-      "am_pm": "pm",
-      "name": "Alice",
-      "gender": "Male",
-      "phone": "123412658102",
-      "comment": "This is a test comment",
-      "period_id": 120,
-      "previous_period_id": 120
+      "day": day.toString(),
+      "time": time.toString(),
+      "am_pm": amPm.toString(),
+      "name": name.toString(),
+      "gender": gender.toString(),
+      "phone": phone.toString(),
+      "comment": comment.toString(),
+      "period_id": periodId,
+      "previous_period_id": periodId
     };
     try {
       var response = await _dio.post('/doctors/$docId/sessions', data: data);

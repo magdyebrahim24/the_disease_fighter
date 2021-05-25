@@ -4,7 +4,6 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_profile/edit_doctor_info/edit_doctor_info.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/favorite/favorite_doctors.dart';
 import 'package:the_disease_fighter/layout/notification/notification.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home_widgets/doctor_card.dart';
@@ -13,6 +12,7 @@ import 'package:the_disease_fighter/localizations/localization/language/language
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/inductors/arc_inductor.dart';
+import 'package:the_disease_fighter/material/widgets/bottom_sheet_item.dart';
 import 'package:the_disease_fighter/material/widgets/model_result.dart';
 import 'package:the_disease_fighter/services/specialization/one_specialization_controller.dart';
 

@@ -6,8 +6,6 @@ import 'package:the_disease_fighter/localizations/localization/language/language
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/rate_bar.dart';
 import 'package:the_disease_fighter/services/doctors/controllers/get_all_doctors_controller.dart';
-import 'package:the_disease_fighter/services/doctors/models/get_all_doctors_model.dart';
-import 'package:the_disease_fighter/services/specialization/one_specialization_controller.dart';
 
 class ViewDocAllBuilder extends StatefulWidget {
   ViewDocAllBuilder();
@@ -144,7 +142,25 @@ class _ViewDocAllBuilderState extends State<ViewDocAllBuilder> {
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            BookAppointment())),
+                                                            BookAppointment(
+                                                              docImage: snapshot
+                                                                  .data
+                                                                  .doctors[
+                                                                      index]
+                                                                  .avatar
+                                                                  .toString(),
+                                                              docId: snapshot
+                                                                  .data
+                                                                  .doctors[
+                                                                      index]
+                                                                  .id,
+                                                              docName: snapshot
+                                                                  .data
+                                                                  .doctors[
+                                                                      index]
+                                                                  .name
+                                                                  .toString(),
+                                                            ))),
                                             height: 30,
                                             minWidth: 65,
                                             child: Text(

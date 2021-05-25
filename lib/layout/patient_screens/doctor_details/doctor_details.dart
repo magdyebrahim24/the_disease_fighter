@@ -231,8 +231,8 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40.0),
                 ),
-                onPressed: () => launch(widget.data._phone != null
-                    ? "tel://${widget.data._phone.toString()}"
+                onPressed: () => launch(widget.data.phone != null
+                    ? "tel://${widget.data.phone.toString()}"
                     : "01552154105"),
                 child: Icon(
                   Icons.phone,
@@ -244,9 +244,9 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => BookAppointment(
-                              docId: widget.data.id,
-                              docName: widget.data.name,
-                              docImage: widget.data.avatar,
+                          docId: widget.data.id,
+                              docName: widget.data.name.toString(),
+                              docImage: widget.data.avatar.toString(),
                             ))),
                 minWdthRatio: .63,
                 text: Languages.of(context)!.doctorDetails['bookBtn'],

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/data/doctor_data.dart';
 import 'package:the_disease_fighter/layout/patient_screens/doctor_details/doctor_details.dart';
 import 'package:the_disease_fighter/layout/patient_screens/the_appointment/book_appointment.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
@@ -29,14 +28,15 @@ class FavoriteCard extends StatelessWidget {
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => DoctorDetails(data: doctorsData[0]))),
+                    builder: (context) => DoctorDetails(data: data))),
             child: Container(
                 height: 92,
                 width: 90,
                 decoration: BoxDecoration(
                   color: Colors.grey,
                   image: DecorationImage(
-                    image: NetworkImage("https://thediseasefighter.herokuapp.com/static/${data.avatar}"),
+                    image: NetworkImage(
+                        "https://thediseasefighter.herokuapp.com/static/${data.avatar}"),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(10),
@@ -98,8 +98,14 @@ class FavoriteCard extends StatelessWidget {
                 height: 20,
               ),
               MaterialButton(
-                onPressed: () => Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => BookAppointment())),
+                onPressed: () => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BookAppointment(
+                              docId: data.id,
+                              docImage: data.avatar,
+                              docName: data.name.toString(),
+                            ))),
                 height: 30,
                 minWidth: 65,
                 child: Text(

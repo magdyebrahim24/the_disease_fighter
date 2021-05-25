@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_profile/edit_doctor_info/update_doctor_dates.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -15,38 +14,28 @@ class DoctorInfo extends StatefulWidget {
 }
 
 class _DoctorInfoState extends State<DoctorInfo> {
-  String clinicLocation = '';
-  String? phone;
-  String errorMessage = '';
-  String genderValue = 'Male';
-  String specialistValue = 'Brain';
-  DateTime? dateOfBirth;
+  String? _clinicLocation;
 
+  String? _phone;
+  String _errorMessage = '';
+  String? _genderValue;
+  String? _specialistValue;
+  DateTime? _dateOfBirth;
+  String? _about;
+  List<String> _specializationsList = [
+    "Brain",
+    "Heart" "Dermatology",
+    "Teeth",
+    "Bone",
+    "Physical",
+    "Urology",
+    "Surgery",
+    "Kids",
+    "Internal Medicine",
+    "Chest"
+  ];
+  int? _specializationId;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  _getClinicLocation(String clinicLocation) {
-    setState(() {
-      this.clinicLocation = clinicLocation;
-    });
-  }
-
-  _getDateOfBirth(val) {
-    setState(() {
-      this.dateOfBirth = val;
-    });
-  }
-
-  _getGender(val) {
-    setState(() {
-      genderValue = val;
-    });
-  }
-
-  _getSpecialist(val) {
-    setState(() {
-      specialistValue = val;
-    });
-  }
 
   UpdateDoctorInfoController _updateDoctorInfoController =
       UpdateDoctorInfoController();
@@ -56,12 +45,12 @@ class _DoctorInfoState extends State<DoctorInfo> {
     if (_formKey.currentState!.validate()) {
       LoaderDialog().onLoading(context);
       final data = await _updateDoctorInfoController.updateDoctorInfo(
-          phone: phone.toString(),
-          gender: genderValue.toString(),
-          dob: dateOfBirth.toString(),
-          clinicLocation: clinicLocation.toString(),
-          about: "bjkkbj",
-          specId: "1");
+          phone: _phone.toString(),
+          gender: _genderValue.toString(),
+          dob: _dateOfBirth.toString(),
+          clinicLocation: _clinicLocation.toString(),
+          about: _about.toString(),
+          specId: _specializationId.toString());
       if (await data['success'] == true) {
         Navigator.pushReplacement(
             context,
@@ -70,7 +59,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
             ));
       } else {
         setState(() {
-          errorMessage = data['message'].toString();
+          _errorMessage = data['message'].toString();
         });
         Navigator.of(context).pop();
       }
@@ -78,7 +67,6 @@ class _DoctorInfoState extends State<DoctorInfo> {
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,7 +126,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
                         hintText: 'Enter your Phone',
                         inputTextFunction: (value) {
                           setState(() {
-                            phone = value;
+                            _phone = value;
                           });
                         },
                         validatorFun: (value) {
@@ -149,8 +137,12 @@ class _DoctorInfoState extends State<DoctorInfo> {
                         textInputType: TextInputType.phone,
                       ),
                       DropDownList(
-                        value: genderValue,
-                        getValue: _getGender,
+                        value: _genderValue,
+                        getValue: (value) {
+                          setState(() {
+                            _genderValue = value;
+                          });
+                        },
                         items: ["Male", "Female"],
                         hintText: 'Select Gender',
                         labelText: 'Gender',
@@ -158,29 +150,38 @@ class _DoctorInfoState extends State<DoctorInfo> {
                       BasicDateField(
                         helperText: 'Select Date Of Birth',
                         label: 'Date Of Birth',
-                        fun: _getDateOfBirth,
+                        fun: (value) {
+                          setState(() {
+                            _dateOfBirth = value;
+                          });
+                        },
                       ),
                       DropDownList(
-                        value: specialistValue,
-                        getValue: _getSpecialist,
-                        items: [
-                          'Brain',
-                          'Heart',
-                          'Dermatology',
-                          'Teeth',
-                          'Bone',
-                          'Surgery',
-                          'Urology',
-                          'Psychiatry',
-                          'Pediatrics',
-                        ],
+                        value: _specialistValue,
+                        getValue: (value) {
+                          for (var i = 0;
+                              i < _specializationsList.length;
+                              i++) {
+                            if (_specializationsList[i] == value) {
+                              setState(() {
+                                _specializationId = i;
+                                _specialistValue = value;
+                              });
+                            }
+                          }
+                        },
+                        items: _specializationsList,
                         hintText: 'Select Your Specialist',
                         labelText: 'Specialist',
                       ),
                       TxtField(
                         labelText: 'Clinic Location',
                         hintText: 'Enter your Clinic Location',
-                        inputTextFunction: _getClinicLocation,
+                        inputTextFunction: (value) {
+                          setState(() {
+                            _clinicLocation = value;
+                          });
+                        },
                         textInputType: TextInputType.text,
                         validatorFun: (value) {
                           if (value.toString().isEmpty) {
@@ -188,11 +189,26 @@ class _DoctorInfoState extends State<DoctorInfo> {
                           }
                         },
                       ),
-                      errorMessage != ''
+                      TxtField(
+                        labelText: 'Information About You',
+                        hintText: 'Enter Any Information',
+                        inputTextFunction: (value) {
+                          setState(() {
+                            _about = value;
+                          });
+                        },
+                        textInputType: TextInputType.text,
+                        validatorFun: (value) {
+                          if (value.toString().isEmpty) {
+                            return 'Information Required';
+                          }
+                        },
+                      ),
+                      _errorMessage != ''
                           ? Padding(
                               padding: EdgeInsets.symmetric(vertical: 15),
                               child: Text(
-                                errorMessage,
+                                _errorMessage,
                                 style: TextStyle(
                                     color: Colors.red.withOpacity(.6)),
                               ),

@@ -4,6 +4,7 @@ import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/patient
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/services/logged_user/controllers/get_user_info_controller.dart';
+
 import 'drawer_screens/about.dart';
 import 'drawer_screens/patient/favorite/favorite_doctors.dart';
 import 'drawer_screens/patient/my_appointments/my_appointments.dart';

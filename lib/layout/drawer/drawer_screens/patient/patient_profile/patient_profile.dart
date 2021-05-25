@@ -6,6 +6,7 @@ import 'package:the_disease_fighter/localizations/localization/language/language
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/services/logged_user/controllers/get_user_info_controller.dart';
+
 import 'edit_patient_profile.dart';
 
 // ignore: must_be_immutable
@@ -28,78 +29,118 @@ class _PatientProfileState extends State<PatientProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: primaryColor.withOpacity(.1),
-        leading: CircleButton(
-          color: primaryColor,
-          fun: () => Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => Home())),
-          icn: Icons.arrow_back,
-        ),
-        actions: [
-          IconButton(
-            color: primaryColor,
-            icon: Icon(
-              FontAwesomeIcons.solidEdit,
-              size: 20,
-            ),
-            onPressed: () => Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => EditPatientProfile(
-                          data: info.currentUser,
-                        ))),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: FutureBuilder<dynamic>(
-            future: _getUserData(),
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container(
-                    height: 222,
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Container(
-                  height: MediaQuery.of(context).size.height - 200,
-                  width: MediaQuery.of(context).size.width,
+      body: FutureBuilder<dynamic>(
+          future: _getUserData(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Container(
+                  height: 222,
                   alignment: Alignment.center,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                          icon: Icon(
-                            Icons.refresh,
-                            color: primaryColor,
-                            size: 40,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _getUserData();
-                            });
-                          }),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text(
-                        'Failed To Load',
-                        style: TextStyle(color: subTextColor, fontSize: 16),
-                      ),
-                    ],
+                  child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Column(
+                children: [
+                  AppBar(
+                    elevation: 0,
+                    leading: CircleButton(
+                      icn: Icons.arrow_back,
+                      fun: () => Navigator.pop(context),
+                      color: primaryColor,
+                    ),
                   ),
-                );
-              } else {
-                return Column(
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .35,
+                  ),
+                  IconButton(
+                      icon: Icon(
+                        Icons.refresh,
+                        color: primaryColor,
+                        size: 40,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _getUserData();
+                        });
+                      }),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    'Failed To Load',
+                    style: TextStyle(color: subTextColor, fontSize: 16),
+                  ),
+                ],
+              );
+            } else {
+              return SingleChildScrollView(
+                child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      AppBar(
+                        elevation: 0.0,
+                        backgroundColor: primaryColor.withOpacity(.1),
+                        leading: CircleButton(
+                          color: primaryColor,
+                          fun: () => Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) => Home())),
+                          icn: Icons.arrow_back,
+                        ),
+                        actions: [
+                          IconButton(
+                            color: primaryColor,
+                            icon: Icon(
+                              FontAwesomeIcons.solidEdit,
+                              size: 20,
+                            ),
+                            onPressed: () => Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EditPatientProfile(
+                                          data: info.currentUser,
+                                        ))),
+                          )
+                        ],
+                      ),
                       _profilePicCard(context,
                           imgUrl: snapshot.data.currentUser.avatar.toString(),
                           name: snapshot.data.currentUser.name.toString()),
+                      Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                        padding: EdgeInsets.only(
+                            top: 15, left: 15, right: 15, bottom: 40),
+                        //padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                        //height: 110,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: backGroundColor,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "About",
+                              //style: TextStyle(
+                              //   color: darkBlueColor,
+                              //  fontSize: 12,
+                              //  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              snapshot.data.currentUser.about.toString(),
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: subTextColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       item(
                         label:
                             Languages.of(context)!.patientProfile['phoneLabel'],
@@ -148,10 +189,142 @@ class _PatientProfileState extends State<PatientProfile> {
                           ),
                         ],
                       )
+                    ]),
+              );
+            }
+          }),
+
+      /* body: SingleChildScrollView(
+        child:FutureBuilder<dynamic>(
+            future: _getUserData(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.connectionState==ConnectionState.waiting) {
+                return Container(
+                    height: 222,
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Container(
+                  height: MediaQuery.of(context).size.height - 200,
+                  width: MediaQuery.of(context).size.width,
+                  alignment: Alignment.center,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                          icon: Icon(
+                            Icons.refresh,
+                            color: primaryColor,
+                            size: 40,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _getUserData();
+                            });
+                          }),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        'Failed To Load',
+                        style: TextStyle(color: subTextColor, fontSize: 16),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      _profilePicCard(context,
+                          imgUrl: snapshot.data.currentUser.avatar.toString(),
+                          name: snapshot.data.currentUser.name.toString()),
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                        padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 40),
+                        //padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                        //height: 110,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: backGroundColor,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "About",
+                              //style: TextStyle(
+                              //   color: darkBlueColor,
+                              //  fontSize: 12,
+                              //  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 10,),
+                            Text(
+                              snapshot.data.currentUser.about.toString(),
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: subTextColor,
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      ),
+                      item(
+                        label:
+                        Languages.of(context)!.patientProfile['phoneLabel'],
+                        initialValue:
+                        snapshot.data.currentUser.phone.toString(),
+                        hintText:
+                        Languages.of(context)!.patientProfile['phoneHint'],
+                        textInputType: TextInputType.phone,
+                      ),
+                      item(
+                          label: Languages.of(context)!.patientProfile['email'],
+                          initialValue:
+                          snapshot.data.currentUser.email.toString(),
+                          hintText: Languages.of(context)!
+                              .patientProfile['emailHint'],
+                          textInputType: TextInputType.emailAddress),
+                      item(
+                          label: Languages.of(context)!
+                              .patientProfile['addressLabel'],
+                          initialValue:
+                          snapshot.data.currentUser.location.toString(),
+                          hintText: Languages.of(context)!
+                              .patientProfile['addressHint'],
+                          textInputType: TextInputType.streetAddress),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: item(
+                                label: Languages.of(context)!
+                                    .patientProfile['DateLabel'],
+                                initialValue:
+                                snapshot.data.currentUser.dob.toString(),
+                                hintText: Languages.of(context)!
+                                    .patientProfile['helperText'],
+                                textInputType: TextInputType.streetAddress),
+                          ),
+                          Expanded(
+                            child: item(
+                                label: Languages.of(context)!
+                                    .patientProfile['genderLabel'],
+                                initialValue:
+                                snapshot.data.currentUser.gender.toString(),
+                                hintText: Languages.of(context)!
+                                    .patientProfile['genderHint'],
+                                textInputType: TextInputType.streetAddress),
+                          ),
+                        ],
+                      )
                     ]);
               }
-            }),
-      ),
+            }),*/
     );
   }
 

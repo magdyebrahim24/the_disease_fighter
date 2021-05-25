@@ -5,30 +5,30 @@ import 'package:the_disease_fighter/material/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MeetingCard extends StatelessWidget {
-  const MeetingCard({
-    Key? key,
-  }) : super(key: key);
+  final data;
+
+  const MeetingCard({this.data}) : super();
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                  color: subTextColor,
-                  offset: Offset(1.0, 2.0),
-                  blurRadius: 2.0,
-                  spreadRadius: .2),
-            ],
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          width: MediaQuery.of(context).size.width,
-          child: Row(
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+              color: subTextColor,
+              offset: Offset(1.0, 2.0),
+              blurRadius: 2.0,
+              spreadRadius: .2),
+        ],
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        children: [
+          Row(
             children: [
               Container(
                   height: 93,
@@ -37,7 +37,7 @@ class MeetingCard extends StatelessWidget {
                     color: greyColor.withOpacity(.5),
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
-                      image: AssetImage('assets/doctors_img/doc2.jpg'),
+                      image: NetworkImage(data.patientAvatar.toString()),
                       fit: BoxFit.contain,
                     ),
                   )),
@@ -54,7 +54,7 @@ class MeetingCard extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            'Dr.Magdy Ebrahim',
+                            data.name.toString(),
                             maxLines: 2,
                             style: TextStyle(
                               color: darkBlueColor,
@@ -85,26 +85,28 @@ class MeetingCard extends StatelessWidget {
                     SizedBox(
                       height: 5,
                     ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.access_time_outlined,
-                          color: subTextColor,
-                          size: 19,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          'Mon, Feb 19, 08.00am - 10.00am',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 12,
+                    Container(
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.access_time_outlined,
                             color: subTextColor,
+                            size: 19,
                           ),
-                        ),
-                      ],
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            '${data.day.toString()}, ${data.date.toString()} , ${data.time.toString()}${data.amPm.toString()}',
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: subTextColor,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 5,
@@ -113,7 +115,9 @@ class MeetingCard extends StatelessWidget {
                       onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => UpComingMeeting())),
+                              builder: (context) => UpComingMeeting(
+                                    sessionId: data.id,
+                                  ))),
                       child: Text(
                         Languages.of(context)!.doctorHome['showBtn'],
                         style: TextStyle(
@@ -132,8 +136,8 @@ class MeetingCard extends StatelessWidget {
               ),
             ],
           ),
-        )
-      ],
+        ],
+      ),
     );
   }
 }

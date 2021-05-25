@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
 class FullImage extends StatelessWidget {
   final fullImagePath;
 

@@ -5,8 +5,6 @@ import 'package:the_disease_fighter/layout/patient_screens/the_appointment/book_
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/rate_bar.dart';
-import 'package:the_disease_fighter/services/doctors/controllers/get_all_doctors_controller.dart';
-import 'package:the_disease_fighter/services/doctors/models/get_all_doctors_model.dart';
 import 'package:the_disease_fighter/services/specialization/one_specialization_controller.dart';
 
 class ViewDocSpecialistBuilder extends StatefulWidget {
@@ -20,16 +18,8 @@ class ViewDocSpecialistBuilder extends StatefulWidget {
 }
 
 class _ViewDocSpecialistBuilderState extends State<ViewDocSpecialistBuilder> {
-  GetAllDoctorsController _getAllDoctorsController = GetAllDoctorsController();
-
   OneSpecializationController _oneSpecializationController =
       OneSpecializationController();
-
-  Future _loadAllDoctors() async {
-    var data = await _getAllDoctorsController.allDoctorsData();
-    return data;
-  }
-
   Future _loadOneSpecialization() async {
     var data = await _oneSpecializationController.getOneSpecialization(
         clinicId: widget.clinicId);
@@ -131,7 +121,7 @@ class _ViewDocSpecialistBuilderState extends State<ViewDocSpecialistBuilder> {
                                         height: 4,
                                       ),
                                       Text(
-                                        '${snapshot.data.doctors[index].specialization.name}',
+                                        '${snapshot.data.doctors[index].specialization.name.toString()}',
                                         style: TextStyle(
                                           color: Color(0xff8A9EAD),
                                           fontSize: 14,
@@ -156,7 +146,25 @@ class _ViewDocSpecialistBuilderState extends State<ViewDocSpecialistBuilder> {
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            BookAppointment())),
+                                                            BookAppointment(
+                                                              docName: snapshot
+                                                                  .data
+                                                                  .doctors[
+                                                                      index]
+                                                                  .name
+                                                                  .toString(),
+                                                              docId: snapshot
+                                                                  .data
+                                                                  .doctors[
+                                                                      index]
+                                                                  .id,
+                                                              docImage: snapshot
+                                                                  .data
+                                                                  .doctors[
+                                                                      index]
+                                                                  .avatar
+                                                                  .toString(),
+                                                            ))),
                                             height: 30,
                                             minWidth: 65,
                                             child: Text(

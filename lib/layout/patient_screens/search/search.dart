@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/data/doctor_data.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -82,7 +81,7 @@ class _SearchState extends State<Search> {
               children: [
                 Expanded(
                   child: Text(
-                    '${doctorsData[index].doctorName}',
+                    'name',
                     style: TextStyle(color: darkBlueColor),
                   ),
                 ),
@@ -94,7 +93,7 @@ class _SearchState extends State<Search> {
               ],
             ),
           ),
-          itemCount: doctorsData.length,
+          itemCount: 10,
           separatorBuilder: (ctx, index) => Divider(
             indent: 15,
           ),

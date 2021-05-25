@@ -5,8 +5,6 @@ import 'package:the_disease_fighter/layout/patient_screens/view_doctors/builder/
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
-import 'package:the_disease_fighter/services/doctors/controllers/get_all_doctors_controller.dart';
-import 'package:the_disease_fighter/services/doctors/models/get_all_doctors_model.dart';
 import 'builder/specialist_builder.dart';
 
 class ViewAllDoctors extends StatefulWidget {
@@ -16,12 +14,6 @@ class ViewAllDoctors extends StatefulWidget {
 
 class _ViewAllDoctorsState extends State<ViewAllDoctors>
     with SingleTickerProviderStateMixin {
-  GetAllDoctorsController _getAllDoctorsController=GetAllDoctorsController();
-  GetAllDoctorsModel _getAllDoctorsModel=GetAllDoctorsModel();
-  Future _loadAllDoctors() async {
-    var data = await _getAllDoctorsController.allDoctorsData();
-    return data;
-  }
   TabController? _tabController;
 
   @override
