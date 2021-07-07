@@ -58,7 +58,8 @@ class LanguageEn extends Languages {
         'signButtonTxt': 'Sign In',
         'orSignWith': 'Or Sign In With',
         'dontHaveAccount': 'Don\'t have an account',
-        'signUpTxt': 'Sign Up'
+        'signUpTxt': 'Sign Up',
+        'loggedOutSuccess': 'Logged Out Successfully'
       };
 
   @override
@@ -114,8 +115,23 @@ class LanguageEn extends Languages {
         'genderHint': 'Select Gender',
         'subText': 'By pressing “Done” you agree to our',
         'terms': 'terms & conditions',
+        'infoAboutYou': 'Information About You',
+        'infoAboutYouHint': 'type any information',
         'done': 'Done'
       };
+
+  @override
+  Map get uploadUserAvatar => {
+        'welcome': 'Welcome To',
+        'subText': 'You can add your profile picture \nto show it to others .',
+        'takePhoto': 'Take New Profile Picture',
+        'selectGallery': 'Select Picture From Gallery',
+      };
+
+  @override
+  String get saveButton => 'Save';
+  String get cancelBTN => 'Cancel';
+  String get closeButton => 'Close';
 
   @override
   Map get signUpDoctorInfo => {
@@ -131,20 +147,31 @@ class LanguageEn extends Languages {
         'clinicLocationLabel': 'Clinic Location',
         'clinicLocationHint': 'enter your clinic Location',
         'clinicDaterHeader': 'Enter Dates Clinic Available',
-        'clinicOpen': 'Day Clinic Open In :',
-        'dayHint': 'Select Day Clinic Open In',
-        'from': 'From :',
-        'fromHelper': 'Enter Time Clinic Opens In',
-        'to': 'To :',
-        'toHelper': 'Enter Time Clinic Close In',
-        'addBTN': 'Add',
+        'infoAboutYou': 'Information About You',
+        'infoAboutYouHint': 'type any information',
         'subText': 'By pressing “Done” you agree to our',
         'terms': 'terms & conditions',
         'submit': 'Submit'
       };
 
   @override
-  Map get notificationScreen => {'tittle': 'Notifications'};
+  Map get updateDoctorDates => {
+        'tittle': 'Update Dates',
+        'Add': 'Add Clinic Dates :',
+        'clinicOpen': 'Day Clinic Open In :',
+        'dayHint': 'Select Day Clinic Open In',
+        'from': 'From :',
+        'fromHelper': 'Enter Time Clinic Opens In',
+        'to': 'To :',
+        'toHelper': 'Enter Time Clinic Close In',
+        'addBTN': 'Add Date',
+        'yourDates': 'Your Clinic Dates',
+        'noDates': 'No Dates yet , add dates '
+      };
+
+  @override
+  Map get notificationScreen =>
+      {'tittle': 'Notifications', 'no notification': ' No Notification Yet','txt':' finished his session with you can rate it now !!'};
 
   @override
   Map get rateScreen => {
@@ -188,6 +215,16 @@ class LanguageEn extends Languages {
         'dermatology': 'Dermatology Clinic',
         'dermatologyDoctors': 'Dermatology Doctors',
         'mlHeader': 'Diagnosis disease with ML',
+        'all': 'All',
+        'noDoctorsFound':'No Doctors Found',
+      };
+  @override
+  Map get search => {
+        'txt hint': 'search Doctor',
+        'what search for': 'What are \n you searching for ?',
+        'search for':
+            'search for your favourite doctors or \n find similar result in this area ',
+        'no result': 'No Result For'
       };
 
   @override
@@ -214,9 +251,6 @@ class LanguageEn extends Languages {
       };
 
   @override
-  String get search => 'Doctor Search ...';
-
-  @override
   Map get bookAppointment => {
         'appointmentDateLabel': 'Appointment Date',
         'appointmentDateHint': 'Select Appointment Date',
@@ -234,7 +268,29 @@ class LanguageEn extends Languages {
         'editBTN': 'Edit',
         'deleteBTN': 'Delete',
         'cancelBtn': 'Cancel',
-        'saveBTN': 'Save'
+        'saveBTN': 'Save',
+        'day': 'Day',
+        'hintDay': 'Select Day',
+        'time': 'Time',
+        'hintTime': 'Select Time',
+        'note': 'Note : you can edit only appointment date and time',
+    'editText':'Appointment Edited Successfully'
+      };
+  @override
+  Map get ml => {
+        'tapToSelect': 'Tap To Select Image ',
+    'analysing':' Analysing',
+    'analysis':'Analysis',
+    'covidModel':'Covid-19\n Model',
+    'brainModel':'Brain Model',
+    'covidAccuracy':'Model Accuracy 95%',
+    'brainAccuracy':'Model Accuracy 97.5%',
+    'covid':'It illustrates your disease from 3 diseases Covid-19 or Viral  Pneumonia or Normal.',
+    'brain':' It illustrates your disease from 3 diseases Glioma or Meningioma or Pituitary.',
+    'thankyou':'Thank you for using',
+    'pleaseClick':'Please click on the file and choose the -ray image',
+    'explainCovid':'Explain Covid-19 Model',
+'end' : 'End'
       };
 
   @override
@@ -260,8 +316,9 @@ class LanguageEn extends Languages {
         'previousTap': 'Previous',
         'detailsBTN': 'Appointment Details',
         'showMoreBTN': 'Show More',
+        'no appointments': 'No Appointments Yet',
+        'noPreviousAppointments': 'No Previous Appointments Yet '
       };
-
   @override
   Map get previousAppointmentDetails => {
         'tittle': 'Details',
@@ -271,7 +328,11 @@ class LanguageEn extends Languages {
       };
 
   @override
-  Map get favoriteDoctors => {'tittle': 'Favorite Doctors', 'bookBTN': 'Book'};
+  Map get favoriteDoctors => {
+        'tittle': 'Favorite Doctors',
+        'bookBTN': 'Book',
+        'noFav': 'No Doctors in Favourite '
+      };
 
   @override
   Map get aboutScreen => {
@@ -314,19 +375,26 @@ class LanguageEn extends Languages {
         'genderLabel': 'Gender',
         'genderHint': 'Select Gender',
         'cancelBtn': 'Cancel',
-        'saveBtn': 'Save'
+        'saveBtn': 'Save',
+        'about': 'about',
+        'name': 'name'
       };
 
   @override
-  Map get doctorHome =>
-      {'todayTap': 'Today', 'allTap': 'All', 'showBtn': 'Show'};
+  Map get doctorHome => {
+        'todayTap': 'Today',
+        'allTap': 'All',
+        'showBtn': 'Show',
+        'allAppointments': 'All Appointments',
+        'appointment of': 'Appointments',
+    'NoAppointments':'No Appointments in \n'
+      };
 
   @override
   Map get doctorUpcomingMeeting => {
         'tittle': 'Meeting',
-        'delayBtn': 'Delay'
-            'startBtn'
-            'Start Meeting',
+        'delayBtn': 'Delay',
+        'startBtn' : 'Start Meeting',
         'about': 'About',
         'delayAlertDateLabel': 'Date',
         'delayAlertDateHint': 'Select Appointment Date',
@@ -334,6 +402,8 @@ class LanguageEn extends Languages {
         'delayAlertCancelBtn': 'Cancel',
         'delayAlertDoneBtn': 'Done',
         'delayAlertDeleteBtn': 'Delete Meeting',
+        'comment': 'Comment',
+        'startNote': 'You Can Only Start Meeting In'
       };
 
   @override
@@ -347,6 +417,12 @@ class LanguageEn extends Languages {
         'endAlertTittle': "Are you sure to end the meeting?",
         'endAlertCancelBtn': "Cancel",
         'endAlertOkBtn': "Okay",
+        'enterDiag': 'Enter a Diagnosis',
+        'enterMedicine': 'Enter a Medicine',
+        'camera': 'Camera',
+        'gallery': 'Gallery',
+        'diagnoseRequired': 'Diagnose Required',
+        'medicineRequired': 'Medicine Required'
       };
 
   @override
@@ -356,14 +432,52 @@ class LanguageEn extends Languages {
         'infoTapAbout': 'About',
         'prevTapMoreBtn': 'Show More',
         'editProfile': {
+          'editTittle': 'Update Information',
           'phoneLabel': 'Phone',
           'phoneHint': 'enter your phone',
           'email': 'Email Address',
           'emailHint': 'enter your email',
+          'name': 'Name',
+          'nameHint': 'enter your name',
           'clinicAddressLabel': 'clinic Address',
           'clinicAddressHint': 'enter your clinic address',
           'saveBtn': 'Save',
           'cancelBtn': 'Cancel',
+          'about': 'About',
+          'aboutHint': 'enter information about you',
+          'noPreviousAppointments':'No Previous Appointments',
+          'no appointments':'No Appointments Yet ',
+          'noTodayAppointments':'No Appointments Today'
         }
       };
+  @override
+  List get modelsDetails => [
+    {
+      'name': 'Covid19 Model',
+      'modelName': 'covid19',
+      'note': [
+        'Model accuracy 90%',
+        'It illustrates your disease from 3 diseases:'
+      ],
+      'diseases': ['Covid19', 'Viral Pneumonia', 'Normal']
+    },
+    {
+      'name': 'Brain Tumor Model',
+      'modelName': 'brain',
+      'note': [
+        'Model accuracy 90%',
+        'It illustrates your disease from 3 diseases:'
+      ],
+      'diseases': ['Glioma', 'Meningioma', 'Pituitary']
+    },
+  ];
+
+  @override
+  String get closeBTN =>  'Close';
+  @override
+  String get explainText =>  'Explain';
+
+  @override
+  // TODO: implement endBTN
+  String get endBTN => throw UnimplementedError();
 }

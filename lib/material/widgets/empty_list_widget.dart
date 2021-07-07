@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+
 class EmptyListWidget extends StatelessWidget {
   final icon;
   final iconSize;
@@ -17,12 +18,13 @@ class EmptyListWidget extends StatelessWidget {
         Icon(
           icon ?? FontAwesomeIcons.folderOpen,
           color: iconColor ?? darkBlueColor.withOpacity(.2),
-          size: iconSize.toDouble() ??  70.0,
+          size: iconSize ??  70.0,
         ),
         Padding(
           padding: EdgeInsets.only(top: 15),
           child: Text(
             label ?? 'Empty List',
+            textAlign: TextAlign.center,
             style:
             TextStyle(color: labelColor ?? darkBlueColor.withOpacity(.4), fontSize: 20),
           ),

@@ -3,7 +3,13 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:path_provider/path_provider.dart';
 
 class BaseUrl {
-  static String url = 'https://thediseasefighter.herokuapp.com';
+
+  // static String url = 'http://127.0.0.1:5000';
+  static String url = 'http://diseasefighter.pythonanywhere.com';
+
+  // static String horokoUrl = 'http://127.0.0.1:5050';
+  static String horokoUrl = 'https://thediseasefighter.herokuapp.com';
+
 }
 
 class ApiCookies {

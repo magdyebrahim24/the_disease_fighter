@@ -2,7 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:the_disease_fighter/models/ApiCookies.dart';
+import 'package:the_disease_fighter/services/base_url/ApiCookies.dart';
+
 class CreateReviewController {
   Dio _dio = Dio();
   late PersistCookieJar persistentCookies;
@@ -22,10 +23,14 @@ class CreateReviewController {
       ..headers = {
         'authorization': 'Bearer ' + _token,
       };
+    print('//////////////////////////////////////////11111111');
+    print('$comment,$stars');
 
     (await ApiCookies.cookieJar).loadForRequest(Uri.parse(BaseUrl.url));
     _dio.interceptors.add(CookieManager(await ApiCookies.cookieJar));
-    Map data = {"comment": comment.toString(), "stars": stars.toString()};
+    Map data = {"comment": comment.toString(), "stars": stars!.toInt()};
+    print('//////////////////////////////////////////');
+    print('$comment,$stars');
     try {
       var response = await _dio
           .post('/sessions/${sessionId.toString()}/reviews', data: data);

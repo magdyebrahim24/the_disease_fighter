@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_profile/edit_doctor_info/update_doctor_dates.dart';
+import 'package:the_disease_fighter/layout/doctor-screens/doctor_profile/edit_doctor_info/update_doctor_dates.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/meeting%20info.dart';
 
@@ -19,10 +20,17 @@ class DocInformation extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
+              margin: EdgeInsets.symmetric(vertical: 10),
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-              //height: 110,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: subTextColor.withOpacity(0.3),
+                      offset: Offset(1.0, 2.0),
+                      blurRadius: 2.0,
+                      spreadRadius: .2),
+                ],
                 borderRadius: BorderRadius.circular(10),
                 color: backGroundColor,
               ),
@@ -31,7 +39,9 @@ class DocInformation extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "About",
+                    Languages.of(context)!
+                        .doctorProfile['editProfile']['about']
+                        .toString(),
                     style: TextStyle(
                         color: darkBlueColor,
                         fontSize: 15,
@@ -97,6 +107,13 @@ class DocInformation extends StatelessWidget {
               ),
               padding: EdgeInsets.symmetric(horizontal: 14, vertical: 20),
               decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: subTextColor.withOpacity(.3),
+                      offset: Offset(1.0, 2.0),
+                      blurRadius: 2.0,
+                      spreadRadius: .2),
+                ],
                 color: backGroundColor,
                 border: Border.all(
                     width: 1, color: Color(0xff707070).withOpacity(.15)),
@@ -109,7 +126,9 @@ class DocInformation extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          'Your Clinic Dates :',
+                          Languages.of(context)!
+                              .updateDoctorDates['yourDates']
+                              .toString(),
                           style: TextStyle(
                               color: darkBlueColor,
                               fontSize: 15,
@@ -137,38 +156,46 @@ class DocInformation extends StatelessWidget {
                       thickness: 3,
                     ),
                   ),
-                  ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.all(0),
-                      shrinkWrap: true,
-                      itemCount: data.availableDates.length,
-                      itemBuilder: (ctx, index) {
-                        return Container(
-                          height: 60,
-                          width: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.fromLTRB(15, 10, 5, 10),
-                          margin: EdgeInsets.symmetric(vertical: 5),
-                          child: Row(
-                            children: [
-                              Icon(Icons.access_time, color: darkBlueColor),
-                              SizedBox(
-                                width: 10,
+                  data.availableDates.length != 0 &&
+                          data.availableDates.length != null
+                      ? ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.all(0),
+                          shrinkWrap: true,
+                          itemCount: data.availableDates.length,
+                          itemBuilder: (ctx, index) {
+                            return Container(
+                              height: 60,
+                              width: MediaQuery.of(context).size.width,
+                              padding: EdgeInsets.fromLTRB(15, 10, 5, 10),
+                              margin: EdgeInsets.symmetric(vertical: 5),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.access_time, color: darkBlueColor),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      '${data.availableDates[index].day}, ${data.availableDates[index].startTime} - ${data.availableDates[index].endTime},',
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(color: darkBlueColor),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Expanded(
-                                child: Text(
-                                  '${data.availableDates[index].day}, ${data.availableDates[index].startTime} - ${data.availableDates[index].endTime},',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(color: darkBlueColor),
-                                ),
-                              ),
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15)),
-                        );
-                      }),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15)),
+                            );
+                          })
+                      : Text(
+                          Languages.of(context)!
+                              .updateDoctorDates['noDates']
+                              .toString(),
+                          style: TextStyle(color: subTextColor),
+                        )
                 ],
               ),
             )

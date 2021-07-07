@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
-import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
 import 'package:the_disease_fighter/material/widgets/full_image.dart';
@@ -28,6 +28,7 @@ class StartMeeting extends StatefulWidget {
 class _StartMeetingState extends State<StartMeeting> {
   bool _showBanner = false;
   String _errorMessage = '';
+  String? _uploadSessionPhotoErrorMessage;
 
   UploadSessionMedicineController _uploadSessionMedicineController =
       UploadSessionMedicineController();
@@ -39,7 +40,7 @@ class _StartMeetingState extends State<StartMeeting> {
     var data = await _getOneSessionController.getOneSession(
       sessionId: widget.sessionId,
     );
-    return data.session!.files;
+    return data.session![0].files;
   }
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -66,15 +67,37 @@ class _StartMeetingState extends State<StartMeeting> {
         });
         Navigator.pop(context);
       }
+    } else {
+      Navigator.pop(context);
     }
   }
 
+  bool _uploadSessionPhotoLoader = false;
   Future _uploadSessionPhoto() async {
     if (_pickerImage != null) {
+      setState(() {
+        _uploadSessionPhotoLoader = true;
+      });
       final data = await _uploadSessionPhotoController.uploadSessionPhoto(
         file: _pickerImage,
         sessionId: widget.sessionId.toString(),
       );
+      if (data['success']) {
+        setState(() {
+          _pickerImage = null;
+          _uploadSessionPhotoErrorMessage = null;
+        });
+      } else {
+        print('///////////////////////////////////////////////');
+        print(data['message']);
+        setState(() {
+          _uploadSessionPhotoLoader = false;
+          _uploadSessionPhotoErrorMessage = data['message'].toString();
+        });
+      }
+      setState(() {
+        _uploadSessionPhotoLoader = false;
+      });
     }
   }
 
@@ -99,12 +122,16 @@ class _StartMeetingState extends State<StartMeeting> {
   Future _asyncConfirmDialog(BuildContext context) async {
     return showDialog(
       context: context,
-      barrierDismissible: false, // user must tap button for close dialog!
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
           contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           buttonPadding: EdgeInsets.symmetric(horizontal: 20),
-          content: const Text("Are you sure to end the meeting?"),
+          content: Text(
+            Languages.of(context)!
+                .doctorStartMeeting['endAlertTittle']
+                .toString(),
+          ),
           contentTextStyle: TextStyle(
               color: darkBlueColor, fontSize: 16, fontWeight: FontWeight.bold),
           actions: [
@@ -114,17 +141,14 @@ class _StartMeetingState extends State<StartMeeting> {
               },
               child: Container(
                 height: 40,
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width * .3,
+                width: MediaQuery.of(context).size.width * .3,
                 child: Center(
                   child: Text(
-                    "Cancel",
+                    Languages.of(context)!
+                        .doctorStartMeeting['endAlertCancelBtn']
+                        .toString(),
                     style: TextStyle(
-                        color: primaryColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold),
+                        color: primaryColor, fontWeight: FontWeight.bold),
                   ),
                 ),
                 decoration: BoxDecoration(
@@ -140,11 +164,11 @@ class _StartMeetingState extends State<StartMeeting> {
                 height: 40,
                 child: Center(
                   child: Text(
-                    "Okay",
+                    Languages.of(context)!
+                        .doctorStartMeeting['endAlertOkBtn']
+                        .toString(),
                     style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold),
+                        color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
                 decoration: BoxDecoration(
@@ -161,14 +185,6 @@ class _StartMeetingState extends State<StartMeeting> {
 
   bool showFullImage = false;
   late String fullImagePath;
-  List img = [
-    "assets/images/file1.jpg",
-    "assets/images/file3.jpg",
-    "assets/images/file2.jpg",
-    "assets/images/file3.jpg",
-    "assets/images/file1.jpg",
-    "assets/images/file2.jpg",
-  ];
   String? diagnose;
   String? medicine;
 
@@ -197,20 +213,17 @@ class _StartMeetingState extends State<StartMeeting> {
 
   Widget _appointCard() {
     return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
-      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+      width: MediaQuery.of(context).size.width,
+      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
       decoration: BoxDecoration(
-          color: lightGreyColor, borderRadius: BorderRadius.circular(15)),
+          color: lightGreyColor, borderRadius: BorderRadius.circular(12)),
       child: Column(
         children: [
           Row(
             children: [
               Container(
-                width: 50,
-                height: 50,
+                width: 60,
+                height: 60,
                 decoration: BoxDecoration(
                     color: backGroundColor,
                     shape: BoxShape.circle,
@@ -229,14 +242,16 @@ class _StartMeetingState extends State<StartMeeting> {
                   Text(
                     widget.data.name.toString(),
                     style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         color: darkBlueColor,
                         fontWeight: FontWeight.w500),
                   ),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Text(
-                    "specialization is needed",
+                    widget.data.phone.toString(),
                     style: TextStyle(
-                      fontSize: 12,
                       color: subTextColor,
                     ),
                   )
@@ -249,10 +264,8 @@ class _StartMeetingState extends State<StartMeeting> {
               _asyncConfirmDialog(context);
             },
             child: Container(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width * .6,
+              margin: EdgeInsets.only(top: 5),
+              width: MediaQuery.of(context).size.width * .6,
               height: 40,
               decoration: BoxDecoration(
                 color: primaryColor,
@@ -260,7 +273,9 @@ class _StartMeetingState extends State<StartMeeting> {
               ),
               child: Center(
                 child: Text(
-                  "End Meeting",
+                  Languages.of(context)!
+                      .doctorStartMeeting['endBtn']
+                      .toString(),
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -290,16 +305,9 @@ class _StartMeetingState extends State<StartMeeting> {
               Navigator.pop(context, [true]);
             },
           ),
-          actions: [
-            ImgButton(
-              img: 'assets/icons/model.png',
-              imgHigh: 35.0,
-              imgWidth: 35.0,
-            ),
-          ],
           centerTitle: true,
           title: Text(
-            "Meeting",
+            Languages.of(context)!.doctorStartMeeting['tittle'].toString(),
             style: TextStyle(color: primaryColor, fontSize: 16),
           ),
         ),
@@ -313,7 +321,11 @@ class _StartMeetingState extends State<StartMeeting> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _appointCard(),
-                  _txt("Add a diagnosis"),
+                  _txt(
+                    Languages.of(context)!
+                        .doctorStartMeeting['addDiagnosis']
+                        .toString(),
+                  ),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     padding: EdgeInsets.all(5),
@@ -327,18 +339,25 @@ class _StartMeetingState extends State<StartMeeting> {
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.all(10),
-                          hintText: "Enter a diagnosis...",
+                          hintText: Languages.of(context)!
+                              .doctorStartMeeting['enterDiag'],
                           hintStyle: TextStyle(
                               color: subTextColor.withOpacity(.8),
                               fontSize: 16)),
                       validator: (val) {
                         if (val == null || val == '') {
-                          return 'diagnosis required';
+                          return Languages.of(context)!
+                              .doctorStartMeeting['diagnoseRequired']
+                              .toString();
                         }
                       },
                     ),
                   ),
-                  _txt("Add a Medicine"),
+                  _txt(
+                    Languages.of(context)!
+                        .doctorStartMeeting['addMedicine']
+                        .toString(),
+                  ),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     padding: EdgeInsets.all(5),
@@ -352,115 +371,153 @@ class _StartMeetingState extends State<StartMeeting> {
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.all(10),
-                          hintText: "Enter a medicine...",
+                          hintText: Languages.of(context)!
+                              .doctorStartMeeting['enterMedicine'],
                           hintStyle: TextStyle(
                               color: subTextColor.withOpacity(.8),
                               fontSize: 16)),
                       validator: (val) {
                         if (val == null || val == '') {
-                          return 'Medicine required';
+                          return Languages.of(context)!
+                              .doctorStartMeeting['medicineRequired']
+                              .toString();
                         }
                       },
                     ),
                   ),
                   // ignore: unnecessary_null_comparison
-                  _pickerImage != null
-                      ? imagePreview()
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _txt("Add Image"),
-                            Row(
+                  _uploadSessionPhotoLoader && _pickerImage != null
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 55),
+                            child: SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: CircularProgressIndicator(
+                                  valueColor:
+                                      AlwaysStoppedAnimation(darkBlueColor),
+                                )),
+                          ),
+                        )
+                      : _pickerImage != null &&
+                              _uploadSessionPhotoLoader == false
+                          ? imagePreview()
+                          : Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Column(
+                                _txt(
+                                  Languages.of(context)!
+                                      .doctorStartMeeting['addFiles']
+                                      .toString(),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    InkWell(
-                                      onTap: () {
-                                        _pickImage(ImageSource.camera);
-                                        setState(() {
-                                          _cancelPressed = false;
-                                          _pickedImage = true;
-                                        });
-                                      },
-                                      child: Container(
-                                          height: 80,
-                                          width: 80,
-                                          decoration: BoxDecoration(
-                                              color: lightGreyColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: Center(
-                                            child: Icon(
-                                              Icons.add_a_photo,
+                                    Column(
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            _pickImage(ImageSource.camera);
+                                            setState(() {
+                                              _cancelPressed = false;
+                                              _pickedImage = true;
+                                            });
+                                          },
+                                          child: Container(
+                                              height: 80,
+                                              width: 80,
+                                              decoration: BoxDecoration(
+                                                  color: lightGreyColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.add_a_photo,
+                                                  color: primaryColor,
+                                                  size: 35,
+                                                ),
+                                                //onPressed: () {
+                                                // _pickImage(ImageSource.camera);
+                                              )),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          Languages.of(context)!
+                                              .doctorStartMeeting['camera']
+                                              .toString(),
+                                          style: TextStyle(
                                               color: primaryColor,
-                                              size: 35,
-                                            ),
-                                            //onPressed: () {
-                                            // _pickImage(ImageSource.camera);
-                                          )),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      ],
                                     ),
                                     SizedBox(
-                                      height: 5,
+                                      width: 20,
                                     ),
-                                    Text(
-                                      "Camera",
-                                      style: TextStyle(
-                                          color: primaryColor,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Column(
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        _pickImage(ImageSource.gallery);
-                                        setState(() {
-                                          _cancelPressed = false;
-                                          _pickedImage = true;
-                                        });
-                                      },
-                                      child: Container(
-                                        height: 80,
-                                        width: 80,
-                                        decoration: BoxDecoration(
-                                            color: lightGreyColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Center(
-                                          child: Image.asset(
-                                            "assets/icons/addimage.png",
-                                            height: 40,
-                                            width: 40,
-                                            fit: BoxFit.contain,
+                                    Column(
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            _pickImage(ImageSource.gallery);
+                                            setState(() {
+                                              _cancelPressed = false;
+                                              _pickedImage = true;
+                                            });
+                                          },
+                                          child: Container(
+                                            height: 80,
+                                            width: 80,
+                                            decoration: BoxDecoration(
+                                                color: lightGreyColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: Center(
+                                              child: Image.asset(
+                                                "assets/icons/addimage.png",
+                                                height: 40,
+                                                width: 40,
+                                                fit: BoxFit.contain,
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      "Gallery",
-                                      style: TextStyle(
-                                          color: primaryColor,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          Languages.of(context)!
+                                              .doctorStartMeeting['gallery']
+                                              .toString(),
+                                          style: TextStyle(
+                                              color: primaryColor,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      ],
                                     )
                                   ],
-                                )
+                                ),
+                                _uploadSessionPhotoErrorMessage != null
+                                    ? Text(
+                                        _uploadSessionPhotoErrorMessage
+                                            .toString(),
+                                        style:
+                                            TextStyle(color: Colors.redAccent),
+                                      )
+                                    : SizedBox(),
                               ],
                             ),
-                          ],
-                        ),
-                  _txt("Recent Files"),
+                  _txt(
+                    Languages.of(context)!
+                        .doctorStartMeeting['recentFiles']
+                        .toString(),
+                  ),
                   FutureBuilder<dynamic>(
                       future: _getSessionData(),
                       builder: (BuildContext context,
@@ -497,52 +554,49 @@ class _StartMeetingState extends State<StartMeeting> {
                             ),
                           );
                         } else {
-                          return SizedBox(
-                            height: (((snapshot.data.length < 4
-                                            ? 3
-                                            : snapshot.data.length) /
-                                        4) *
-                                    150)
-                                .toDouble(),
-                            child: GridView.builder(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount:
-                                    MediaQuery.of(context).size.width ~/ 85,
-                                childAspectRatio: 0.99,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 30,
-                              ),
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => FullImage(
-                                                  fullImagePath: snapshot
-                                                      .data[index]
-                                                      .toString())));
-                                    },
-                                    child: Container(
-                                      height: 30,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                        color: backGroundColor,
-                                        borderRadius: BorderRadius.circular(15),
-                                        image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: NetworkImage(snapshot
-                                                .data[index]
-                                                .toString())),
-                                      ),
-                                    ));
-                              },
-                              itemCount: snapshot.data.length,
-                            ),
-                          );
+                          return snapshot.data.length != 0
+                              ? GridView.builder(
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 4,
+                                    // childAspectRatio: 0.99,
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 30,
+                                  ),
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      FullImage(
+                                                          fullImagePath: snapshot
+                                                              .data[index]
+                                                              .toString())));
+                                        },
+                                        child: Container(
+                                          height: 200,
+                                          width: 200,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.withOpacity(.5),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: NetworkImage(snapshot
+                                                    .data[index]
+                                                    .toString())),
+                                          ),
+                                        ));
+                                  },
+                                  itemCount: snapshot.data.length,
+                                )
+                              : Text('Please , Add Files To Show',
+                                  style: TextStyle(
+                                      color: subTextColor.withOpacity(.9)));
                         }
                       }),
                 ],
@@ -582,7 +636,7 @@ class _StartMeetingState extends State<StartMeeting> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: Image.file(
-                 _pickerImage!,
+                            _pickerImage!,
                             fit: BoxFit.fill,
                             gaplessPlayback: true,
                             scale: 1.0,
@@ -599,13 +653,14 @@ class _StartMeetingState extends State<StartMeeting> {
                           children: [
                             Text(
                               '${_pickerImage!.path.split('/').last}',
-                              maxLines: 3,
+                              maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
                             SizedBox(
-                              height: 5,
+                              height: 20,
                             ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 InkWell(
                                   onTap: () {
@@ -624,7 +679,8 @@ class _StartMeetingState extends State<StartMeeting> {
                                     ),
                                     child: Center(
                                       child: Text(
-                                        "Save",
+                                        Languages.of(context)!
+                                            .saveButton,
                                         style: TextStyle(
                                             fontSize: 14,
                                             color: Colors.white,
@@ -632,9 +688,6 @@ class _StartMeetingState extends State<StartMeeting> {
                                       ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 10,
                                 ),
                                 InkWell(
                                   onTap: () {
@@ -652,7 +705,8 @@ class _StartMeetingState extends State<StartMeeting> {
                                     ),
                                     child: Center(
                                       child: Text(
-                                        "Cancel",
+                                        Languages.of(context)!
+                                            .cancelBTN,
                                         style: TextStyle(
                                             fontSize: 14,
                                             color: primaryColor,
@@ -667,6 +721,16 @@ class _StartMeetingState extends State<StartMeeting> {
                         )),
                       ],
                     ),
-                  ]):SizedBox());
+                    SizedBox(
+                      height: 10,
+                    ),
+                    _uploadSessionPhotoErrorMessage != null
+                        ? Text(
+                            _uploadSessionPhotoErrorMessage.toString(),
+                            style: TextStyle(color: Colors.redAccent),
+                          )
+                        : SizedBox(),
+                  ])
+            : SizedBox());
   }
 }

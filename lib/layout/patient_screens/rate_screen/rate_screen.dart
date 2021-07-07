@@ -32,13 +32,13 @@ class _RateScreenState extends State<RateScreen> {
     setState(() {
       _showBanner = false;
     });
-    if (comment != '' && stars != 0) {
+    if (comment != '' && stars != null) {
       LoaderDialog().onLoading(context);
       final data = await _createReviewController.createReview(
           comment: comment.toString(),
           stars: stars,
           sessionId: widget.sessionId.toString());
-      if (await data['success'] ?? false) {
+      if (await data['success'] ) {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -101,7 +101,7 @@ class _RateScreenState extends State<RateScreen> {
                                     spreadRadius: 1),
                               ],
                               image: DecorationImage(
-                                  image: AssetImage("assets/images/img_1.png"),
+                                  image: NetworkImage(widget.data.doctorAvatar.toString()),
                                   fit: BoxFit.cover),
                               shape: BoxShape.circle,
                               border: Border.all(
@@ -123,7 +123,7 @@ class _RateScreenState extends State<RateScreen> {
                       height: 15,
                     ),
                     Text(
-                      "Specialization is needed",
+                      '${widget.data.specialization.toString()} Specialist',
                       style: TextStyle(
                         color: subTextColor,
                         fontSize: 14,
@@ -143,7 +143,7 @@ class _RateScreenState extends State<RateScreen> {
         Scaffold(
           appBar: AppBar(
             leading: CircleButton(
-              fun: () => Navigator.pop(context),
+              fun: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Notifications(),)),
               icn: Icons.arrow_back,
               color: darkBlueColor,
             ),
@@ -245,15 +245,17 @@ class _RateScreenState extends State<RateScreen> {
       direction: Axis.horizontal,
       allowHalfRating: false,
       alpha: 40,
+      glowRadius: .5,
+      glowColor: Colors.lightBlueAccent.withOpacity(.1),
       itemCount: 5,
       itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
       itemBuilder: (context, _) => Icon(
         Icons.star,
         color: primaryColor,
       ),
-      onRatingUpdate: (rating) {
+      onRatingUpdate: (value) {
         setState(() {
-          rating = rating;
+          stars = value;
         });
       },
     );

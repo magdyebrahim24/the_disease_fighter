@@ -15,7 +15,7 @@ class Rate extends StatelessWidget {
           i < rateValue
               ? Icon(
                   Icons.star,
-                  size: 13,
+                  size: 15,
                   color: clr,
                 )
               : Icon(

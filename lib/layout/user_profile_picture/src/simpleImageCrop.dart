@@ -1,8 +1,8 @@
 part of image_crop;
 
 class ImageOptions {
-  final int width;
-  final int height;
+  final int? width;
+  final int? height;
 
   ImageOptions({this.width, this.height})
       : assert(width != null),
@@ -34,10 +34,9 @@ class ImageCrop {
         .then<bool>((result) => result);
   }
 
-  static Future<ImageOptions> getImageOptions({File file}) async {
-    assert(file != null);
+  static Future<ImageOptions> getImageOptions({File? file}) async {
     final result =
-        await _channel.invokeMethod('getImageOptions', {'path': file.path});
+        await _channel.invokeMethod('getImageOptions', {'path': file!.path});
     return ImageOptions(
       width: result['width'],
       height: result['height'],
@@ -45,15 +44,15 @@ class ImageCrop {
   }
 
   static Future<File> cropImage({
-    File file,
-    Rect area,
-    double scale,
+    File? file,
+    Rect? area,
+    double? scale,
   }) {
     assert(file != null);
     assert(area != null);
     return _channel.invokeMethod('cropImage', {
-      'path': file.path,
-      'left': area.left,
+      'path': file!.path,
+      'left': area!.left,
       'top': area.top,
       'right': area.right,
       'bottom': area.bottom,
@@ -62,10 +61,10 @@ class ImageCrop {
   }
 
   static Future<File> sampleImage({
-    File file,
-    int preferredSize,
-    int preferredWidth,
-    int preferredHeight,
+    File? file,
+    int? preferredSize,
+    int? preferredWidth,
+    int? preferredHeight,
   }) async {
     assert(file != null);
     assert(() {
@@ -77,7 +76,7 @@ class ImageCrop {
       return true;
     }());
     final String path = await _channel.invokeMethod('sampleImage', {
-      'path': file.path,
+      'path': file!.path,
       'maximumWidth': preferredSize ?? preferredWidth,
       'maximumHeight': preferredSize ?? preferredHeight,
     });

@@ -1,14 +1,23 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_profile/edit_doctor_info/update_doctor_dates.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:the_disease_fighter/layout/doctor-screens/doctor_profile/edit_doctor_info/update_doctor_dates.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
 import 'package:the_disease_fighter/material/widgets/drop-downlist.dart';
 import 'package:the_disease_fighter/material/widgets/time-date-field.dart';
 import 'package:the_disease_fighter/material/widgets/txt_field.dart';
-import 'package:the_disease_fighter/services/logged_user/controllers/updateDoctorInfo.dart';
+import 'package:the_disease_fighter/services/basicData/controllers/doctor_register.dart';
 
 class DoctorInfo extends StatefulWidget {
+  final email;
+  final password;
+  final name;
+  final isDoctor;
+
+  const DoctorInfo({Key? key, this.email, this.password, this.name, this.isDoctor}) : super(key: key);
   @override
   _DoctorInfoState createState() => _DoctorInfoState();
 }
@@ -24,7 +33,8 @@ class _DoctorInfoState extends State<DoctorInfo> {
   String? _about;
   List<String> _specializationsList = [
     "Brain",
-    "Heart" "Dermatology",
+    "Heart",
+    "Dermatology",
     "Teeth",
     "Bone",
     "Physical",
@@ -36,27 +46,35 @@ class _DoctorInfoState extends State<DoctorInfo> {
   ];
   int? _specializationId;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  UpdateDoctorInfoController _updateDoctorInfoController =
-      UpdateDoctorInfoController();
+  DoctorRegisterController _doctorRegisterController =DoctorRegisterController();
 
   Future _onSubmitSignUp() async {
     _formKey.currentState!.validate();
     if (_formKey.currentState!.validate()) {
       LoaderDialog().onLoading(context);
-      final data = await _updateDoctorInfoController.updateDoctorInfo(
+      final data = await _doctorRegisterController.register(
+        name: widget.name,password: widget.password,isDoctor: widget.isDoctor,email: widget.email,
           phone: _phone.toString(),
           gender: _genderValue.toString(),
           dob: _dateOfBirth.toString(),
           clinicLocation: _clinicLocation.toString(),
           about: _about.toString(),
-          specId: _specializationId.toString());
+          specId: _specializationId!.toInt() + 1);
       if (await data['success'] == true) {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => UpdateDoctorDates(showSkip: true),
-            ));
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isDoctor', widget.isDoctor);
+        await prefs.setString('userData',jsonEncode(await data['logged_user']));
+        await prefs.setString('userAvatar',await data['logged_user']['avatar']);
+        await prefs.setString('userName',await data['logged_user']['name']);
+
+
+        Navigator.pushAndRemoveUntil<dynamic>(
+          context,
+          MaterialPageRoute<dynamic>(
+            builder: (BuildContext context) => UpdateDoctorDates(showSkip: true)
+          ),
+              (route) => false,
+        );
       } else {
         setState(() {
           _errorMessage = data['message'].toString();
@@ -80,7 +98,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                height: 10,
+                height: 20,
               ),
               // logo
               Container(
@@ -117,13 +135,16 @@ class _DoctorInfoState extends State<DoctorInfo> {
                       Padding(
                         padding: EdgeInsets.only(top: 25, bottom: 30),
                         child: Text(
-                          'You\'re Almost Done!',
+                            Languages.of(context)!
+                                .signUpDoctorInfo['header'],
                           style: TextStyle(fontSize: 30, color: darkBlueColor),
                         ),
                       ),
                       TxtField(
-                        labelText: 'Phone',
-                        hintText: 'Enter your Phone',
+                        labelText: Languages.of(context)!
+                            .signUpDoctorInfo['phoneLabel'],
+                        hintText: Languages.of(context)!
+                            .signUpDoctorInfo['phoneHint'],
                         inputTextFunction: (value) {
                           setState(() {
                             _phone = value;
@@ -132,6 +153,9 @@ class _DoctorInfoState extends State<DoctorInfo> {
                         validatorFun: (value) {
                           if (value.toString().isEmpty) {
                             return 'Phone Required';
+                          }
+                          if(value.toString().length != 11){
+                            return 'Phone Must Be 11 Digit';
                           }
                         },
                         textInputType: TextInputType.phone,
@@ -144,12 +168,16 @@ class _DoctorInfoState extends State<DoctorInfo> {
                           });
                         },
                         items: ["Male", "Female"],
-                        hintText: 'Select Gender',
-                        labelText: 'Gender',
+                        hintText: Languages.of(context)!
+                            .signUpDoctorInfo['genderLabel'],
+                        labelText: Languages.of(context)!
+                            .signUpDoctorInfo['genderHint'],
                       ),
                       BasicDateField(
-                        helperText: 'Select Date Of Birth',
-                        label: 'Date Of Birth',
+                        helperText:  Languages.of(context)!
+                            .signUpDoctorInfo['helperText'],
+                        label:  Languages.of(context)!
+                            .signUpDoctorInfo['DateLabel'],
                         fun: (value) {
                           setState(() {
                             _dateOfBirth = value;
@@ -171,12 +199,16 @@ class _DoctorInfoState extends State<DoctorInfo> {
                           }
                         },
                         items: _specializationsList,
-                        hintText: 'Select Your Specialist',
-                        labelText: 'Specialist',
+                        hintText:  Languages.of(context)!
+                            .signUpDoctorInfo['specialistHint'],
+                        labelText:  Languages.of(context)!
+                            .signUpDoctorInfo['specialistLabel'],
                       ),
                       TxtField(
-                        labelText: 'Clinic Location',
-                        hintText: 'Enter your Clinic Location',
+                        labelText: Languages.of(context)!
+                            .signUpDoctorInfo['clinicLocationLabel'],
+                        hintText: Languages.of(context)!
+                            .signUpDoctorInfo['clinicLocationHint'],
                         inputTextFunction: (value) {
                           setState(() {
                             _clinicLocation = value;
@@ -190,8 +222,10 @@ class _DoctorInfoState extends State<DoctorInfo> {
                         },
                       ),
                       TxtField(
-                        labelText: 'Information About You',
-                        hintText: 'Enter Any Information',
+                        labelText: Languages.of(context)!
+                            .signUpDoctorInfo['infoAboutYou'],
+                        hintText: Languages.of(context)!
+                            .signUpDoctorInfo['infoAboutYouHint'],
                         inputTextFunction: (value) {
                           setState(() {
                             _about = value;
@@ -219,7 +253,8 @@ class _DoctorInfoState extends State<DoctorInfo> {
                       ),
                       RoundedButton(
                         fun: _onSubmitSignUp,
-                        text: 'Submit',
+                        text:Languages.of(context)!
+                            .signUpDoctorInfo['submit'],
                       ),
                     ],
                   ),

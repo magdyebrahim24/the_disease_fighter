@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/favorite/favorite_doctors.dart';
 import 'package:the_disease_fighter/layout/patient_screens/doctor_details/doctor_details.dart';
 import 'package:the_disease_fighter/layout/patient_screens/the_appointment/book_appointment.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+import 'package:the_disease_fighter/material/widgets/empty_list_widget.dart';
+import 'package:the_disease_fighter/material/widgets/no_internet_widget.dart';
 import 'package:the_disease_fighter/material/widgets/rate_bar.dart';
 import 'package:the_disease_fighter/services/doctors/controllers/get_all_doctors_controller.dart';
 
@@ -27,35 +28,16 @@ class _ViewDocAllBuilderState extends State<ViewDocAllBuilder> {
     return FutureBuilder<dynamic>(
         future: _loadAllDoctors(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          if (!snapshot.hasData && !snapshot.hasError) {
             return Center(child: CircularProgressIndicator());
           } else {
             if (snapshot.hasError) {
-              return Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * .15),
-                child: Column(
-                  children: [
-                    IconButton(
-                        icon: Icon(
-                          Icons.refresh,
-                          color: primaryColor,
-                          size: 40,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _loadAllDoctors();
-                          });
-                        }),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Text(
-                      'Failed To Load',
-                      style: TextStyle(color: subTextColor, fontSize: 16),
-                    ),
-                  ],
-                ),
+              return FailLoadWidget(
+                fun: () {
+                  setState(() {
+                    _loadAllDoctors();
+                  });
+                },
               );
             } else {
               return snapshot.data.success == true
@@ -81,11 +63,10 @@ class _ViewDocAllBuilderState extends State<ViewDocAllBuilder> {
                             child: Row(
                               children: [
                                 Container(
-                                    // margin: EdgeInsets.only(right: 15),
                                     height: 92,
                                     width: 90,
                                     decoration: BoxDecoration(
-                                      color: Colors.grey,
+                                      color: Colors.grey.withOpacity(.4),
                                       image: DecorationImage(
                                         image: NetworkImage(
                                             '${snapshot.data.doctors[index].avatar}'),
@@ -189,7 +170,7 @@ class _ViewDocAllBuilderState extends State<ViewDocAllBuilder> {
                         );
                       },
                     )
-                  : EmptyPage();
+                  : EmptyListWidget(icon: Icons.perm_contact_cal_sharp,label: 'No Doctors Found',iconSize: 100.0,);
             }
           }
         });

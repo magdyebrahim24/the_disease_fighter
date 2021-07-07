@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/setting/settings.dart';
+import 'package:the_disease_fighter/layout/setting/settings.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
@@ -22,6 +22,9 @@ class _ChangePasswordState extends State<ChangePassword> {
   String errorMessage = '';
   String? _bannerMessage;
   bool _showBanner = false;
+  bool _obSecureOldPassword = true;
+  bool _obSecureConfirmPassword = true;
+  bool _obSecureNewPassword=true;
 
   ChangePasswordController _changePasswordController =
       ChangePasswordController();
@@ -75,11 +78,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             backgroundColor: Colors.transparent,
             elevation: 0.0,
             leading: CircleButton(
-              fun: () => Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Setting(),
-                  )),
+              fun: () => Navigator.pop(context),
               color: darkBlueColor,
               icn: Icons.arrow_back,
             ),
@@ -94,10 +93,10 @@ class _ChangePasswordState extends State<ChangePassword> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     PatientLogo(
-                      imgHigh: 140.0,
-                      imgWidth: 140.0,
-                      nameColor: darkBlueColor,
-                      nameSize: 23.0,
+                      imgHigh: 135.0,
+                      imgWidth: 135.0,
+                      nameColor: darkBlueColor.withOpacity(.8),
+                      nameSize: 22.0,
                     ),
                     SizedBox(
                       height: 25,
@@ -108,7 +107,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       hintText: Languages.of(context)!
                           .changePassword['oldPasswordHint'],
                       textInputType: TextInputType.visiblePassword,
-                      obSecure: true,
+                      obSecure: _obSecureOldPassword,
                       inputTextFunction: (String password) {
                         setState(() {
                           this.oldPassword = password.trim();
@@ -119,6 +118,19 @@ class _ChangePasswordState extends State<ChangePassword> {
                           return 'Old Password Required';
                         }
                       },
+                      showSuffix: true,
+                      showSuffixFun: (){
+                        if(_obSecureOldPassword){
+                          setState(() {
+                            _obSecureOldPassword = false ;
+                          });
+                        }else{
+                          setState(() {
+                            _obSecureOldPassword = true ;
+                          });
+                        }
+
+                      },
                     ),
                     TxtField(
                       labelText: Languages.of(context)!
@@ -126,7 +138,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       hintText: Languages.of(context)!
                           .changePassword['newPasswordHint'],
                       textInputType: TextInputType.visiblePassword,
-                      obSecure: true,
+                      obSecure: _obSecureNewPassword,
                       inputTextFunction: (String newPassword) {
                         setState(() {
                           this.newPassword = newPassword.trim();
@@ -144,6 +156,19 @@ class _ChangePasswordState extends State<ChangePassword> {
                           }
                         }
                       },
+                      showSuffix: true,
+                      showSuffixFun: (){
+                        if(_obSecureNewPassword){
+                          setState(() {
+                            _obSecureNewPassword = false ;
+                          });
+                        }else{
+                          setState(() {
+                            _obSecureNewPassword = true ;
+                          });
+                        }
+
+                      },
                     ),
                     TxtField(
                       labelText: Languages.of(context)!
@@ -151,7 +176,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       hintText: Languages.of(context)!
                           .changePassword['ConfirmPasswordHint'],
                       textInputType: TextInputType.visiblePassword,
-                      obSecure: true,
+                      obSecure: _obSecureConfirmPassword,
                       inputTextFunction: (String confirmPassword) {
                         setState(() {
                           this.confirmPassword = confirmPassword.trim();
@@ -168,6 +193,19 @@ class _ChangePasswordState extends State<ChangePassword> {
                             return 'Password Length Must Be More Than 9 Digit';
                           }
                         }
+                      },
+                      showSuffix: true,
+                      showSuffixFun: (){
+                        if(_obSecureConfirmPassword){
+                          setState(() {
+                            _obSecureConfirmPassword = false ;
+                          });
+                        }else{
+                          setState(() {
+                            _obSecureConfirmPassword = true ;
+                          });
+                        }
+
                       },
                     ),
                     errorMessage != ''

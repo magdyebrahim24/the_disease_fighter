@@ -14,7 +14,7 @@ class BottomSheetItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: EdgeInsets.only(left: 40, bottom: 10),
+      contentPadding: EdgeInsets.only(left: 25, bottom: 10,right: 25),
       onTap: fun,
       leading: Container(
         width: 45,

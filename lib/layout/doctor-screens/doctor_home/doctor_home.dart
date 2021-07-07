@@ -3,10 +3,10 @@ import 'package:flutter/rendering.dart';
 import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/widgets/all_appointments.dart';
 import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/widgets/today_appointments.dart';
 import 'package:the_disease_fighter/layout/drawer/doctor_MainDrawer.dart';
-import 'package:the_disease_fighter/layout/notification/notification.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+import 'package:the_disease_fighter/material/widgets/no_internet_widget.dart';
 import 'package:the_disease_fighter/services/doctorScreens/controllers/get_all_doctors_sessions_controller.dart';
 
 class DoctorHome extends StatefulWidget {
@@ -43,15 +43,6 @@ class _DoctorHomeState extends State<DoctorHome> with TickerProviderStateMixin {
                   imgHigh: 15.0,
                 ),
                 actions: [
-                  ImgButton(
-                    fun: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Notifications())),
-                    img: 'assets/icons/notification.png',
-                    imgHigh: 35.0,
-                    imgWidth: 35.0,
-                  ),
                 ],
                 pinned: true,
                 snap: true,
@@ -82,38 +73,15 @@ class _DoctorHomeState extends State<DoctorHome> with TickerProviderStateMixin {
               future: _loadDoctorAppointments(),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 if (!snapshot.hasData && !snapshot.hasError) {
-                  return Container(
-                      height: 222,
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator());
+                  return Center(child: CircularProgressIndicator());
                 } else {
                   if (snapshot.hasError) {
-                    return SizedBox(
-                      height: 222,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                              icon: Icon(
-                                Icons.refresh,
-                                color: primaryColor,
-                                size: 40,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _loadDoctorAppointments();
-                                });
-                              }),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Text(
-                            'Failed To Load',
-                            style: TextStyle(color: subTextColor, fontSize: 16),
-                          ),
-                        ],
-                      ),
+                    return FailLoadWidget(
+                      fun: () {
+                        setState(() {
+                          _loadDoctorAppointments();
+                        });
+                      },
                     );
                   } else {
                     return TabBarView(
@@ -130,12 +98,7 @@ class _DoctorHomeState extends State<DoctorHome> with TickerProviderStateMixin {
                     );
                   }
                 }
-              }), /*TabBarView(
-            children: [
-              TodayAppointments(),
-              AllAppointments(),
-            ],
-          ),*/
+              }),
         ),
       ),
       drawer: DoctorMainDrawer(),

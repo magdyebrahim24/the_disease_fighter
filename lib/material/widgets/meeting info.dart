@@ -13,15 +13,19 @@ class MeetingInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8),
-      padding: EdgeInsets.only(
-        left: 10,
-      ),
+      padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
       decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+              color: subTextColor.withOpacity(.3),
+              offset: Offset(1.0, 2.0),
+              blurRadius: 2.0,
+              spreadRadius: .2),
+        ],
         borderRadius: BorderRadius.circular(8),
         color: color,
       ),
       width: width,
-      height: 50,
       child: Row(
         children: [
           Container(
@@ -32,11 +36,14 @@ class MeetingInfo extends StatelessWidget {
             child: Center(child: widget),
           ),
           SizedBox(
-            width: 20,
+            width: 15,
           ),
-          Text(
-            text,
-            style: TextStyle(color: darkBlueColor, fontSize: 14),
+          Expanded(
+            child: Text(
+              '$text',
+              maxLines: 2,
+              style: TextStyle(color: darkBlueColor, fontSize: 14,),overflow: TextOverflow.ellipsis,
+            ),
           )
         ],
       ),

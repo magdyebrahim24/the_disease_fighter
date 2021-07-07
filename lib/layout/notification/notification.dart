@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/favorite/favorite_doctors.dart';
-import 'package:the_disease_fighter/layout/notification/rate.dart';
+import 'package:the_disease_fighter/layout/notification/widget/notification_card.dart';
+import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+import 'package:the_disease_fighter/material/widgets/empty_list_widget.dart';
+import 'package:the_disease_fighter/material/widgets/no_internet_widget.dart';
 import 'package:the_disease_fighter/services/notification/controllers/show_patient_notification_controller.dart';
 
 class Notifications extends StatefulWidget {
   final data;
-
-  const Notifications({Key? key, this.data}) : super(key: key);
+  Notifications({this.data});
 
   @override
   _NotificationsState createState() => _NotificationsState();
@@ -21,7 +22,20 @@ class _NotificationsState extends State<Notifications> {
 
   Future _showPatientNotification() async {
     var data = await _patientNotificationController.getPatientNotification();
-    return Future.value(data);
+    List _seenNotificationList = [];
+    List _unSeenNotificationList = [];
+    for (var item in data.notifications ?? []) {
+      if (item.seen == false) {
+        _unSeenNotificationList.add(item);
+      } else {
+        _seenNotificationList.add(item);
+      }
+    }
+    Map notificationData = {
+      'un_seen': _unSeenNotificationList,
+      'seen': _seenNotificationList,
+    };
+    return notificationData;
   }
 
   @override
@@ -34,149 +48,106 @@ class _NotificationsState extends State<Notifications> {
           style: kHeadStyle,
         ),
         leading: CircleButton(
-          fun: () => Navigator.pop(context),
+          fun: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home(),)),
           icn: Icons.arrow_back,
           color: primaryColor,
         ),
         centerTitle: true,
+        elevation: 0.0,
       ),
-      body: Directionality(
-        textDirection: TextDirection.ltr,
-        child: FutureBuilder<dynamic>(
-            future: _showPatientNotification(),
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+      body: FutureBuilder<dynamic>(
+          future: _showPatientNotification(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (!snapshot.hasData && !snapshot.hasError) {
+              return Center(child: CircularProgressIndicator());
+            } else {
+              if (snapshot.hasError) {
+                return FailLoadWidget(
+                  fun: () {
+                    setState(() {
+                      _showPatientNotification();
+                    });
+                  },
+                );
               } else {
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                            icon: Icon(
-                              Icons.refresh,
-                              color: primaryColor,
-                              size: 40,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _showPatientNotification();
-                              });
-                            }),
-                        SizedBox(
-                          height: 15,
+                return snapshot.data['un_seen'].length == 0 &&
+                        snapshot.data['seen'].length == 0
+                    ? EmptyListWidget(
+                        icon: Icons.notifications_none_rounded,
+                        iconSize: 80.0,
+                        label:  Languages.of(context)!.notificationScreen['no notification'],
+                      )
+                    : SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            snapshot.data['un_seen'].length != 0
+                                ? Padding(
+                                    padding:
+                                        EdgeInsets.fromLTRB(15, 25, 15, 10),
+                                    child: Text(
+                                      'Un Seen Notification',
+                                      style: TextStyle(
+                                          color: darkBlueColor,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  )
+                                : SizedBox(),
+                            snapshot.data['un_seen'].length != 0
+                                ? ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount:
+                                        snapshot.data['un_seen'].length ?? 0,
+                                    itemBuilder: (ctx, index) {
+                                      return NotificationCard(
+                                        data: snapshot.data['un_seen'][index] ??
+                                            {},
+                                      );
+                                    })
+                                : SizedBox(),
+                            snapshot.data['seen'].length != 0
+                                ? Container(
+                                    height: 5,
+                                    color: backGroundColor,
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 15),
+                                  )
+                                : SizedBox(),
+                            snapshot.data['seen'].length != 0
+                                ? Padding(
+                                    padding:
+                                        EdgeInsets.fromLTRB(15, 10, 15, 10),
+                                    child: Text(
+                                      'Seen Notification',
+                                      style: TextStyle(
+                                          color: darkBlueColor,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  )
+                                : SizedBox(),
+                            snapshot.data['seen'].length != 0
+                                ? ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount:
+                                        snapshot.data['seen'].length ?? 0,
+                                    itemBuilder: (ctx, index) {
+                                      return NotificationCard(
+                                        data:
+                                            snapshot.data['seen'][index] ?? {},
+                                        seen: true,
+                                      );
+                                    })
+                                : SizedBox(),
+                          ],
                         ),
-                        Text(
-                          'Failed To Load',
-                          style: TextStyle(color: subTextColor, fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  return snapshot.data.notifications != null &&
-                          snapshot.data.notifications.length != 0
-                      ? ListView.builder(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          itemCount: snapshot.data.notifications.length ?? 0,
-                          itemBuilder: (ctx, index) {
-                            return Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 15),
-                              child: InkWell(
-                                onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => RateScreen(
-                                              sessionId: snapshot
-                                                  .data
-                                                  .notifications[index]
-                                                  .sessionId,
-                                              data: snapshot
-                                                  .data.notifications[index],
-                                            ))),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 15, horizontal: 15),
-                                  // margin: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-                                  decoration: BoxDecoration(
-                                    color: primaryColor.withOpacity(.17),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                          margin: EdgeInsets.only(right: 13),
-                                          height: 55,
-                                          width: 55,
-                                          decoration: BoxDecoration(
-                                            color: greyColor.withOpacity(.5),
-                                            shape: BoxShape.circle,
-                                            image: DecorationImage(
-                                              image: AssetImage(
-                                                  'assets/doctors_img/doc3.jpg'),
-                                              fit: BoxFit.cover,
-                                            ),
-                                          )),
-                                      Expanded(
-                                          child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text.rich(
-                                            TextSpan(
-                                              text: snapshot
-                                                  .data
-                                                  .notifications[index]
-                                                  .doctorName
-                                                  .toString(),
-                                              style: new TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: darkBlueColor,
-                                              ),
-                                              children: [
-                                                TextSpan(
-                                                    text:
-                                                        'finished his session with you can rate it now!! ',
-                                                    style: new TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal)),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 7,
-                                          ),
-                                          Text(
-                                            snapshot
-                                                .data.notifications[index].time
-                                                .toString(),
-                                            style: TextStyle(
-                                              color: subTextColor,
-                                              fontSize: 12,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      )),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          })
-                      : EmptyPage();
-                  //MeetingCard(data:snapshot.data.sessions);
-
-                }
+                      );
               }
-            }),
-      ),
+            }
+          }),
     );
   }
 }

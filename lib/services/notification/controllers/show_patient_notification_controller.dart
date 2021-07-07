@@ -4,14 +4,14 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:the_disease_fighter/models/ApiCookies.dart';
+import 'package:the_disease_fighter/services/base_url/ApiCookies.dart';
 import 'package:the_disease_fighter/services/notification/models/show_patient_notification_model.dart';
 
 class ShowPatientNotificationController {
   Dio _dio = Dio();
   var cookieJar = CookieJar();
-  ShowtPatientNotificationModel _patientNotificationModel =
-      ShowtPatientNotificationModel();
+  GetPatientNotificationModel _patientNotificationModel =
+      GetPatientNotificationModel();
 
   Future _showPatientNotification() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -41,12 +41,12 @@ class ShowPatientNotificationController {
     }
   }
 
-  Future<ShowtPatientNotificationModel> getPatientNotification() async {
+  Future<GetPatientNotificationModel> getPatientNotification() async {
     var jsonString, jsonResponse;
     jsonString = await _showPatientNotification();
     jsonResponse = json.decode(jsonString.toString());
     _patientNotificationModel =
-        ShowtPatientNotificationModel.fromJson(jsonResponse);
+        GetPatientNotificationModel.fromJson(jsonResponse);
     return _patientNotificationModel;
   }
 }

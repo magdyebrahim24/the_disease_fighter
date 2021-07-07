@@ -63,41 +63,41 @@ class _ViewAllDoctorsState extends State<ViewAllDoctors>
                       color: Color(0xffE6F7FD)),
                   tabs: [
                     tapBarWidget(
-                      label: 'all',
+                      label: Languages.of(context)!.allDoctors['allTap'].toString(),
                     ),
                     tapBarWidget(
-                      label: Languages.of(context)!.allDoctors['brain'],
+                      label: Languages.of(context)!.allDoctors['brain'].toString(),
                     ),
                     tapBarWidget(
-                      label: Languages.of(context)!.allDoctors['chest'],
+                      label: Languages.of(context)!.allDoctors['chest'].toString(),
                     ),
                     tapBarWidget(
-                      label: Languages.of(context)!.allDoctors['physical'],
+                      label: Languages.of(context)!.allDoctors['physical'].toString(),
                     ),
                     tapBarWidget(
-                      label: Languages.of(context)!.allDoctors['bone'],
+                      label: Languages.of(context)!.allDoctors['bone'].toString(),
                     ),
                     tapBarWidget(
                       label:
-                          Languages.of(context)!.allDoctors['internalMedicine'],
+                          Languages.of(context)!.allDoctors['internalMedicine'].toString(),
                     ),
                     tapBarWidget(
-                      label: Languages.of(context)!.allDoctors['surgery'],
+                      label: Languages.of(context)!.allDoctors['surgery'].toString(),
                     ),
                     tapBarWidget(
-                      label: Languages.of(context)!.allDoctors['teeth'],
+                      label: Languages.of(context)!.allDoctors['teeth'].toString(),
                     ),
                     tapBarWidget(
-                      label: Languages.of(context)!.allDoctors['urology'],
+                      label: Languages.of(context)!.allDoctors['urology'].toString(),
                     ),
                     tapBarWidget(
-                      label: Languages.of(context)!.allDoctors['heart'],
+                      label: Languages.of(context)!.allDoctors['heart'].toString(),
                     ),
                     tapBarWidget(
-                      label: Languages.of(context)!.allDoctors['kids'],
+                      label: Languages.of(context)!.allDoctors['kids'].toString(),
                     ),
                     tapBarWidget(
-                      label: Languages.of(context)!.allDoctors['dermatology'],
+                      label: Languages.of(context)!.allDoctors['dermatology'].toString(),
                     ),
                   ]),
               forceElevated: innerBoxIsScrolled,
@@ -107,7 +107,7 @@ class _ViewAllDoctorsState extends State<ViewAllDoctors>
         body: TabBarView(
           controller: _tabController,
           children: [
-            ViewDocAllBuilder(),
+            ViewDocAllBuilder( ),
             ViewDocSpecialistBuilder(
               clinicId: 1,
             ),

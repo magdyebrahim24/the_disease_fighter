@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
+import 'package:the_disease_fighter/layout/sign/sign-up/additional-info/upload_user_avatar.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -33,23 +35,22 @@ class _UpdateDoctorDatesState extends State<UpdateDoctorDates> {
   Future _showTimePicker() async {
     var time = await showTimePicker(
         context: context,
+
         initialEntryMode: TimePickerEntryMode.input,
         helpText: 'Enter Time Clinic Open In',
         initialTime: TimeOfDay.fromDateTime(DateTime.now()),
         builder: (BuildContext context, Widget? child) {
-          return MediaQuery(
-            data: MediaQuery.of(context).copyWith(
-              alwaysUse24HourFormat: false,
-            ),
-            child: child!,
+          return Localizations.override(
+            context: context,
+            locale: Locale('en', 'US'),
+            child: child,
           );
         });
     return time!.format(context).toString();
   }
 
   Future _deleteDate({dateId}) async {
-    final response =
-        await _doctorDateController.deleteDate(dateId: dateId.toString());
+    await _doctorDateController.deleteDate(dateId: dateId.toString());
     setState(() {
       _loadDoctorDates();
       _deleteDocDateLoading = null;
@@ -92,7 +93,8 @@ class _UpdateDoctorDatesState extends State<UpdateDoctorDates> {
       appBar: AppBar(
         elevation: 0.0,
         title: Text(
-          'Update Dates',
+          Languages.of(context)!
+              .updateDoctorDates['tittle'],
           style: TextStyle(color: darkBlueColor),
         ),
         centerTitle: true,
@@ -106,9 +108,10 @@ class _UpdateDoctorDatesState extends State<UpdateDoctorDates> {
           widget.showSkip
               ? TextButton(
                   onPressed: () => Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => DoctorHome())),
+                      MaterialPageRoute(builder: (context) => UploadUserAvatar(route: DoctorHome(),))),
                   child: Text(
-                    'Save',
+                  Languages.of(context)!
+                      .saveButton,
                     style: TextStyle(color: subTextColor, fontSize: 16),
                   ),
                   style: ButtonStyle(),
@@ -139,7 +142,8 @@ class _UpdateDoctorDatesState extends State<UpdateDoctorDates> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Add Clinic Date :',
+                      Languages.of(context)!
+                          .updateDoctorDates['Add'].toString(),
                       style: TextStyle(
                           color: darkBlueColor,
                           fontSize: 19,
@@ -156,7 +160,8 @@ class _UpdateDoctorDatesState extends State<UpdateDoctorDates> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                                 Text(
-                                  'Day Clinic Open In :',
+                                  Languages.of(context)!
+                                      .updateDoctorDates['clinicOpen'].toString(),
                                   style: TextStyle(
                                       fontSize: 15, color: darkBlueColor),
                                 ),
@@ -184,7 +189,8 @@ class _UpdateDoctorDatesState extends State<UpdateDoctorDates> {
                                         value: day,
                                         elevation: 1,
                                         hint: Text(
-                                          'Select Day Clinic Open In',
+                                          Languages.of(context)!
+                                              .updateDoctorDates['dayHint'].toString(),
                                           style: TextStyle(color: subTextColor),
                                         ),
                                         icon: Icon(Icons.arrow_drop_down,
@@ -222,7 +228,10 @@ class _UpdateDoctorDatesState extends State<UpdateDoctorDates> {
                                   children: [
                                     Expanded(
                                       child: BasicTimeField(
-                                        label: 'From :',
+                                        label:  Languages.of(context)!
+                                            .updateDoctorDates['from'].toString(),
+                                        helperText: Languages.of(context)!
+                                            .updateDoctorDates['fromHelper'].toString(),
                                         selectedTime: fromTime,
                                         fun: () async {
                                           final time = await _showTimePicker();
@@ -238,13 +247,16 @@ class _UpdateDoctorDatesState extends State<UpdateDoctorDates> {
                                     Expanded(
                                         child: BasicTimeField(
                                       selectedTime: toTime,
+                                      helperText: Languages.of(context)!
+                                          .updateDoctorDates['toHelper'].toString(),
                                       fun: () async {
                                         final time = await _showTimePicker();
                                         setState(() {
                                           toTime = time;
                                         });
                                       },
-                                      label: 'To :',
+                                      label:  Languages.of(context)!
+                                          .updateDoctorDates['to'].toString(),
                                     )),
                                   ],
                                 ),
@@ -261,7 +273,8 @@ class _UpdateDoctorDatesState extends State<UpdateDoctorDates> {
                                 Center(
                                   child: RoundedButton(
                                     fun: _addDoctorDate,
-                                    text: 'Add Date',
+                                    text: Languages.of(context)!
+                                        .updateDoctorDates['addBTN'].toString(),
                                     borderRadious: 10,
                                     minWdthRatio: .5,
                                   ),
@@ -297,7 +310,8 @@ class _UpdateDoctorDatesState extends State<UpdateDoctorDates> {
                       Row(
                         children: [
                           Text(
-                            'Your Clinic Dates :',
+                            Languages.of(context)!
+                                .updateDoctorDates['yourDates'].toString(),
                             style: TextStyle(
                                 color: darkBlueColor,
                                 fontSize: 19,
@@ -398,7 +412,6 @@ class _UpdateDoctorDatesState extends State<UpdateDoctorDates> {
                                                 _deleteDocDateLoading != index
                                                     ? CircleButton(
                                                         color: subTextColor,
-                                                        // fun: (){},
                                                         fun: () {
                                                           setState(() {
                                                             _deleteDocDateLoading =
@@ -438,7 +451,8 @@ class _UpdateDoctorDatesState extends State<UpdateDoctorDates> {
                                           );
                                         })
                                     : Text(
-                                        'No Dates yet , add dates below',
+                                  Languages.of(context)!
+                                      .updateDoctorDates['noDates'].toString(),
                                         style: TextStyle(color: subTextColor),
                                       );
                               }

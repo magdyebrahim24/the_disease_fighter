@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -92,7 +93,8 @@ class _MlModelScreenState extends State<MlModelScreen> {
               children: [
                 Text(
                   _show == 3
-                      ? 'Thank You For Using ${widget.data['name']}'
+                      ?  Languages.of(context)!
+                      .ml['thankyou'].toString()+'\n${widget.data['name']}'
                       : widget.data['name'],
                   style: TextStyle(
                       fontSize: 22,
@@ -105,12 +107,15 @@ class _MlModelScreenState extends State<MlModelScreen> {
                 ),
                 Text(
                   _show == 1 && _pickerImage != null
-                      ? 'Please Analysis X-ray image OR choose other image'
+                      ? Languages.of(context)!
+                      .ml['pleaseClick']
                       : _show == 2 && _pickerImage != null
-                          ? 'Please Wait Until Analysis X-Ray Image '
+                          ? Languages.of(context)!
+                      .ml['pleaseClick']
                           : _show == 3
                               ? ' '
-                              : 'Please click on the file and choose the X-ray image',
+                              : Languages.of(context)!
+                      .ml['pleaseClick'],
                   style: TextStyle(
                       color: subTextColor.withOpacity(.6),
                       fontWeight: FontWeight.bold),
@@ -151,7 +156,8 @@ class _MlModelScreenState extends State<MlModelScreen> {
                         children: [
                           RoundedButton(
                             fun: _uploadXRayImage,
-                            text: 'Analysis',
+                            text:  Languages.of(context)!
+                                .ml['analysis'].toString(),
                             borderRadious: 10.0,
                             minWdthRatio: .8,
                           ),
@@ -173,7 +179,8 @@ class _MlModelScreenState extends State<MlModelScreen> {
                               });
                             },
                             child: Text(
-                              'Cancel',
+                                Languages.of(context)!
+                                    .cancelBTN.toString(),
                               style:
                                   TextStyle(fontSize: 16, color: primaryColor),
                             ),
@@ -190,12 +197,14 @@ class _MlModelScreenState extends State<MlModelScreen> {
                                     _pickerImage = null;
                                   });
                                 },
-                                text: 'End',
+                                text:  Languages.of(context)!
+                                    .ml['end'].toString(),
                                 borderRadious: 10.0,
                                 minWdthRatio: .8,
                               )
                             : SizedBox(),
-              ],
+
+                 ],
             ),
           ),
         ));
@@ -294,7 +303,8 @@ class _MlModelScreenState extends State<MlModelScreen> {
                 height: 10,
               ),
               Text(
-                'Tap To Select Image',
+                Languages.of(context)!
+                    .ml['tapToSelect'].toString(),
                 style: TextStyle(
                   color: subTextColor,
                   fontSize: 16,
@@ -325,7 +335,8 @@ class _MlModelScreenState extends State<MlModelScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   BottomSheetItem(
-                    label: 'Take New Picture',
+                    label:  Languages.of(context)!
+                  .uploadUserAvatar['takePhoto'].toString(),
                     icon: Icons.camera_alt_rounded,
                     fun: () {
                       _pickImage(ImageSource.camera);
@@ -336,7 +347,8 @@ class _MlModelScreenState extends State<MlModelScreen> {
                     },
                   ),
                   BottomSheetItem(
-                      label: 'Select Picture From Gallery',
+                      label:  Languages.of(context)!
+                          .uploadUserAvatar['selectGallery'].toString(),
                       icon: Icons.photo_library_outlined,
                       fun: () {
                         _pickImage(ImageSource.gallery);
@@ -355,16 +367,18 @@ class _MlModelScreenState extends State<MlModelScreen> {
   Future<void> _modelDialog() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Explain ${widget.data['name']}',
+            '${Languages.of(context)!
+                .explainText.toString()} ${widget.data['name']}',
             style: TextStyle(color: darkBlueColor),
           ),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
+                Container(margin: EdgeInsets.only(bottom: 10),height: 2,color: Colors.grey.withOpacity(.5),width: MediaQuery.of(context).size.width,),
                 for (int i = 0; i < 2; i++)
                   Text(
                     '- ${widget.data['note'][i]}',
@@ -384,7 +398,8 @@ class _MlModelScreenState extends State<MlModelScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Close'),
+              child: Text( Languages.of(context)!
+                  .closeBTN.toString()),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -413,7 +428,8 @@ class AnalysisLoader extends StatelessWidget {
           width: 150.0,
         ),
         Text(
-          "Analysing ...",
+        Languages.of(context)!
+            .ml['analysing'],
           style: TextStyle(
               color: primaryColor, fontWeight: FontWeight.bold, fontSize: 15),
         )

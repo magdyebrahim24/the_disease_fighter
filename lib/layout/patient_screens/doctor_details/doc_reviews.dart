@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+import 'package:the_disease_fighter/material/widgets/empty_list_widget.dart';
+import 'package:the_disease_fighter/material/widgets/no_internet_widget.dart';
 import 'package:the_disease_fighter/material/widgets/rate_bar.dart';
 import 'package:the_disease_fighter/services/reviews/controllers/get_doctor_reviews_controller.dart';
 
@@ -57,14 +59,15 @@ class _DoctorReviewsState extends State<DoctorReviews> {
                   itemCount: snapshot.data.reviews.length ?? 0,
                   padding: EdgeInsets.symmetric(vertical: 15),
                 )
-                    : emptyPage();
+                    : EmptyListWidget(icon: Icons.list_alt,label: 'No Reviews Yet',iconSize: 100.0,);
+
               } else if (snapshot.hasError) {
-                return Column(
-                  children: [
-                    IconButton(
-                        icon: Icon(Icons.refresh), onPressed: _getReviewsFun),
-                    Text('Failed To Load'),
-                  ],
+                return FailLoadWidget(
+                  fun: () {
+                    setState(() {
+                      _getReviewsFun();
+                    });
+                  },
                 );
               } else {
                 return Center(child: CircularProgressIndicator());
@@ -87,13 +90,13 @@ class _DoctorReviewsState extends State<DoctorReviews> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-              height: 45,
-              width: 45,
+              height: 50,
+              width: 50,
               decoration: BoxDecoration(
                 color: greyColor.withOpacity(.5),
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
-                  image: AssetImage('assets/doctors_img/doc3.jpg'),
+                  image: NetworkImage(data.avatar.toString()),
                   fit: BoxFit.cover,
                 ),
               )),

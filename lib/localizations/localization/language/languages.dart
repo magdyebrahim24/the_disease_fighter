@@ -10,6 +10,9 @@ abstract class Languages {
   Map get changePassword;
 
   String get introSkip;
+  String get cancelBTN;
+  String get closeBTN;
+  String get endBTN;
 
   List get introInformation;
 
@@ -21,7 +24,15 @@ abstract class Languages {
 
   Map get signUpPatientInfo;
 
+  Map get uploadUserAvatar;
+
+  String get saveButton;
+
+  Map get ml;
+
   Map get signUpDoctorInfo;
+
+  Map get updateDoctorDates;
 
   Map get notificationScreen;
 
@@ -34,9 +45,6 @@ abstract class Languages {
   Map get doctorDetails;
 
   Map get drawer;
-
-  String get search;
-
   Map get bookAppointment;
 
   Map get allDoctors;
@@ -49,6 +57,8 @@ abstract class Languages {
 
   Map get aboutScreen;
 
+  Map get search;
+
   Map get termsOfUse;
 
   Map get patientProfile;
@@ -60,4 +70,8 @@ abstract class Languages {
   Map get doctorStartMeeting;
 
   Map get doctorProfile;
+
+  List get modelsDetails;
+
+  String get explainText;
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/my_appointments/my_appointments.dart';
+import 'package:the_disease_fighter/layout/patient_screens/my_appointments/my_appointments.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -11,8 +11,7 @@ import 'package:the_disease_fighter/services/sessions/controllers/updateSession.
 
 class EditAppointment extends StatefulWidget {
   final data;
-
-  const EditAppointment({this.data});
+  EditAppointment({this.data});
 
   @override
   _EditAppointmentState createState() => _EditAppointmentState();
@@ -49,66 +48,7 @@ class _EditAppointmentState extends State<EditAppointment> {
           SingleChildScrollView(
             child: Column(
               children: [
-                Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(bottom: 25),
-                    padding: EdgeInsets.only(top: 25),
-                    width: MediaQuery.of(context).size.width,
-                    height: 240,
-                    decoration: BoxDecoration(
-                        color: primaryColor.withOpacity(.8),
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(40),
-                          bottomLeft: Radius.circular(40),
-                        )),
-                    child: Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: subTextColor,
-                                    offset: Offset(1.0, 2.0),
-                                    blurRadius: 6.0,
-                                    spreadRadius: 1),
-                              ],
-                              image: DecorationImage(
-                                  image: NetworkImage(
-                                      widget.data.doctorAvatar.toString()),
-                                  fit: BoxFit.cover),
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                  color: Color(0xffFDFDFD), width: 2),
-                              color: backGroundColor),
-                          margin: EdgeInsets.all(10),
-                          height: 120,
-                          width: 120,
-                        ),
-                        Text(
-                          widget.data.doctorName.toString(),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: darkBlueColor,
-                            fontSize: 20,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 7,
-                        ),
-                        Text(
-                          'doc Specialist need',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
-                    )),
+                _appointCard(),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                   child: Column(
@@ -166,7 +106,8 @@ class _EditAppointmentState extends State<EditAppointment> {
                                             MainAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Note : you can edit only appointment date and time',
+                                        Languages.of(context)!
+                                        .bookAppointment['note'].toString(),
                                             style:
                                                 TextStyle(color: subTextColor),
                                           ),
@@ -217,8 +158,10 @@ class _EditAppointmentState extends State<EditAppointment> {
                                               });
                                             },
                                             items: _days,
-                                            hintText: 'Select Day',
-                                            labelText: 'Day',
+                                            hintText: Languages.of(context)!
+                                                .bookAppointment['day'].toString(),
+                                            labelText: Languages.of(context)!
+                                                .bookAppointment['hintDay'].toString(),
                                           ),
                                           DropDownList(
                                             value: _selectedTime,
@@ -256,8 +199,10 @@ class _EditAppointmentState extends State<EditAppointment> {
                                               });
                                             },
                                             items: _times,
-                                            hintText: 'Select Time',
-                                            labelText: 'Time',
+                                            hintText: Languages.of(context)!
+                                                .bookAppointment['time'].toString(),
+                                            labelText: Languages.of(context)!
+                                                .bookAppointment['hintTime'].toString(),
                                           ),
                                         ]),
                                   );
@@ -286,11 +231,14 @@ class _EditAppointmentState extends State<EditAppointment> {
             ),
           ),
           _showBanner
-              ? ErrorMaterialBanner(
-                  errorMessage: _errorMessage,
-                  fun: () => setState(() {
-                        _showBanner = false;
-                      }))
+              ? SizedBox(
+            height: 150,
+                child: ErrorMaterialBanner(
+                    errorMessage: _errorMessage,
+                    fun: () => setState(() {
+                          _showBanner = false;
+                        })),
+              )
               : SizedBox()
         ],
       ),
@@ -334,7 +282,7 @@ class _EditAppointmentState extends State<EditAppointment> {
 
   Widget _item(BuildContext context, {labelText, data}) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 7, horizontal: 0),
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -343,16 +291,20 @@ class _EditAppointmentState extends State<EditAppointment> {
             style: TextStyle(fontSize: 15, color: subTextColor),
           ),
           Container(
-              // alignment: Alignment.centerLeft,
               margin: EdgeInsets.symmetric(
                 vertical: 7,
               ),
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(horizontal: 14, vertical: 15),
               decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: subTextColor.withOpacity(.5),
+                      offset: Offset(1.0, 2.0),
+                      blurRadius: 4.0,
+                      spreadRadius: .4),
+                ],
                 color: backGroundColor,
-                border: Border.all(
-                    width: 1, color: Color(0xff707070).withOpacity(.15)),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
@@ -362,7 +314,69 @@ class _EditAppointmentState extends State<EditAppointment> {
         ],
       ),
     );
+  }  Widget _appointCard() {
+    return Container(
+      padding: EdgeInsets.all(15),
+      margin: EdgeInsets.only(top: 40,bottom: 10,left: 10,right: 10),
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+              color: subTextColor.withOpacity(.5),
+              offset: Offset(1.0, 2.0),
+              blurRadius: 4.0,
+              spreadRadius: .4),
+        ],
+        color: backGroundColor, borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 75,
+                height: 75,
+                decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(.5),
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                        image:
+                        NetworkImage(widget.data.doctorAvatar.toString()),
+                        fit: BoxFit.cover)),
+              ),
+              SizedBox(
+                width: 15,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.data.doctorName.toString(),
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: darkBlueColor,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    '${widget.data.docSpecialization.toString()} Specialist',
+                    style: TextStyle(
+                      color: subTextColor,
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        ],
+      ),
+    );
   }
+
+
 
   Future _updateSession() async {
     if (_formKey.currentState!.validate()) {
@@ -374,7 +388,8 @@ class _EditAppointmentState extends State<EditAppointment> {
         time: _selectedTime,
         day: _selectedDay,
         selectedPeriodId: _periodId,
-        previousPeriodId: '12',
+        previousPeriodId:  widget.data.periodId.toString()
+        ,
         sessionId: widget.data.id.toString(),
       );
       if (await data['success']) {
@@ -383,7 +398,8 @@ class _EditAppointmentState extends State<EditAppointment> {
             MaterialPageRoute(
                 builder: (context) => MyAppointments(
                       showSnackBar: true,
-                      snackBarMessage: 'Appointment Edited Successfully',
+                      snackBarMessage:  Languages.of(context)!
+                          .bookAppointment['editText'],
                     )));
       } else {
         setState(() {

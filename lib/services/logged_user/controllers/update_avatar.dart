@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:the_disease_fighter/models/ApiCookies.dart';
+import 'package:the_disease_fighter/services/base_url/ApiCookies.dart';
 
 class UpdateAvatarController {
   Dio _dio = Dio();
@@ -34,23 +34,26 @@ class UpdateAvatarController {
     String fileName = file!.path.split('/').last;
     FormData formData = FormData.fromMap(
         {"file": await MultipartFile.fromFile(file.path, filename: fileName)});
-
+    try {
     var response = await _dio.patch(
       '/avatar',
       data: formData,
     );
 
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
-      print(response.statusCode);
+      print(response.data);
       // response.data.putIfAbsent('success', () => true);
 
       return response.data;
     } else {
-      // throw Exception('Failed to Log In');
       print(response.data);
       // response.data.putIfAbsent('success', () => false);
 
       return response.data;
+    }}on DioError catch (e) {
+      print(e);
+      Map error = {'success': false, 'message': 'Fail , check your internet'};
+      return error;
     }
   }
 }

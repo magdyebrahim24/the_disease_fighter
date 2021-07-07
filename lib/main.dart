@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'layout/patient_screens/patient_home/home.dart';
+import 'package:the_disease_fighter/layout/splash/splash.dart';
 import 'localizations/localization/locale_constant.dart';
 import 'localizations/localization/localizations_delegate.dart';
 
@@ -13,7 +13,6 @@ class MyApp extends StatefulWidget {
     var state = context.findAncestorStateOfType<_MyAppState>();
     state!.setLocale(newLocale);
   }
-
   @override
   State<StatefulWidget> createState() => _MyAppState();
 }
@@ -49,7 +48,7 @@ class _MyAppState extends State<MyApp> {
       title: 'The Disease Fighter',
       debugShowCheckedModeBanner: false,
       locale: _locale,
-      home: Home(),
+      home: Splash(),
       theme: ThemeData(
         primaryColor: Colors.white,
         fontFamily: 'Rubik',

@@ -34,7 +34,7 @@ class CurrentUser {
   String? phone;
   int? specId;
   Specialization? specialization;
-  Null? xY;
+  Null xY;
 
   CurrentUser(
       {this.about,

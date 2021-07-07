@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/favorite/favorite_doctors.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+import 'package:the_disease_fighter/material/widgets/empty_list_widget.dart';
 
 import 'previous_appointment_details.dart';
 
@@ -89,6 +89,7 @@ class PreviousAppointments extends StatelessWidget {
                 ),
               );
             })
-        : EmptyPage();
+        : EmptyListWidget(icon: Icons.list_alt,label: Languages.of(context)!
+        .patientAppointments['noPreviousAppointments'].toString(),iconSize: 100.0,);
   }
 }

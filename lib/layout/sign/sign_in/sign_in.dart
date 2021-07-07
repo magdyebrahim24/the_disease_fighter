@@ -1,6 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
@@ -10,10 +10,8 @@ import 'package:the_disease_fighter/material/widgets/materialBanner.dart';
 import 'package:the_disease_fighter/services/basicData/controllers/logIn_controller.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
-import 'package:the_disease_fighter/material/bottons/socialBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/txt_field.dart';
-import 'forget_password/forget_password.dart';
 
 class SignIn extends StatefulWidget {
   final showLogOutSnackBar;
@@ -28,6 +26,7 @@ class _SignInState extends State<SignIn> {
   String errorMessage = '';
   String? _bannerMessage;
   bool _showBanner = false;
+  bool _obSecurePassword = true;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -48,18 +47,30 @@ class _SignInState extends State<SignIn> {
         password: password,
       );
       if (await data['success'] ?? false) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        String accessToken = await data['access_token'];
+        await prefs.setString('access_token', '$accessToken');
+        await prefs.setBool('isDoctor',await data['is_doctor']);
+        await prefs.setString('userData',jsonEncode(await data['logged_user']));
+        await prefs.setString('userAvatar',await data['logged_user']['avatar']);
+        await prefs.setString('userName',await data['logged_user']['name']);
+
         if (await data['is_doctor'] ?? false) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DoctorHome(),
-              ));
+          Navigator.pushAndRemoveUntil<dynamic>(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DoctorHome(),
+            ),
+                (route) => false,
+          );
         } else {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Home(),
-              ));
+          Navigator.pushAndRemoveUntil<dynamic>(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Home(),
+            ),
+                (route) => false,
+          );
         }
       } else if (await data['success'] == false &&
           await data['message'] == 'Fail to sign in , check your internet') {
@@ -105,7 +116,7 @@ class _SignInState extends State<SignIn> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     // logo
                     Container(
@@ -125,7 +136,7 @@ class _SignInState extends State<SignIn> {
                     Container(
                         width: MediaQuery.of(context).size.width,
                         padding: EdgeInsets.symmetric(
-                            horizontal: MediaQuery.of(context).size.width * .05,
+                            horizontal: 20,
                             vertical: 30),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
@@ -174,12 +185,25 @@ class _SignInState extends State<SignIn> {
                                   this.password = password.trim();
                                 });
                               },
-                              obSecure: true,
+                              obSecure: _obSecurePassword,
                               textInputType: TextInputType.visiblePassword,
                               validatorFun: (value) {
                                 if (value.toString().isEmpty) {
                                   return 'Password Required';
                                 }
+                              },
+                              showSuffix: true,
+                              showSuffixFun: (){
+                                if(_obSecurePassword){
+                                  setState(() {
+                                    _obSecurePassword = false ;
+                                  });
+                                }else{
+                                  setState(() {
+                                    _obSecurePassword = true ;
+                                  });
+                                }
+
                               },
                             ),
                             errorMessage != ''
@@ -189,69 +213,70 @@ class _SignInState extends State<SignIn> {
                                         color: Colors.red.withOpacity(.6)),
                                   )
                                 : SizedBox(),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  bottom: 35, right: 5, left: 5),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  InkWell(
-                                      onTap: () => Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ForgetPassword(),
-                                            ),
-                                          ),
-                                      child: Text(
-                                        Languages.of(context)!
-                                            .signIn['forgetPassword'],
-                                        style: TextStyle(color: subTextColor),
-                                      )),
-                                ],
-                              ),
-                            ),
+                            SizedBox(height: MediaQuery.of(context).size.height * .05,),
+                            // Padding(
+                            //   padding: EdgeInsets.only(
+                            //       bottom: 35, right: 5, left: 5),
+                            //   child: Row(
+                            //     crossAxisAlignment: CrossAxisAlignment.end,
+                            //     mainAxisAlignment: MainAxisAlignment.end,
+                            //     children: [
+                            //       InkWell(
+                            //           onTap: () => Navigator.pushReplacement(
+                            //                 context,
+                            //                 MaterialPageRoute(
+                            //                   builder: (context) =>
+                            //                       ForgetPassword(),
+                            //                 ),
+                            //               ),
+                            //           child: Text(
+                            //             Languages.of(context)!
+                            //                 .signIn['forgetPassword'],
+                            //             style: TextStyle(color: subTextColor),
+                            //           )),
+                            //     ],
+                            //   ),
+                            // ),
                             RoundedButton(
                               fun: () => _userLogin(),
                               text: Languages.of(context)!
                                   .signIn['signButtonTxt'],
                             ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(top: 30, bottom: 10),
-                                  child: Text(
-                                    Languages.of(context)!.signIn['orSignWith'],
-                                    style: TextStyle(color: subTextColor),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SocialButton(
-                                  onTap: () {},
-                                  icon: FontAwesomeIcons.google,
-                                  iconColor: Colors.blue,
-                                ),
-                                SocialButton(
-                                  onTap: () {},
-                                  icon: FontAwesomeIcons.facebookF,
-                                  iconColor: darkBlueColor.withOpacity(.8),
-                                ),
-                                SocialButton(
-                                  onTap: () {},
-                                  icon: FontAwesomeIcons.twitter,
-                                  iconColor: primaryColor,
-                                ),
-                              ],
-                            ),
+                            // Row(
+                            //   crossAxisAlignment: CrossAxisAlignment.center,
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     Padding(
+                            //       padding: EdgeInsets.only(top: 30, bottom: 10),
+                            //       child: Text(
+                            //         Languages.of(context)!.signIn['orSignWith'],
+                            //         style: TextStyle(color: subTextColor),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     SocialButton(
+                            //       onTap: () {},
+                            //       icon: FontAwesomeIcons.google,
+                            //       iconColor: Colors.blue,
+                            //     ),
+                            //     SocialButton(
+                            //       onTap: () {},
+                            //       icon: FontAwesomeIcons.facebookF,
+                            //       iconColor: darkBlueColor.withOpacity(.8),
+                            //     ),
+                            //     SocialButton(
+                            //       onTap: () {},
+                            //       icon: FontAwesomeIcons.twitter,
+                            //       iconColor: primaryColor,
+                            //     ),
+                            //   ],
+                            // ),
                             Padding(
-                              padding: EdgeInsets.only(top: 35, bottom: 10),
+                              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * .1, bottom: 10),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -303,15 +328,6 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  Future setToken(token) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('access_token', token);
-  }
-
-  Future getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('access_token');
-  }
 
   snackBarr() {
     final snackBar = SnackBar(
@@ -325,7 +341,7 @@ class _SignInState extends State<SignIn> {
             width: 10,
           ),
           Text(
-            'Logged Out Successfully',
+            Languages.of(context)!.signIn['loggedOutSuccess'],
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ],

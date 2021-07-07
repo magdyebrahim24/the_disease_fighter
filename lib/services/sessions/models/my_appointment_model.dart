@@ -48,20 +48,21 @@ class FutureAppointments {
   String? comment;
   String? date;
   String? day;
-  Null? diagnosis;
+  Null diagnosis;
   String? doctorAvatar;
   int? doctorId;
   String? doctorName;
   List? files;
   String? gender;
   int? id;
-  Null? medicines;
+  String? medicines = '';
   String? name;
   String? patientAvatar;
   int? patientId;
   int? periodId;
   String? phone;
   String? time;
+  String?  docSpecialization;
 
   FutureAppointments(
       {this.amPm,
@@ -81,6 +82,7 @@ class FutureAppointments {
       this.patientId,
       this.periodId,
       this.phone,
+      this.docSpecialization,
       this.time});
 
   FutureAppointments.fromJson(Map<String, dynamic> json) {
@@ -107,6 +109,8 @@ class FutureAppointments {
     periodId = json['period_id'];
     phone = json['phone'];
     time = json['time'];
+    docSpecialization = json['specialization'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -131,6 +135,8 @@ class FutureAppointments {
     data['period_id'] = this.periodId;
     data['phone'] = this.phone;
     data['time'] = this.time;
+    data['specialization'] = this.docSpecialization;
+
     return data;
   }
 }
@@ -154,6 +160,7 @@ class PreviousAppointments {
   int? periodId;
   String? phone;
   String? time;
+  String? docSpecialization;
 
   PreviousAppointments(
       {this.amPm,
@@ -173,6 +180,7 @@ class PreviousAppointments {
       this.patientId,
       this.periodId,
       this.phone,
+      this.docSpecialization,
       this.time});
 
   PreviousAppointments.fromJson(Map<String, dynamic> json) {
@@ -194,6 +202,8 @@ class PreviousAppointments {
     periodId = json['period_id'];
     phone = json['phone'];
     time = json['time'];
+    docSpecialization = json['specialization'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -216,6 +226,8 @@ class PreviousAppointments {
     data['period_id'] = this.periodId;
     data['phone'] = this.phone;
     data['time'] = this.time;
+    data['specialization'] = this.docSpecialization;
+
     return data;
   }
 }

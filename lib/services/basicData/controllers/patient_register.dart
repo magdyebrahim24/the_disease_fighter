@@ -5,7 +5,7 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/services/base_url/ApiCookies.dart';
 
-class RegisterController {
+class PatientRegisterController {
   Dio _dio = Dio();
 
   late PersistCookieJar persistentCookies;
@@ -15,6 +15,11 @@ class RegisterController {
     String? email,
     String? password,
     bool? isDoctor,
+    String? phone,
+    String? location,
+    String? gender,
+    String? dob,
+    String? about,
   }) async {
     _dio.options
       ..baseUrl = BaseUrl.url
@@ -34,11 +39,18 @@ class RegisterController {
 
     _dio.interceptors.add(CookieManager(await ApiCookies.cookieJar));
 
+    print('$about ////////////////////////////////////');
+
     Map data = {
       "name": name,
       "email": email,
       "password": password,
       "is_doctor": isDoctor,
+      "phone": phone.toString(),
+      "location": location.toString(),
+      "gender": gender.toString(),
+      "about": about.toString(),
+      "dob": dob.toString(),
     };
     try {
       var response = await _dio.post('/register', data: data);

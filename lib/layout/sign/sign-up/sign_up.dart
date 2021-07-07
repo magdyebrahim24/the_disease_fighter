@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_disease_fighter/layout/sign/sign_in/sign_in.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
-import 'package:the_disease_fighter/material/bottons/socialBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
 import 'package:the_disease_fighter/material/widgets/materialBanner.dart';
 import 'package:the_disease_fighter/material/widgets/txt_field.dart';
-import 'package:the_disease_fighter/services/basicData/controllers/signUp_controllers.dart';
+import 'package:the_disease_fighter/services/basicData/controllers/verify_email.dart';
 import 'additional-info/doctor-info.dart';
 import 'additional-info/patient-info.dart';
 
@@ -21,39 +19,42 @@ class _SignUpState extends State<SignUp> {
   String name = '';
   String email = '';
   String password = '';
+
   String confirmPassword = '';
   String errorMessage = '';
   String? _bannerMessage;
   bool isDoctor = false;
   bool _showBanner = false;
+  bool _obSecurePassword = true;
+  bool _obSecureConfirmPassword = true;
 
-  SignUpController _signUpController = SignUpController();
-
+  VerifyEmailController _verifyEmailController = VerifyEmailController();
   Future _onSubmitSignUp() async {
     _formKey.currentState!.validate();
     _formKey.currentState!.save();
 
     if (_formKey.currentState!.validate()) {
       LoaderDialog().onLoading(context);
-      final data = await _signUpController.userSignUp(
+      final data = await _verifyEmailController.verifyEmail(
         name: name,
         email: email,
         password: password,
-        isDoctor: isDoctor,
       );
-      if (await data['success'] == true && isDoctor == true) {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DoctorInfo(),
-            ));
-      } else if (await data['success'] == true && isDoctor == false) {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PatientInfo(),
-            ));
-      } else if (await data['success'] == false &&
+      if (await data['success'] == true ) {
+        if (isDoctor) {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DoctorInfo(email: email,isDoctor: isDoctor,password: password,name: name),
+              ));
+        } else {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PatientInfo(email: email,isDoctor: isDoctor,password: password,name: name,),
+              ));
+        }
+      }else if (await data['success'] == false &&
           await data['message'] == 'Fail to sign up , check your internet') {
         Navigator.of(context).pop();
         setState(() {
@@ -88,7 +89,7 @@ class _SignUpState extends State<SignUp> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     // logo
                     Container(
@@ -262,7 +263,7 @@ class _SignUpState extends State<SignUp> {
                                   this.password = password.trim();
                                 });
                               },
-                              obSecure: true,
+                              obSecure: _obSecurePassword,
                               textInputType: TextInputType.visiblePassword,
                               validatorFun: (value) {
                                 if (value.toString().isEmpty) {
@@ -276,6 +277,19 @@ class _SignUpState extends State<SignUp> {
                                   }
                                 }
                               },
+                              showSuffix: true,
+                              showSuffixFun: (){
+                                if(_obSecurePassword){
+                                  setState(() {
+                                    _obSecurePassword = false ;
+                                  });
+                                }else{
+                                  setState(() {
+                                    _obSecurePassword = true ;
+                                  });
+                                }
+
+                              },
                             ),
                             TxtField(
                               labelText: Languages.of(context)!
@@ -287,7 +301,7 @@ class _SignUpState extends State<SignUp> {
                                   this.confirmPassword = confirmPassword.trim();
                                 });
                               },
-                              obSecure: true,
+                              obSecure: _obSecureConfirmPassword,
                               textInputType: TextInputType.visiblePassword,
                               validatorFun: (value) {
                                 if (value.toString().isEmpty) {
@@ -300,6 +314,19 @@ class _SignUpState extends State<SignUp> {
                                     return 'Password Length Must Be More Than 9 Digit';
                                   }
                                 }
+                              },
+                              showSuffix: true,
+                              showSuffixFun: (){
+                                if(_obSecureConfirmPassword){
+                                  setState(() {
+                                    _obSecureConfirmPassword = false ;
+                                  });
+                                }else{
+                                  setState(() {
+                                    _obSecureConfirmPassword = true ;
+                                  });
+                                }
+
                               },
                             ),
                             errorMessage != ''
@@ -317,44 +344,44 @@ class _SignUpState extends State<SignUp> {
                               text: Languages.of(context)!
                                   .signUp['signButtonTxt'],
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(top: 30, bottom: 10),
-                                  child: InkWell(
-                                      onTap: () {},
-                                      child: Text(
-                                        Languages.of(context)!
-                                            .signUp['orSignWith'],
-                                        style: TextStyle(color: subTextColor),
-                                      )),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SocialButton(
-                                  onTap: () {},
-                                  icon: FontAwesomeIcons.google,
-                                  iconColor: Colors.blue,
-                                ),
-                                SocialButton(
-                                  onTap: () {},
-                                  icon: FontAwesomeIcons.facebookF,
-                                  iconColor: darkBlueColor.withOpacity(.8),
-                                ),
-                                SocialButton(
-                                  onTap: () {},
-                                  icon: FontAwesomeIcons.twitter,
-                                  iconColor: primaryColor,
-                                ),
-                              ],
-                            ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   crossAxisAlignment: CrossAxisAlignment.center,
+                            //   children: [
+                            //     Padding(
+                            //       padding: EdgeInsets.only(top: 30, bottom: 10),
+                            //       child: InkWell(
+                            //           onTap: () {},
+                            //           child: Text(
+                            //             Languages.of(context)!
+                            //                 .signUp['orSignWith'],
+                            //             style: TextStyle(color: subTextColor),
+                            //           )),
+                            //     ),
+                            //   ],
+                            // ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     SocialButton(
+                            //       onTap: () {},
+                            //       icon: FontAwesomeIcons.google,
+                            //       iconColor: Colors.blue,
+                            //     ),
+                            //     SocialButton(
+                            //       onTap: () {},
+                            //       icon: FontAwesomeIcons.facebookF,
+                            //       iconColor: darkBlueColor.withOpacity(.8),
+                            //     ),
+                            //     SocialButton(
+                            //       onTap: () {},
+                            //       icon: FontAwesomeIcons.twitter,
+                            //       iconColor: primaryColor,
+                            //     ),
+                            //   ],
+                            // ),
                             Padding(
-                              padding: EdgeInsets.only(top: 25, bottom: 20),
+                              padding: EdgeInsets.only(top: 40, bottom: 20),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

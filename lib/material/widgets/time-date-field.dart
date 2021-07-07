@@ -121,14 +121,13 @@ class _BasicDateFieldState extends State<BasicDateField> {
                   suffixIcon: Icon(Icons.arrow_drop_down,
                       color: darkBlueColor.withOpacity(.7)),
                   hintText: 'yyyy-MM-dd',
-                  // '${DateFormat("hh:mm a").format(DateTime.now())}',
                   border: InputBorder.none),
               onShowPicker: (context, currentValue) async {
                 final time = await showDatePicker(
                     // locale: Locale('ar', 'MA'),
                     // selectableDayPredicate: (DateTime val) =>
                     //     val.weekday == 1 || val.weekday == 3 ? false : true,
-                    context: context,
+                    context: context,initialEntryMode: DatePickerEntryMode.input,
                     initialDate: DateTime.now(),
                     firstDate: DateTime(1900, 1, 1),
                     lastDate: DateTime.now());

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/widgets/metting_card.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/favorite/favorite_doctors.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
+import 'package:the_disease_fighter/material/widgets/empty_list_widget.dart';
 
 class TodayAppointments extends StatefulWidget {
   final data;
@@ -22,6 +23,6 @@ class _TodayAppointmentsState extends State<TodayAppointments> {
             itemBuilder: (ctx, index) => MeetingCard(
                   data: widget.data[index],
                 ))
-        : EmptyPage();
+        : EmptyListWidget(icon: Icons.date_range_outlined,label:Languages.of(context)!.doctorProfile['editProfile']['noTodayAppointments'].toString(),iconSize: 100.0,);
   }
 }

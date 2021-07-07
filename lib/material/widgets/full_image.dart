@@ -15,9 +15,10 @@ class FullImage extends StatelessWidget {
             color: Colors.black,
             width: MediaQuery.of(context).size.width,
             child: InteractiveViewer(
-              panEnabled: false,
+              panEnabled: true,
               minScale: 0.5,
-              maxScale: 2,
+              maxScale: 3,
+              scaleEnabled: true,
               child: Image.network(
                 fullImagePath,
                 width: MediaQuery.of(context).size.width,

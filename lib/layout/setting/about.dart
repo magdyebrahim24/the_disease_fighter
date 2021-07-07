@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:the_disease_fighter/layout/drawer/patient_MainDrawer.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:core';
-import '../patient_MainDrawer.dart';
 import 'terms_of_use.dart';
 
 class About extends StatelessWidget {

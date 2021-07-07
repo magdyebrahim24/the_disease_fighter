@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/terms_of_use.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
+import 'package:the_disease_fighter/layout/setting/terms_of_use.dart';
+import 'package:the_disease_fighter/layout/sign/sign-up/additional-info/upload_user_avatar.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -8,9 +12,14 @@ import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
 import 'package:the_disease_fighter/material/widgets/drop-downlist.dart';
 import 'package:the_disease_fighter/material/widgets/time-date-field.dart';
 import 'package:the_disease_fighter/material/widgets/txt_field.dart';
-import 'package:the_disease_fighter/services/logged_user/controllers/update_patient_info.dart';
+import 'package:the_disease_fighter/services/basicData/controllers/patient_register.dart';
 
 class PatientInfo extends StatefulWidget {
+  final email;
+  final password;
+  final name;
+  final isDoctor;
+  const PatientInfo({this.email, this.password, this.name, this.isDoctor});
   @override
   _PatientInfoState createState() => _PatientInfoState();
 }
@@ -18,17 +27,13 @@ class PatientInfo extends StatefulWidget {
 class _PatientInfoState extends State<PatientInfo> {
   String? _address;
   String? _phone;
-
   String _errorMessage = '';
   String? _genderValue;
-
   String? _about;
-
   DateTime? dateOfBirth;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  UpdatePatientInfoController _updateUserInfoController =
-      UpdatePatientInfoController();
+  PatientRegisterController _patientRegisterController = PatientRegisterController();
 
   Future _updateUserInfo() async {
     _formKey.currentState!.validate();
@@ -36,18 +41,33 @@ class _PatientInfoState extends State<PatientInfo> {
 
     if (_formKey.currentState!.validate()) {
       LoaderDialog().onLoading(context);
-      final data = await _updateUserInfoController.updatePatientInfo(
+      final data = await _patientRegisterController.register(
           location: _address,
           phone: _phone,
           dob: dateOfBirth.toString(),
           gender: _genderValue,
-          about: _about);
+          about: _about,
+        name: widget.name,
+        email: widget.email,
+        isDoctor: widget.isDoctor,
+        password: widget.password
+      );
       if (await data['success']) {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Home(),
-            ));
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isDoctor', widget.isDoctor);
+        await prefs.setString('userData',jsonEncode(await data['logged_user']));
+        await prefs.setString('userAvatar',await data['logged_user']['avatar']);
+        await prefs.setString('userName',await data['logged_user']['name']);
+
+
+
+        Navigator.pushAndRemoveUntil<dynamic>(
+          context,
+          MaterialPageRoute<dynamic>(
+            builder: (context) => UploadUserAvatar(route: Home(),),
+          ),
+              (route) => false,
+        );
       } else {
         setState(() {
           _errorMessage = data['message'].toString();
@@ -71,7 +91,7 @@ class _PatientInfoState extends State<PatientInfo> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 // logo
                 Container(
@@ -142,6 +162,9 @@ class _PatientInfoState extends State<PatientInfo> {
                           if (value.toString().isEmpty) {
                             return 'Phone Required';
                           }
+                          if(value.toString().length != 11){
+                            return 'Phone Must Be 11 Digit';
+                          }
                         },
                       ),
                       BasicDateField(
@@ -169,11 +192,13 @@ class _PatientInfoState extends State<PatientInfo> {
                             .signUpPatientInfo['genderLabel'],
                       ),
                       TxtField(
-                        labelText: 'Information About You',
-                        hintText: 'type any information',
+                        labelText: Languages.of(context)!
+                            .signUpPatientInfo['infoAboutYou'],
+                        hintText:  Languages.of(context)!
+                          .signUpPatientInfo['infoAboutYouHint'],
                         inputTextFunction: (value) {
                           setState(() {
-                            value = _about;
+                            _about = value;
                           });
                         },
                         textInputType: TextInputType.text,

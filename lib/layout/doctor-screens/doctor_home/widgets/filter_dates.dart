@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/doctor-screens/metting/upComing_metting.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/favorite/favorite_doctors.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+import 'package:the_disease_fighter/material/widgets/empty_list_widget.dart';
+import 'package:the_disease_fighter/material/widgets/no_internet_widget.dart';
 import 'package:the_disease_fighter/services/doctorScreens/controllers/filter_sessions_dates_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -188,7 +189,8 @@ class _FilteredDatesState extends State<FilteredDates> {
             child: Row(
               children: [
                 Text(
-                  "${widget.pickedTime.toString().split(" ")[0]} Appointments",
+                Languages.of(context)!
+                .doctorHome['appointment of']+"${widget.pickedTime.toString().split(" ")[0]} ",
                   style: kHeadStyle,
                 ),
               ],
@@ -197,11 +199,7 @@ class _FilteredDatesState extends State<FilteredDates> {
         ),
         actions: [
           ImgButton(
-            fun: () {
-              _filterByDate();
-              //Navigator.push(context,
-              // MaterialPageRoute(builder: (context) => DoctorHome()));
-            },
+            fun: _filterByDate,
             img: 'assets/icons/filter.png',
             imgWidth: 16.0,
             imgHigh: 21.0,
@@ -225,36 +223,15 @@ class _FilteredDatesState extends State<FilteredDates> {
               return Center(child: CircularProgressIndicator());
             } else {
               if (snapshot.hasError) {
-                return Padding(
-                  padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * .15),
-                  child: Column(
-                    children: [
-                      IconButton(
-                          icon: Icon(
-                            Icons.refresh,
-                            color: primaryColor,
-                            size: 40,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _loadFilteredSessions();
-                            });
-                          }),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text(
-                        'Failed To Load',
-                        style: TextStyle(color: subTextColor, fontSize: 16),
-                      ),
-                    ],
-                  ),
-                );
-              } else {
+                return FailLoadWidget(
+                  fun: () {
+                    setState(() {
+                      _loadFilteredSessions();
+                    });
+                  },
+                );              } else {
                 return snapshot.data.sessions.length != 0 &&
                         snapshot.data.sessions != null
-                    // && snapshot.data.containsKey
                     ? ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
@@ -264,9 +241,8 @@ class _FilteredDatesState extends State<FilteredDates> {
                               data: snapshot.data.sessions[index]);
                         },
                       )
-                    : EmptyPage();
-                //MeetingCard(data:snapshot.data.sessions);
-
+                    : EmptyListWidget(icon: Icons.date_range_outlined,label: "${Languages.of(context)!
+                    .doctorHome['NoAppointments']} \n "'${widget.pickedTime.toString().split(" ")[0]}',iconSize: 100.0,);
               }
             }
           }),

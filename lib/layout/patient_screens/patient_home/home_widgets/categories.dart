@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/patient_screens/clinics/brain_clinic/brain_clinic.dart';
 import 'package:the_disease_fighter/layout/patient_screens/clinics/clinic.dart';
+import 'package:the_disease_fighter/layout/patient_screens/clinics/ml_clinic/ml_clinic.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 
@@ -51,7 +51,8 @@ class Categories extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => index == 0 || index == 2
-                        ? BrainClinic(
+                        ? MlClinic(
+                      modelName: clinicsInfo[index]['id'] == 1 ? 'brain' : 'covid19',
                             clinicId: clinicsInfo[index]['id'],
                             clinicTittle: clinicsInfo[index]['docName'],
                           )

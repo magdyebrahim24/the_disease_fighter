@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/patient_screens/clinics/brain_clinic/brain_clinic.dart';
 import 'package:the_disease_fighter/layout/patient_screens/clinics/clinic.dart';
+import 'package:the_disease_fighter/layout/patient_screens/clinics/ml_clinic/ml_clinic.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import '../../../material/bottons/circleBtn.dart';
 import '../../../material/constants.dart';
@@ -51,7 +51,8 @@ class _AllClinicsState extends State<AllClinics> {
                     fun: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => BrainClinic(
+                            builder: (context) => MlClinic(
+                          modelName: 'brain',
                               clinicId: 1,
                                   clinicTittle: Languages.of(context)!
                                       .allClinicsScreen['brainDoctors'],
@@ -64,7 +65,8 @@ class _AllClinicsState extends State<AllClinics> {
                     fun: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => BrainClinic(
+                            builder: (context) => MlClinic(
+                              modelName: 'covid19',
                               clinicId: 11,
                                   clinicTittle: Languages.of(context)!
                                       .allClinicsScreen['chestDoctors'],

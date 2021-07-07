@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/widgets/filter_dates.dart';
 import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/widgets/metting_card.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/favorite/favorite_doctors.dart';
+import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+import 'package:the_disease_fighter/material/widgets/empty_list_widget.dart';
 class AllAppointments extends StatefulWidget {
   final data;
 
@@ -14,7 +15,6 @@ class AllAppointments extends StatefulWidget {
 }
 
 class _AllAppointmentsState extends State<AllAppointments> {
-  //FilterSessionByDateController _filterSessionByDateController =FilterSessionByDateController();
   Future _filterByDate() async {
     final time = await showDatePicker(
       context: context,
@@ -42,7 +42,7 @@ class _AllAppointmentsState extends State<AllAppointments> {
               children: [
                 Expanded(
                     child: Text(
-                  'All Appointments',
+            Languages.of(context)!.doctorHome['allAppointments'],
                   style: kHeadStyle,
                 )),
                 ImgButton(
@@ -64,9 +64,11 @@ class _AllAppointmentsState extends State<AllAppointments> {
                       data: widget.data[index],
                     );
                   })
-              : EmptyPage(),
+        : Padding(
+          padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * .25),
+          child: EmptyListWidget(icon: Icons.date_range_outlined,label:   Languages.of(context)!.doctorProfile['editProfile']['no appointments'].toString(),iconSize: 100.0,),
+        )
 
-          // for (var i = 0; i < 15; i++) MeetingCard()
         ],
       ),
     );

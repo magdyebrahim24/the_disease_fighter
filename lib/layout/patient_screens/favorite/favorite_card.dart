@@ -7,10 +7,10 @@ import 'package:the_disease_fighter/material/widgets/rate_bar.dart';
 
 // ignore: must_be_immutable
 class FavoriteCard extends StatelessWidget {
-  FavoriteCard({required this.data, this.deleteFun});
+  FavoriteCard({required this.data, this.iconWidget});
 
+  final iconWidget;
   final data;
-  final deleteFun;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class FavoriteCard extends StatelessWidget {
                   color: Colors.grey,
                   image: DecorationImage(
                     image: NetworkImage(
-                        "https://thediseasefighter.herokuapp.com/static/${data.avatar}"),
+                        "${data.avatar}"),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(10),
@@ -87,13 +87,8 @@ class FavoriteCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              IconButton(
-                icon: Icon(
-                  Icons.favorite,
-                  color: primaryColor,
-                ),
-                onPressed: deleteFun,
-              ),
+              iconWidget,
+
               SizedBox(
                 height: 20,
               ),

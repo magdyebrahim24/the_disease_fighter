@@ -182,44 +182,42 @@ class _PreviousAppointmentDetailsState
                         style: TextStyle(color: subTextColor),
                       ),
                     )
-                  : SizedBox(
-                      height: ((widget.data.files.length / 4) * 150).toDouble(),
-                      child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount:
-                              MediaQuery.of(context).size.width ~/ 85,
-                          childAspectRatio: 0.99,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 30,
-                        ),
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (ctx) => FullImage(
-                                            fullImagePath:
-                                                widget.data.files[index],
-                                          )));
-                            },
-                            child: Container(
-                              height: 30,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(widget
-                                          .data.files[index]
-                                          .toString()))),
-                            ),
-                          );
-                        },
-                        itemCount: widget.data.files.length,
-                      ),
+                  : GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      // childAspectRatio: 0.99,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 30,
                     ),
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (ctx) => FullImage(
+                                        fullImagePath:
+                                            widget.data.files[index],
+                                      )));
+                        },
+                        child: Container(
+                          height: 200,
+                          width: 200,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(.5),
+                              borderRadius: BorderRadius.circular(15),
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(widget
+                                      .data.files[index]
+                                      .toString()))),
+                        ),
+                      );
+                    },
+                    itemCount: widget.data.files.length,
+                  ),
             ],
           ),
         ),

@@ -1,8 +1,12 @@
+import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+import 'package:the_disease_fighter/material/widgets/no_internet_widget.dart';
 import 'package:the_disease_fighter/services/sessions/controllers/my_appointment_controller.dart';
 import 'appointments_screens/appointments.dart';
 import 'appointments_screens/previous_appointments.dart';
@@ -17,38 +21,26 @@ class MyAppointments extends StatefulWidget {
 }
 
 class _MyAppointmentsState extends State<MyAppointments>{
-  MyAppointmentsController _appointmentsController=MyAppointmentsController();
-
-  Future _loadMyAppointments() async {
+  Map _userData = {};
+  String? _name = '';
+  MyAppointmentsController _appointmentsController = MyAppointmentsController();
+  Future _getUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userData = prefs.getString('userData');
+    Map<String,dynamic> userDataMap = jsonDecode(userData!) as Map<String, dynamic>;
+    String? getUserName = prefs.getString('userName');
+    setState(() {
+      _userData = userDataMap ;
+      _name = getUserName ;
+    });
+    // return userDataMap;
+  }
+    Future _loadMyAppointments() async {
     var data = await _appointmentsController.getMyAppointments();
     return Future.value(data);
   }
 
-  Widget patientImage() {
-    return Column(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                    color: subTextColor,
-                    offset: Offset(1.0, 2.0),
-                    blurRadius: 6.0,
-                    spreadRadius: .5),
-              ],
-              image: DecorationImage(
-                  image: AssetImage("assets/images/img_1.png"),
-                  fit: BoxFit.cover),
-              shape: BoxShape.circle,
-              border: Border.all(color: Color(0xffFDFDFD), width: 2),
-              color: backGroundColor),
-          margin: EdgeInsets.only(top: 40),
-          height: 120,
-          width: 120,
-        ),
-      ],
-    );
-  }
+
 
   @override
   void initState() {
@@ -58,7 +50,7 @@ class _MyAppointmentsState extends State<MyAppointments>{
           })
         // ignore: unnecessary_statements
         : null;
-
+    _getUserData();
     super.initState();
   }
 
@@ -72,29 +64,29 @@ class _MyAppointmentsState extends State<MyAppointments>{
             headerSliverBuilder:
                 (BuildContext context, bool innerBoxIsScrolled) {
               return [
-                SliverAppBar(
-                  elevation: 0.0,
-                  leading: CircleButton(
-                    icn: Icons.arrow_back,
-                    fun: () => Navigator.pushReplacement(
-                        context, MaterialPageRoute(builder: (ctx) => Home())),
-                    color: darkBlueColor,
-                  ),
-                  pinned: true,
-                  snap: false,
-                  floating: true,
-                  expandedHeight: 200.0,
-                  flexibleSpace: FlexibleSpaceBar(
-                    title: Text(
-                      ' Magdy Ebrahim',
-                      maxLines: 1,
-                      softWrap: true,
-                      style: TextStyle(color: darkBlueColor, fontSize: 16),
-                    ),
-                    centerTitle: true,
-                    background: patientImage(),
-                  ),
-                ),
+                 SliverAppBar(
+                        elevation: 0.0,
+                        leading: CircleButton(
+                          icn: Icons.arrow_back,
+                          fun: () => Navigator.pushReplacement(
+                              context, MaterialPageRoute(builder: (ctx) => Home())),
+                          color: darkBlueColor,
+                        ),
+                        pinned: true,
+                        snap: false,
+                        floating: true,
+                        expandedHeight: 215.0,
+                        flexibleSpace: FlexibleSpaceBar(
+                          title: Text(
+                            _name.toString(),
+                            maxLines: 1,
+                            softWrap: true,
+                            style: TextStyle(color: darkBlueColor, fontSize: 16),
+                          ),
+                          centerTitle: true,
+                          background: patientImage(imgUrl: _userData['avatar'].toString(),),
+                        ),
+                      ),
                 SliverPersistentHeader(
                   delegate: SliverAppBarDelegate(
                     TabBar(
@@ -132,33 +124,12 @@ class _MyAppointmentsState extends State<MyAppointments>{
                         child: CircularProgressIndicator());
                   } else {
                     if (snapshot.hasError) {
-                      return SizedBox(
-                        height: 222,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                                icon: Icon(
-                                  Icons.refresh,
-                                  color: primaryColor,
-                                  size: 40,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _loadMyAppointments();
-                                  });
-                                }),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Text(
-                              'Failed To Load',
-                              style:
-                                  TextStyle(color: subTextColor, fontSize: 16),
-                            ),
-                          ],
-                        ),
+                      return FailLoadWidget(
+                        fun: () {
+                          setState(() {
+                            _loadMyAppointments();
+                          });
+                        },
                       );
                     } else {
                       return  TabBarView(
@@ -179,6 +150,37 @@ class _MyAppointmentsState extends State<MyAppointments>{
                 }),
           ),
         ));
+  }
+  Widget patientImage({imgUrl}) {
+    return CachedNetworkImage(
+      imageUrl: imgUrl,
+      height: 120,width: 120,
+      fit: BoxFit.cover,
+      imageBuilder: (context, imageProvider) => Container(
+        height: 120,
+        width: 120,
+        margin: EdgeInsets.all(55),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: imageProvider,
+            fit: BoxFit.scaleDown,
+          ),
+          boxShadow: [
+            BoxShadow(
+                color: subTextColor,
+                offset: Offset(0.0, 1.0),
+                blurRadius: 6.0,
+                spreadRadius: 1),
+          ],
+          shape: BoxShape.circle,
+          border:
+          Border.all(color: Color(0xffFDFDFD), width: 2),
+          color: backGroundColor,
+        ),
+      ),
+      placeholder: (context, url) => Container(alignment: Alignment.center,width: 120,height: 120,child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(darkBlueColor),)),
+      errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.redAccent,size: 100,),
+    );
   }
 
   Widget tapBarWidget({String? label}) {

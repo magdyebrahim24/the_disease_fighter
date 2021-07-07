@@ -69,12 +69,7 @@ class Sessions {
     day = json['day'];
     diagnosis = json['diagnosis'];
     doctorId = json['doctor_id'];
-    if (json['files'] != null) {
-      files = <String>[];
-      json['files'].forEach((v) {
-        files!.add(v.fromJson(v));
-      });
-    }
+    files = json['files'].cast<String>();
     gender = json['gender'];
     id = json['id'];
     medicines = json['medicines'];

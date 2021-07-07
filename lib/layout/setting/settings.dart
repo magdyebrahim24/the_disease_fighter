@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:the_disease_fighter/layout/drawer/patient_MainDrawer.dart';
 import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
 import 'package:the_disease_fighter/material/widgets/materialBanner.dart';
 import 'package:the_disease_fighter/services/basicData/controllers/logOutController.dart';
@@ -12,7 +13,6 @@ import 'package:the_disease_fighter/localizations/localization_models/language_d
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/patient-logo.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../patient_MainDrawer.dart';
 import 'setting_screens/change_password.dart';
 
 class Setting extends StatefulWidget {
@@ -40,13 +40,16 @@ class _SettingState extends State<Setting> {
     if (await data['success']) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('access_token','');
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SignIn(
-              showLogOutSnackBar: true,
-            ),
-          ));
+
+      Navigator.pushAndRemoveUntil<dynamic>(
+        context,
+        MaterialPageRoute<dynamic>(
+          builder: (BuildContext context) =>  SignIn(
+            showLogOutSnackBar: true,
+          ),
+        ),
+            (route) => false,
+      );
     } else {
       setState(() {
         _errorMessage = data['message'].toString();
@@ -99,11 +102,11 @@ class _SettingState extends State<Setting> {
                     padding: EdgeInsets.only(top: 25),
                     alignment: Alignment.bottomCenter,
                     width: MediaQuery.of(context).size.width,
-                    height: 200,
+                    height: 210,
                     child: PatientLogo(
-                      imgWidth: 92.0,
-                      imgHigh: 92.0,
-                      nameSize: 17.0,
+                      imgWidth: 120.0,
+                      imgHigh: 120.0,
+                      nameSize: 18.0,
                       nameColor: Colors.white,
                     ),
                   ),
@@ -132,12 +135,12 @@ class _SettingState extends State<Setting> {
                     tittle: Languages.of(context)!.setting['password'],
                     leadingIconColor: primaryColor.withOpacity(.7),
                   ),
-                  DrawerTile(
-                    icon: Icons.notifications_none_rounded,
-                    fun: () {},
-                    tittle: Languages.of(context)!.setting['notification'],
-                    leadingIconColor: primaryColor.withOpacity(.7),
-                  ),
+                  // DrawerTile(
+                  //   icon: Icons.notifications_none_rounded,
+                  //   fun: () {},
+                  //   tittle: Languages.of(context)!.setting['notification'],
+                  //   leadingIconColor: primaryColor.withOpacity(.7),
+                  // ),
                   _createLanguageDropDown(),
                   Divider(
                     height: 1,
@@ -183,6 +186,7 @@ class _SettingState extends State<Setting> {
                       tittle: Languages.of(context)!.setting['whatsApp'],
                       fun: () async => await launch(
                           "https://wa.me/01552154105?text=Share The Medical Solution App With Your Friends - link :https://twitter.com/migoo_1_3?s=09&fbclid=IwAR3k92gBqVe_OWHYwn2jsvsdV7hpO_lCB9dqJdS2SSM-7yhlaD_i8S7nsKM")),
+                Container(height: MediaQuery.of(context).size.height * .1,color: Colors.white,)
                 ],
               ),
               _showBanner

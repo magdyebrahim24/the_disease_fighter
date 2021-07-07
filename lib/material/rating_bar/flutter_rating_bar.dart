@@ -117,7 +117,7 @@ class _NoRatingWidget extends StatelessWidget {
         child: enableMask
             ? _ColorMask(
                 color: unratedColor.withAlpha(255 - alpha!),
-                child: child,
+                child: Icon(Icons.star_border),
               )
             : child,
       ),

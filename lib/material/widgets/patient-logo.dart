@@ -1,6 +1,7 @@
+import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/services/logged_user/controllers/get_user_info_controller.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../constants.dart';
 
 class PatientLogo extends StatefulWidget {
@@ -8,22 +9,30 @@ class PatientLogo extends StatefulWidget {
     this.imgHigh = 240.0,
     this.imgWidth = 240.0,
     this.nameColor,
-    this.nameSize = 18.0,
+    this.nameSize = 18.0, this.showEmail = false,
   });
   final imgHigh;
   final imgWidth;
   final nameColor;
   final nameSize;
+  final showEmail;
 
   @override
   _PatientLogoState createState() => _PatientLogoState();
 }
 
 class _PatientLogoState extends State<PatientLogo> {
-  CurrentUserInfoController _userInfoController = CurrentUserInfoController();
+
+  String? userAvatar;
   Future _getUserData() async {
-    var data = await _userInfoController.loadUserData();
-    return Future.value(data);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String? userData = prefs.getString('userData');
+    String? getUserAvatar = prefs.getString('userAvatar');
+    String? getUserName = prefs.getString('userName');
+      userAvatar = getUserAvatar ;
+    Map<String,dynamic> userDataMap = jsonDecode(userData!) as Map<String, dynamic>;
+    return [userDataMap,getUserAvatar,getUserName];
   }
   @override
   Widget build(BuildContext context) {
@@ -33,65 +42,38 @@ class _PatientLogoState extends State<PatientLogo> {
             future: _getUserData(),
             builder: (BuildContext context,
                 AsyncSnapshot<dynamic> snapshot) {
-              if (!snapshot.hasData && !snapshot.hasError) {
-                return Container(
-                    height: 120,
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator());
-              } else {
-                if (snapshot.error != null) {
-                  return SizedBox(
-                    height: 150,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                            icon: Icon(
-                              Icons.refresh,
-                              color: darkBlueColor,
-                              size: 40,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _getUserData();
-                              });
-                            }),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          'Failed To Load',
-                          style: TextStyle(
-                              color: subTextColor, fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
                   return Column(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
+                      CachedNetworkImage(
+                        imageUrl: snapshot.data[1].toString(),
+                        fit: BoxFit.cover,
+                        imageBuilder: (context, imageProvider) => Container(
+                          height: widget.imgWidth,
+                          width: widget.imgWidth,
+                          margin: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
                             boxShadow: [
                               BoxShadow(
                                   color: subTextColor,
-                                  offset: Offset(1.0, 2.0),
+                                  offset: Offset(0.0, 1.0),
                                   blurRadius: 6.0,
                                   spreadRadius: 1),
                             ],
-                            image: DecorationImage(
-                                image: NetworkImage(snapshot.data.currentUser.avatar),
-                                fit: BoxFit.cover),
                             shape: BoxShape.circle,
-                            border: Border.all(color: Color(0xffFDFDFD), width: 2),
-                            color: backGroundColor),
-                        margin: EdgeInsets.all(10),
-                        height: widget.imgHigh,
-                        width: widget.imgWidth,
+                            border:
+                            Border.all(color: Color(0xffFDFDFD), width: 2),
+                            color: backGroundColor,
+                          ),
+                        ),
+                        placeholder: (context, url) => Container(alignment: Alignment.center,width: widget.imgWidth + 10 ,height: widget.imgHigh + 10 ,child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(darkBlueColor),)),
+                        errorWidget: (context, url, error) => SizedBox(child: Container(margin: EdgeInsets.all(15),decoration: BoxDecoration(color:Colors.grey.withOpacity(.5),shape: BoxShape.circle ),),width: widget.imgWidth+10,height: widget.imgHigh+10),
                       ),
                       Text(
-                        snapshot.data.currentUser.name,
+                        snapshot.data[2].toString(),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis
                         ,style: TextStyle(
@@ -100,19 +82,20 @@ class _PatientLogoState extends State<PatientLogo> {
                           fontSize: widget.nameSize,
                         ),
                       ),
+                      SizedBox(
+                        height: 6,
+                      ),
+                     widget.showEmail ? Text(
+                        snapshot.data[0]['email']
+                            .toString(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: subTextColor),
+                      ) : SizedBox()
                     ],
                   );
-                }
               }
-            }),
-
-        // SizedBox(
-        //  height: 7,
-        // ),
-        // Text(
-        // "Egypt - Mansoura",
-        // style: TextStyle(color: subTextColor),
-        // )
+            ),
       ],
     );
   }

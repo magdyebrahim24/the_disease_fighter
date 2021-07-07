@@ -54,6 +54,7 @@ class Appointment {
     this.patientId,
     this.phone,
     this.time,
+    this.periodId,
   });
 
   String? amPm;
@@ -70,6 +71,7 @@ class Appointment {
   int? patientId;
   String? phone;
   String? time;
+  String? periodId;
 
   factory Appointment.fromJson(String str) =>
       Appointment.fromMap(json.decode(str));
@@ -91,6 +93,7 @@ class Appointment {
         patientId: json["patient_id"],
         phone: json["phone"],
         time: json["time"],
+        periodId: json["period_id"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -109,5 +112,6 @@ class Appointment {
         "patient_id": patientId,
         "phone": phone,
         "time": time,
+        "period_id": periodId,
       };
 }

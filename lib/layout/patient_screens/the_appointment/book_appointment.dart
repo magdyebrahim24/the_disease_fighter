@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/favorite/favorite_doctors.dart';
 import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/drop-downlist.dart';
+import 'package:the_disease_fighter/material/widgets/empty_list_widget.dart';
+import 'package:the_disease_fighter/material/widgets/no_internet_widget.dart';
 import 'package:the_disease_fighter/material/widgets/txt_field.dart';
 import 'package:the_disease_fighter/services/doctors/controllers/getDoctorDatesController.dart';
 import 'package:the_disease_fighter/services/sessions/controllers/createSession.dart';
@@ -171,36 +172,23 @@ class _BookAppointmentState extends State<BookAppointment> {
                       builder: (BuildContext context,
                           AsyncSnapshot<dynamic> snapshot) {
                         if (!snapshot.hasData && !snapshot.hasError) {
-                          return Center(child: CircularProgressIndicator());
+                          return Padding(
+                            padding:  EdgeInsets.only(top: MediaQuery.of(context).size.height * .3),
+                            child: CircularProgressIndicator(),
+                          );
                         } else {
                           if (snapshot.hasError) {
                             return Padding(
                               padding: EdgeInsets.only(
                                   top:
                                       MediaQuery.of(context).size.height * .15),
-                              child: Column(
-                                children: [
-                                  IconButton(
-                                      icon: Icon(
-                                        Icons.refresh,
-                                        color: primaryColor,
-                                        size: 40,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          _loadDoctorDates();
-                                        });
-                                      }),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                  Text(
-                                    'Failed To Load',
-                                    style: TextStyle(
-                                        color: subTextColor, fontSize: 16),
-                                  ),
-                                ],
-                              ),
+                              child:  FailLoadWidget(
+                                fun: () {
+                              setState(() {
+                                _loadDoctorDates();
+                              });
+                            },
+                        )
                             );
                           } else {
                             return snapshot.data.success == true
@@ -244,8 +232,10 @@ class _BookAppointmentState extends State<BookAppointment> {
                                                         value: i.day,
                                                       ))),
 
-                                              hintText: 'select Day',
-                                              labelText: 'Day',
+                                              hintText: Languages.of(context)!
+                                                  .bookAppointment['day'].toString(),
+                                              labelText: Languages.of(context)!
+                                                  .bookAppointment['hintDay'].toString(),
                                             ),
                                             DropDownDate(
                                               getValue: (val) {
@@ -269,63 +259,13 @@ class _BookAppointmentState extends State<BookAppointment> {
                                                         ),
                                                         value: i,
                                                       ))),
-                                              hintText: 'select Time',
-                                              labelText: 'Time',
+                                              hintText: Languages.of(context)!
+                                                  .bookAppointment['time'].toString(),
+                                              labelText: Languages.of(context)!
+                                                  .bookAppointment['hintTime'].toString(),
                                             ),
-                                            // Container(
-                                            //   margin: EdgeInsets.symmetric(
-                                            //     vertical: 7,
-                                            //   ),
-                                            //   padding: EdgeInsets.symmetric(horizontal: 15,vertical: 3),
-                                            //   decoration: BoxDecoration(
-                                            //       border: Border.all(
-                                            //           width: 1, color: Color(0xff707070).withOpacity(.15)),
-                                            //       borderRadius: BorderRadius.circular(10),
-                                            //       color: backGroundColor),
-                                            //   // height: 52,
-                                            //     child: DropdownButtonFormField<dynamic>(
-                                            //         isDense: true,
-                                            //         decoration: InputDecoration(
-                                            //           border: InputBorder.none,
-                                            //         ),
-                                            //         items:List.from(snapshot.data.dates
-                                            //             .map((i) => DropdownMenuItem(
-                                            //           child: Text(
-                                            //             i.day.toString(),
-                                            //             style: TextStyle(
-                                            //                 fontSize: 15,
-                                            //                 color: darkBlueColor
-                                            //                     .withOpacity(.9)),
-                                            //           ),
-                                            //           value: i.day,
-                                            //         ))),
-                                            //         onChanged: (value) async{
-
-//           for(var item in snapshot.data.dates){
-                                            //             if(item.day == value){
-                                            //               setState(() {
-                                            //                 dayTimes = item.availableDates;
-                                            //                 appointmentDay = value;
-                                            //               });
-                                            //             }
-                                            //           }
-                                            //         },
-                                            //         isExpanded: true,
-                                            //         elevation: 1,
-                                            //         hint: Text(
-                                            //             'select Day',
-                                            //           style: TextStyle(color: subTextColor),
-                                            //         ),
-                                            //         validator: (value) {
-                                            //           if (value == null ||
-                                            //               value == '') {
-                                            //             return 'من فضلك اختر خدمة';
-                                            //           }
-                                            //           return null;
-                                            //         }),
-                                            //   ),
                                             TxtField(
-                                              textInputType: TextInputType.text,
+                                              textInputType: TextInputType.name,
                                               labelText: Languages.of(context)!
                                                   .bookAppointment['nameLabel'],
                                               hintText: Languages.of(context)!
@@ -386,9 +326,8 @@ class _BookAppointmentState extends State<BookAppointment> {
                                                     validatorFun: (val) {
                                                       if (val == null) {
                                                         return 'phone required';
-                                                      } else if (val.length <
-                                                          11) {
-                                                        return 'at least 11 digit';
+                                                      } else if (val.length != 11) {
+                                                        return 'phone must be 11 digit';
                                                       }
                                                     },
                                                   ),
@@ -464,7 +403,10 @@ class _BookAppointmentState extends State<BookAppointment> {
                                           ]),
                                     ),
                                   )
-                                : EmptyPage();
+                                : Padding(
+                                  padding: EdgeInsets.only(top: 50),
+                                  child: EmptyListWidget(icon: Icons.date_range,label: 'Doctor Don\'t Have Available Dates',iconSize: 100.0,),
+                                );
                           }
                         }
                       }),

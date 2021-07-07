@@ -51,7 +51,7 @@ class DoctorCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Dr.${item.name}',
+                    '${item.name}',
                     style: TextStyle(
                       color: darkBlueColor,
                       fontSize: 15,
@@ -76,22 +76,9 @@ class DoctorCard extends StatelessWidget {
                 ],
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Rate(
-                  clr: primaryColor,
-                  rateValue: item.reviews.rates.toInt(),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Text(
-                  '(99+)Patients',
-                  style: TextStyle(color: subTextColor, fontSize: 12),
-                ),
-              ],
+            Rate(
+              clr: primaryColor,
+              rateValue: item.reviews.rates.toInt(),
             ),
           ],
         ),

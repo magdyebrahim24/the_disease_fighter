@@ -42,7 +42,7 @@ class Doctors {
   Reviews? reviews;
   int? specId;
   Specialization? specialization;
-  Null? xY;
+  Null xY;
 
   Doctors(
       {this.about,

@@ -2,13 +2,13 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:the_disease_fighter/models/ApiCookies.dart';
+import 'package:the_disease_fighter/services/base_url/ApiCookies.dart';
 
 class DeleteFromFavoriteController {
   Dio _dio = Dio();
   var cookieJar = CookieJar();
 
-  Future deleteFromFavorite({required index}) async {
+  Future deleteFromFavorite({required docId}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final _token = prefs.getString('access_token') ?? '';
 
@@ -27,17 +27,19 @@ class DeleteFromFavoriteController {
 
     _dio.interceptors.add(CookieManager(await ApiCookies.cookieJar));
 
-    var response = await _dio.delete('/doctors/$index/favorite');
+    try{
+    var response = await _dio.delete('/doctors/$docId/favorite');
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
       print(response.data.toString());
 
-      print('response success');
-      return response;
+      return response.data;
     } else {
-      print(response.statusCode.toString());
-      print(response.toString());
-      // throw Exception('Failed to add to fav ');
-      return response;
+      print(response.data.toString());
+      return response.data;
+    }}on DioError catch (e) {
+    print(e);
+    Map error = {'success': false, 'message': 'Fail , check your internet'};
+    return error;
     }
   }
 }

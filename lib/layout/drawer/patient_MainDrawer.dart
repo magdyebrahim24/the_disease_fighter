@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/patient_profile/patient_profile.dart';
+import 'package:the_disease_fighter/layout/patient_screens/favorite/favorite_doctors.dart';
+import 'package:the_disease_fighter/layout/patient_screens/my_appointments/my_appointments.dart';
+import 'package:the_disease_fighter/layout/patient_screens/patient_profile/patient_profile.dart';
+import 'package:the_disease_fighter/layout/setting/about.dart';
+import 'package:the_disease_fighter/layout/setting/settings.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
-import 'package:the_disease_fighter/services/logged_user/controllers/get_user_info_controller.dart';
-
-import 'drawer_screens/about.dart';
-import 'drawer_screens/patient/favorite/favorite_doctors.dart';
-import 'drawer_screens/patient/my_appointments/my_appointments.dart';
-import 'drawer_screens/setting/settings.dart';
+import 'package:the_disease_fighter/material/widgets/patient-logo.dart';
 
 // ignore: must_be_immutable
 class PatientMainDrawer extends StatefulWidget {
@@ -17,210 +16,113 @@ class PatientMainDrawer extends StatefulWidget {
 }
 
 class _PatientMainDrawerState extends State<PatientMainDrawer> {
-  CurrentUserInfoController _userInfoController = CurrentUserInfoController();
-
-  Future _getUserData() async {
-    var data = await _userInfoController.loadUserData();
-    return Future.value(data);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
-        child: Stack(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height * .5,
-              width: MediaQuery.of(context).size.width,
-              color: primaryColor.withOpacity(.6),
-            ),
-            SingleChildScrollView(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    FutureBuilder<dynamic>(
-                        future: _getUserData(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<dynamic> snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return Container(
-                                height: 222,
-                                alignment: Alignment.center,
-                                child: CircularProgressIndicator());
-                          } else {
-                            if (snapshot.error != null) {
-                              return SizedBox(
-                                height: 222,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                        icon: Icon(
-                                          Icons.refresh,
-                                          color: Colors.white,
-                                          size: 40,
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            _getUserData();
-                                          });
-                                        }),
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                    Text(
-                                      'Failed To Load',
-                                      style: TextStyle(
-                                          color: subTextColor, fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              return InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => PatientProfile()));
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 35),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Column(
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: subTextColor,
-                                                      offset: Offset(0.0, 1.0),
-                                                      blurRadius: 6.0,
-                                                      spreadRadius: 1.5),
-                                                ],
-                                                image: DecorationImage(
-                                                    image: NetworkImage(snapshot
-                                                        .data.currentUser.avatar),
-                                                    fit: BoxFit.cover),
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                    color: Color(0xffFDFDFD),
-                                                    width: 2),
-                                                color: backGroundColor),
-                                            margin: EdgeInsets.all(10),
-                                            height: 90,
-                                            width: 90,
-                                          ),
-                                          Text(
-                                            snapshot.data.currentUser.name.toString(),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 6,
-                                          ),
-                                          Text(
-                                            snapshot.data.currentUser.email.toString(),
-                                             maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(color: subTextColor),
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }
-                          }
-                        }),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-                      decoration: BoxDecoration(
-                          color: backGroundColor,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(25),
-                              topRight: Radius.circular(25))),
-                      child: Text(
-                        Languages.of(context)!.drawer['menu'],
-                        style: TextStyle(
-                          color: darkBlueColor,
-                          fontSize: 17,
-                        ),
-                      ),
+        child: Scaffold(
+      backgroundColor: primaryColor.withOpacity(.5),
+      body: SingleChildScrollView(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PatientProfile()));
+                },
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 35),
+                    child: PatientLogo(
+                      imgHigh: 100.0,
+                      imgWidth: 100.0,
+                      showEmail: true,
+                      nameColor: Colors.white,
+                      nameSize: 16.0,
                     ),
-                    DrawerTile(
-                      leadingIconColor: primaryColor.withOpacity(.7),
-                      icon: FontAwesomeIcons.calendarCheck,
-                      fun: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyAppointments())),
-                      tittle: Languages.of(context)!.drawer['appointments'],
-                    ),
-                    DrawerTile(
-                      leadingIconColor: primaryColor.withOpacity(.7),
-                      icon: FontAwesomeIcons.user,
-                      fun: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PatientProfile())),
-                      tittle: Languages.of(context)!.drawer['profile'],
-                    ),
-                    ListTile(
-                      contentPadding: EdgeInsets.only(left: 40, right: 40),
-                      // onTap: ()=>_getFavoriteDoctors.getFavorite(),
-                      // onTap:()=> _addToFavorite.addToFavorite(isFavorite: true),
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FavoriteDoctors())),
-                      tileColor: Colors.white,
-                      leading: Image.asset(
-                        "assets/icons/doctorPrimary.png",
-                        width: 20,
-                        height: 25,
-                        fit: BoxFit.fill,
-                      ),
-                      title: Text(
-                        Languages.of(context)!.drawer['favoriteDoc'],
-                        style: TextStyle(color: darkBlueColor, fontSize: 16),
-                      ),
-                    ),
-                    Divider(
-                      height: 1,
-                      color: backGroundColor,
-                    ),
-                    DrawerTile(
-                      leadingIconColor: primaryColor.withOpacity(.7),
-                      icon: Icons.settings_outlined,
-                      fun: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Setting())),
-                      tittle: Languages.of(context)!.drawer['setting'],
-                    ),
-                    DrawerTile(
-                      leadingIconColor: primaryColor.withOpacity(.7),
-                      icon: Icons.info_outline,
-                      fun: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => About()));
-                      },
-                      tittle: Languages.of(context)!.drawer['about'],
-                    ),
-                  ]),
-            ),
-          ],
-        ));
+                  ),
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+                decoration: BoxDecoration(
+                    color: backGroundColor,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(25),
+                        topRight: Radius.circular(25))),
+                child: Text(
+                  Languages.of(context)!.drawer['menu'],
+                  style: TextStyle(
+                    color: darkBlueColor,
+                    fontSize: 17,
+                  ),
+                ),
+              ),
+              DrawerTile(
+                leadingIconColor: primaryColor.withOpacity(.7),
+                icon: FontAwesomeIcons.calendarCheck,
+                fun: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MyAppointments())),
+                tittle: Languages.of(context)!.drawer['appointments'],
+              ),
+              DrawerTile(
+                leadingIconColor: primaryColor.withOpacity(.7),
+                icon: FontAwesomeIcons.user,
+                fun: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => PatientProfile())),
+                tittle: Languages.of(context)!.drawer['profile'],
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.only(left: 40, right: 40),
+                tileColor: Colors.white,
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => FavoriteDoctors())),
+                leading: Image.asset(
+                  "assets/icons/doctorPrimary.png",
+                  width: 20,
+                  height: 25,
+                  fit: BoxFit.fill,
+                ),
+                title: Text(
+                  Languages.of(context)!.drawer['favoriteDoc'],
+                  style: TextStyle(color: darkBlueColor, fontSize: 16),
+                ),
+              ),
+              Divider(
+                height: 1,
+                thickness: 1,
+                color: backGroundColor,
+              ),
+              DrawerTile(
+                leadingIconColor: primaryColor.withOpacity(.7),
+                icon: Icons.settings_outlined,
+                fun: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Setting())),
+                tittle: Languages.of(context)!.drawer['setting'],
+              ),
+              DrawerTile(
+                leadingIconColor: primaryColor.withOpacity(.7),
+                icon: Icons.info_outline,
+                fun: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => About()));
+                },
+                tittle: Languages.of(context)!.drawer['about'],
+              ),
+              Container(
+                color: Colors.white,
+                height: MediaQuery.of(context).size.height > 600
+                    ? MediaQuery.of(context).size.height - 600
+                    : 20,
+                width: MediaQuery.of(context).size.width,
+              ),
+            ]),
+      ),
+    ));
   }
 }
 

@@ -51,15 +51,17 @@ class LanguageAr extends Languages {
   Map get signIn => {
         'welcome': 'اهلا بعودتك!',
         'email': 'البريد الالكترونى',
-        'emailHint': 'من فضلك ادخل الاميل',
+        'emailHint': 'من فضلك ادخل الايميل',
         'password': 'كلمة المرور',
         'passwordHint': 'من فضلك ادخل كلمة المرور',
         'forgetPassword': 'نسيت كلمة المرور',
         'signButtonTxt': 'تسجيل الدخول',
         'orSignWith': 'أو سجل من خلال',
         'dontHaveAccount': 'ليس لديك حساب',
-        'signUpTxt': 'انشاء حساب'
-      };
+        'signUpTxt': 'انشاء حساب',
+    'loggedOutSuccess': 'تم تسجيل الخروج بنجاح'
+
+  };
 
   Map get forgetPasswordScreen => {
         'header': 'نسيت كلمة المرور ؟',
@@ -112,8 +114,25 @@ class LanguageAr extends Languages {
         'genderHint': 'اختر نوعك',
         'subText': 'بالضغط على "القيام به" أنت توافق على',
         'terms': 'البنود و الشروط',
+        'infoAboutYou': 'معلومات عنك',
+        'infoAboutYouHint': 'ادخل معلومات عنك',
         'done': 'الانتهاء'
       };
+
+  @override
+  Map get uploadUserAvatar => {
+    'welcome' :'مرحبا فى',
+    'subText' : 'يمكنك اضافة صورة شخصية \n لعرضها للاخرين',
+    'takePhoto' : 'التقاط صورة جديدة',
+    'selectGallery' : 'اختر صورة من المعرض',
+  };
+
+  @override
+  String get saveButton => 'حفظ';
+  String get cancelBTN => 'الغاء';
+  String get closeButton => 'غلق';
+  String get endButton => 'غلق';
+
 
   @override
   Map get signUpDoctorInfo => {
@@ -129,20 +148,31 @@ class LanguageAr extends Languages {
         'clinicLocationLabel': 'عنوان العيادة',
         'clinicLocationHint': 'ادخل عنوان العيادة',
         'clinicDaterHeader': 'أدخل مواعيد العيادة المتاحة',
-        'clinicOpen': 'يوم فتح العيادة :',
-        'dayHint': 'اختر يوم العياده تفتح فيه',
-        'from': 'من :',
-        'fromHelper': 'ادخل معاد فتح العياده',
-        'to': 'الى :',
-        'toHelper': 'ادخل معاد اغلاق العيادة',
-        'addBTN': 'اضافة',
+    'infoAboutYou': 'معلومات عنك',
+    'infoAboutYouHint': 'ادخل معلومات عنك',
         'subText': 'بالضغط على "القيام به" أنت توافق على',
         'terms': 'البنود و الشروط',
         'submit': 'الانتهاء'
       };
+  @override
+  Map get updateDoctorDates => {
+    'tittle': 'تعديل المواعيد',
+    'Add':'اضافة مواعيد العيادة :',
+    'clinicOpen': 'يوم فتح العيادة :',
+    'dayHint': 'اختر يوم العياده تفتح فيه',
+    'from': 'من :',
+    'fromHelper': 'ادخل معاد فتح العياده',
+    'to': 'الى :',
+    'toHelper': 'ادخل معاد اغلاق العيادة',
+    'addBTN': 'اضافة موعد',
+    'yourDates' : 'مواعيد عيادتك',
+    'noDates':'لا توجد مواعيد , قم بادخالها '
+  };
 
   @override
-  Map get notificationScreen => {'tittle': 'الاشعارات'};
+  Map get notificationScreen => {'tittle': 'الاشعارات',
+    'no notification':' لا توجد اشعارات حتي الأن ',
+  'txt':' أنهي الكشف يمكن أن تقوم بتقييمه الأن اذا اردت !!'};
 
   @override
   Map get rateScreen => {
@@ -186,6 +216,8 @@ class LanguageAr extends Languages {
         'dermatology': 'عيادة الجلدية',
         'dermatologyDoctors': 'دكاترة الجلدية',
         'mlHeader': 'تحليل باستخدام الذكاء الاصطناعى',
+    'all':'الكل',
+    'noDoctorsFound':'لا يوجد دكاترة ',
       };
 
   @override
@@ -212,7 +244,31 @@ class LanguageAr extends Languages {
       };
 
   @override
-  String get search => 'ابحث عن طبيب ...';
+  Map get search => {
+    'txt hint':'ابحث عن دكتور',
+    'what search for': 'ما الذي تبحث عنه ؟',
+    'search for': 'ابحث عن طبيبك المفضل أو نتائج مشابهه للبحث ',
+    'no result':'لا يوجد نتائج للبحثث عن '
+
+  };
+  @override
+  Map get ml => {
+    'tapToSelect':'اضغط لاضافة صورة',
+    'analysis':'تحليل',
+    'analysing':' جاري التحليل',
+    'covidModel':'كوفيد-19\n موديل',
+    'brainModel':'Brain Model',
+    'covidAccuracy':'كفاءة النموذج 95%',
+    'brainAccuracy':'كفاءة النموذج 97.5%',
+    'covid':'فهو يوضح مرضك من 3 أمراض Covid-19 أو التهاب رئوي فيروسي أو عادي.',
+    'brain':' يوضح مرضك من 3 أمراض الورم الدبقي أو الورم السحائي أو الغدة النخامية.',
+    'thankyou':'شكرا لاستخدامك',
+    'pleaseClick':' الرجاء الضغط على الملف واختيار صورةالأشعة',
+  'end' : 'End'
+
+
+
+  };
 
   @override
   Map get bookAppointment => {
@@ -232,7 +288,13 @@ class LanguageAr extends Languages {
         'editBTN': 'تعديل',
         'deleteBTN': 'حذف',
         'cancelBtn': 'الغاء',
-        'saveBTN': 'حفظ'
+        'saveBTN': 'حفظ',
+    'day':'اليوم',
+    'hintDay':'اختار يوم',
+  'time':'الوقت',
+  'hintTime':'اختار وقت',
+    'note':'ملاحظة : يمكنك فقط تعديل وقت ويوم الحجز',
+    'editText':'تم تعديل الحجز بنجاح'
       };
 
   @override
@@ -258,7 +320,12 @@ class LanguageAr extends Languages {
         'previousTap': 'السابقه',
         'detailsBTN': 'تفاصيل الحجز',
         'showMoreBTN': 'المزيد',
+    'no appointments':'لا يوجد حجوزات  ',
+    'noPreviousAppointments':'لا يوجد حجوزات سابقه '
+
       };
+
+
 
   @override
   Map get previousAppointmentDetails => {
@@ -269,7 +336,7 @@ class LanguageAr extends Languages {
       };
 
   @override
-  Map get favoriteDoctors => {'tittle': 'الدكاترة المفضلة', 'bookBTN': 'حجز'};
+  Map get favoriteDoctors => {'tittle': 'الدكاترة المفضلة', 'bookBTN': 'حجز','noFav':'لا يوجد دكاترة في المفضلة'};
 
   @override
   Map get aboutScreen => {
@@ -312,18 +379,23 @@ class LanguageAr extends Languages {
         'genderLabel': 'النوع',
         'genderHint': 'اختر نوعك',
         'cancelBtn': 'الغاء',
-        'saveBtn': 'حفظ'
+        'saveBtn': 'حفظ',
+    'about':'نبذة',
+    'name':'الاسم'
       };
 
   @override
   Map get doctorHome =>
-      {'todayTap': 'اليوم', 'allTap': 'الكل', 'showBtn': 'عـرض'};
+      {'todayTap': 'اليوم', 'allTap': 'الكل', 'showBtn': 'عـرض','allAppointments':'جميع الحجوزات',
+  'appointment of':'حجوزات يوم ',
+        'NoAppointments':'لا يوجد حجوزات في يوم'
+  };
 
   @override
   Map get doctorUpcomingMeeting => {
         'tittle': 'تفاصيل الحجز',
         'delayBtn': 'تاجيل',
-        'startBtn': 'يدأ المعاد',
+        'startBtn': 'يدأ الميعاد',
         'about': 'عن المريض',
         'delayAlertDateLabel': 'التاريخ',
         'delayAlertDateHint': 'اختر تاريخ الميعاد',
@@ -331,6 +403,9 @@ class LanguageAr extends Languages {
         'delayAlertCancelBtn': 'الغاء',
         'delayAlertDoneBtn': 'تـم',
         'delayAlertDeleteBtn': 'حذف الميعاد',
+    'comment':'تعليق',
+    'startNote':'يمكنك فقط بدأ الحجز في '
+
       };
 
   @override
@@ -344,6 +419,12 @@ class LanguageAr extends Languages {
         'endAlertTittle': "هل انت متاكد من انك تريد انهاء الاجتماع",
         'endAlertCancelBtn': "الغاء",
         'endAlertOkBtn': "حسنا",
+    'enterDiag':'ادخل تشخيص',
+    'enterMedicine':'ادخل دواء',
+    'camera':'الكاميرا',
+    'gallery':'المعرض',
+    'diagnoseRequired':'يجب ادخال تشخيص',
+    'medicineRequired':'يجب ادخال دواء'
       };
 
   @override
@@ -353,14 +434,54 @@ class LanguageAr extends Languages {
         'infoTapAbout': 'نبذة',
         'prevTapMoreBtn': 'المزيد',
         'editProfile': {
+          'editTittle': 'تحديث بياناتك',
           'phoneLabel': 'رقم الهاتف',
           'phoneHint': 'ادخل رقم الهاتف',
           'email': 'البريد الالكترونى',
           'emailHint': 'ادخل البريد الالكترونى',
           'clinicAddressLabel': 'عنوان العيادة',
           'clinicAddressHint': 'ادخل عنوان العيادة',
+          'name': 'الاسم',
+          'nameHint': 'ادخل اسمك',
           'saveBtn': 'حفظ',
           'cancelBtn': 'الغاء',
+          'about':'نبذه',
+          'aboutHint': 'ادخل معلومات عنك',
+          'no appointments':'لا يوجد حجوزات  ',
+          'noTodayAppointments':'لا يوجد حجوزات اليوم ',
+          'noPreviousAppointments':'لا يوجد حجوزات سابقة',
         }
       };
+
+  @override
+  List get modelsDetails => [
+    {
+      'name': 'نموذج كوفيد-19',
+      'modelName': 'covid19',
+      'note': [
+        'دقة النموذج 90%',
+        'يوضح اصابتك بمرض من 3 أمراض :'
+      ],
+      'diseases': ['كوفيد19', 'الالتهاب الرئوي الفيروسي', 'غير مريض']
+    },
+    {
+      'name': 'نموذج ورم الدماغ',
+      'modelName': 'brain',
+      'note': [
+        'دقة النموذج 90%',
+        'يوضح اصابتك بمرض من 3 أمراض :'
+      ],
+      'diseases': ['دبقي', 'الأورام السحائية', 'الغدة النخامية']
+    },
+  ];
+  @override
+  // TODO: implement closeBTN
+  String get closeBTN => 'اغلاق';
+
+  @override
+  String get explainText =>  'توضيح';
+  @override
+
+  // TODO: implement endBTN
+  String get endBTN => throw UnimplementedError();
 }

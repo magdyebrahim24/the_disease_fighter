@@ -319,7 +319,8 @@ class PreviousAppointments {
   String? name;
   String? patientAvatar;
   int? patientId;
-  Null? periodId;
+  // ignore: unnecessary_question_mark
+  // Null? periodId;
   String? phone;
   String? time;
 
@@ -337,7 +338,7 @@ class PreviousAppointments {
       this.name,
       this.patientAvatar,
       this.patientId,
-      this.periodId,
+      // this.periodId,
       this.phone,
       this.time});
 
@@ -355,7 +356,7 @@ class PreviousAppointments {
     name = json['name'];
     patientAvatar = json['patient_avatar'];
     patientId = json['patient_id'];
-    periodId = json['period_id'];
+    // periodId = json['period_id'];
     phone = json['phone'];
     time = json['time'];
   }
@@ -371,14 +372,13 @@ class PreviousAppointments {
     if (this.files != null) {
       data['files'] = this.files!.cast<String>();
     }
-    //data['files'] = this.files;
     data['gender'] = this.gender;
     data['id'] = this.id;
     data['medicines'] = this.medicines;
     data['name'] = this.name;
     data['patient_avatar'] = this.patientAvatar;
     data['patient_id'] = this.patientId;
-    data['period_id'] = this.periodId;
+    // data['period_id'] = this.periodId;
     data['phone'] = this.phone;
     data['time'] = this.time;
     return data;

@@ -15,21 +15,20 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.3
   dotted_border: ^2.0.0
   font_awesome_flutter: ^9.0.0
-  image_picker: ^0.7.4
+  image_picker: ^0.8.0+3
   datetime_picker_formfield: ^2.0.0
-  shared_preferences: ^2.0.5
-  url_launcher: ^6.0.3
-  device_preview: ^0.7.1
+  shared_preferences: ^2.0.6
+  url_launcher: ^6.0.6
   flutter_launcher_icons: ^0.9.0
   dio: ^4.0.0
   cookie_jar: ^3.0.1
-  path_provider: ^2.0.1
+  path_provider: ^2.0.2
   dio_cookie_manager: ^2.0.0
-
+  cached_network_image: ^3.0.0
+  image_cropper: ^1.4.1
 
 flutter_icons:
   android: "launcher_icon"

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/favorite/favorite_doctors.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/my_appointments/my_appointments.dart';
 import 'package:the_disease_fighter/layout/drawer/patient_MainDrawer.dart';
 import 'package:the_disease_fighter/layout/notification/notification.dart';
 import 'package:the_disease_fighter/layout/patient_screens/clinics/all_clinics.dart';
+import 'package:the_disease_fighter/layout/patient_screens/my_appointments/my_appointments.dart';
 import 'package:the_disease_fighter/layout/patient_screens/view_doctors/view_all_doctors.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
+import 'package:the_disease_fighter/material/widgets/empty_list_widget.dart';
+import 'package:the_disease_fighter/material/widgets/no_internet_widget.dart';
 import 'package:the_disease_fighter/services/doctors/controllers/top_doctors_controller.dart';
+import 'package:the_disease_fighter/services/notification/controllers/get_notification_num.dart';
 import 'home_widgets/categories.dart';
 import 'home_widgets/doctor_card.dart';
 
@@ -83,6 +85,13 @@ class _HomeState extends State<Home> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  NotificationNumberController _notificationNumberController =
+      NotificationNumberController();
+  Future _notificationNum() async {
+    final data = await _notificationNumberController.notificationNumber();
+    return data;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,21 +108,54 @@ class _HomeState extends State<Home> {
           imgHigh: 15.0,
         ),
         actions: [
-          ImgButton(
-            fun: () => WidgetsBinding.instance!.addPostFrameCallback((_) {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => Notifications()));
-            }),
-            img: 'assets/icons/notification.png',
-            imgHigh: 35.0,
-            imgWidth: 35.0,
+          Stack(
+            children: [
+              IconButton(
+                icon: Icon(
+                  Icons.notifications_outlined,
+                  color: primaryColor,
+                  size: 35,
+                ),
+                onPressed: () =>
+                    WidgetsBinding.instance!.addPostFrameCallback((_) {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => Notifications()));
+                }),
+              ),
+              FutureBuilder<dynamic>(
+                  future: _notificationNum(),
+                  builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting || snapshot.connectionState == ConnectionState.none||snapshot.connectionState == ConnectionState.active) {
+                      return SizedBox();
+                    } else {
+                      return snapshot.data['total_notifications'] == 0 || snapshot.data['total_notifications'] == null ?
+
+                    SizedBox()
+                     : Positioned(
+                      right: 5,top: 3,
+                      child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                      color: primaryColor,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 1)),
+                      child: Text('${snapshot.data['total_notifications']}',
+                      style: TextStyle(fontSize: 12,
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    ) );
+                  }
+                  }),
+
+              // Icon(Icons.circle,size: 15,color: primaryColor,),
+            ],
           ),
         ],
         centerTitle: true,
       ),
       body: CustomScrollView(
         // center: centerKey,
-
         slivers: [
           SliverToBoxAdapter(
             child: listHead(
@@ -140,42 +182,32 @@ class _HomeState extends State<Home> {
           FutureBuilder<dynamic>(
               future: _loadTopDoctors(),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+                if (!snapshot.hasData && !snapshot.hasError) {
                   return SliverToBoxAdapter(
-                      child: Center(child: CircularProgressIndicator()));
+                      child: Center(
+                          child: Padding(
+                    padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height * .15),
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(darkBlueColor),
+                    ),
+                  )));
                 } else {
                   if (snapshot.hasError) {
                     return SliverToBoxAdapter(
                       child: Padding(
-                        padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * .15),
-                        child: Column(
-                          children: [
-                            IconButton(
-                                icon: Icon(
-                                  Icons.refresh,
-                                  color: primaryColor,
-                                  size: 40,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _loadTopDoctors();
-                                  });
-                                }),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Text(
-                              'Failed To Load',
-                              style:
-                                  TextStyle(color: subTextColor, fontSize: 16),
-                            ),
-                          ],
-                        ),
-                      ),
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height * .1),
+                          child: FailLoadWidget(
+                            fun: () {
+                              setState(() {
+                                _loadTopDoctors();
+                              });
+                            },
+                          )),
                     );
                   } else {
-                    return snapshot.data.topDoctors.length != 0
+                    return snapshot.data.topDoctors != null && snapshot.data.topDoctors.length != 0
                         ? SliverList(
                             delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
@@ -185,7 +217,11 @@ class _HomeState extends State<Home> {
                             },
                             childCount: snapshot.data.topDoctors.length,
                           ))
-                        : EmptyPage();
+                        : EmptyListWidget(
+                            icon: Icons.list_alt,
+                            label: Languages.of(context)!.allClinicsScreen['noDoctorsFound'].toString(),
+                            iconSize: 90.0,
+                          );
                   }
                 }
               }),

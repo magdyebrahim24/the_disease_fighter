@@ -1,626 +1,335 @@
-/*import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
-import 'package:the_disease_fighter/layout/doctor-screens/metting/start_meeting.dart';
-import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
-import 'package:the_disease_fighter/material/constants.dart';
-import 'package:the_disease_fighter/material/widgets/drop-downlist.dart';
-import 'package:the_disease_fighter/material/widgets/meeting%20info.dart';
-import 'package:the_disease_fighter/material/widgets/time-date-field.dart';
-import 'package:the_disease_fighter/services/doctorScreens/controllers/get_one_session_controller.dart';
+import 'dart:io';
+import 'package:flutter/services.dart' ;
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
-import 'layout/drawer/drawer_screens/patient/my_appointments/my_appointments.dart';
+import 'layout/user_profile_picture/src/simpleCrop.dart';
 
-class UpComingMeeting extends StatefulWidget {
-  final sessionId;
-  const UpComingMeeting({ this.sessionId}) ;
+class ProfilePicture extends StatefulWidget {
+
   @override
-  _UpComingMeetingState createState() => _UpComingMeetingState();
+  _ProfilePictureState createState() => _ProfilePictureState();
 }
 
-class _UpComingMeetingState extends State<UpComingMeeting> {
-  var info;
-  GetOneSessionController _getOneSessionController=GetOneSessionController();
-  Future _getSessionData() async {
-    var data = await _getOneSessionController.getOneSession(sessionId:widget.sessionId,);
-    info=data;
-    return data ;
-  }
-  late String appointmentTime;
-  late DateTime fromTime;
+class _ProfilePictureState extends State<ProfilePicture> {
 
-  _getAppointmentDate(DateTime phone) {
-    setState(() {
-      // this.fromTime = phone;
-    });
-  }
 
-  _getAppointmentTime(String val) {
-    setState(() {
-      appointmentTime = val;
-    });
+
+  void _pickImage(ImageSource src) async {
+    final pickedImageFile = await ImagePicker().getImage(source: src);
+    if (pickedImageFile != null) {
+      Navigator.pop(context);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  SimpleCropRoute(image: File(pickedImageFile.path),)));
+    } else {
+      print('No Image Selected');
+    }
   }
 
-  Future _asyncConfirmDialog(BuildContext context) async {
-    return showDialog(
-      context: context,
-      barrierDismissible: false, // user must tap button for close dialog!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          buttonPadding: EdgeInsets.symmetric(horizontal: 20),
-          content: Container(
-            height: 300,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                BasicDateField(
-                  helperText: 'Select Appointment Date',
-                  label: 'Date',
-                  fun: _getAppointmentDate,
-                ),
-                DropDownList(
-                  value: appointmentTime,
-                  getValue: _getAppointmentTime,
-                  items: [
-                    '08:00 pm',
-                    '08:30 pm',
-                    '09:00 pm',
-                    '09:30 pm',
-                    '10:00 pm',
-                    '10:30 pm',
-                  ],
-                  hintText: '${DateTime.now().hour}:${DateTime.now().minute}',
-                  labelText: 'Time',
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        height: 45,
-                        width: MediaQuery.of(context).size.width * .3,
-                        child: Center(
-                          child: Text(
-                            "Cancel",
-                            style: TextStyle(
-                                color: greyColor,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: backGroundColor,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    InkWell(
-                      onTap: () => Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DoctorHome())),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * .3,
-                        height: 45,
-                        child: Center(
-                          child: Text(
-                            "Done",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: primaryColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.pop(context, [true]);
-                  },
-                  //=> Navigator.pushReplacement(context,
-                  //MaterialPageRoute(builder: (context) => DoctorHome())),
-                  child: Container(
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 20,
-                    ),
-                    width: MediaQuery.of(context).size.width,
-                    height: 45,
-                    child: Center(
-                      child: Text(
-                        "Delete Meeting",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Color(0xffE13239),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-  Widget _profilePicCard(BuildContext context,imgUrl,name) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: primaryColor.withOpacity(.1),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  @override
+  Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+    return Scaffold(
+      body: Stack(
         children: [
           Container(
-            margin: EdgeInsets.only(bottom: 10),
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(imgUrl.toString()),
-                    fit: BoxFit.cover),
-                shape: BoxShape.circle,
-                border: Border.all(color: Color(0xffFDFDFD), width: 2),
-                color: backGroundColor),
-            height: 90,
-            width: 90,
-          ),
-          Text(
-            name.toString(),
-            style: TextStyle(
-                color: darkBlueColor,
-                fontSize: 23,
-                fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          InkWell(
-            onTap: () {
-              _asyncConfirmDialog(context);
-            },
-            child: Container(
-              width: MediaQuery.of(context).size.width * .7,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(
-                child: Text(
-                  "Delay Meeting",
-                  style: TextStyle(
-                      color: primaryColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
-                ),
+            height: MediaQuery.of(context).size.height,
+            alignment: Alignment.center,
+            color: Colors.black,
+            width: MediaQuery.of(context).size.width,
+            child: InteractiveViewer(
+              panEnabled: true,
+              minScale: 0.5,
+              maxScale: 3,
+              scaleEnabled: true,
+              child: Image.network(
+                "https://picsum.photos/250?image=9",
+                width: MediaQuery.of(context).size.width,
+                alignment: Alignment.center,
+                fit: BoxFit.contain,
               ),
             ),
           ),
-          SizedBox(
-            height: 10,
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => StartMeeting(data:info.session)));
-            },
-            child: Container(
-              width: MediaQuery.of(context).size.width * .7,
-              height: 50,
-              decoration: BoxDecoration(
-                color: primaryColor,
-                borderRadius: BorderRadius.circular(8),
+          Positioned(
+            bottom: 20,
+            left: MediaQuery.of(context).size.width * .4,
+            child: MaterialButton(
+              minWidth: 100,
+              height: 40,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+                side: BorderSide(color: Colors.white, width: 2),
               ),
-              child: Center(
-                child: Text(
-                  "Start Meeting",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
-                ),
+              onPressed: () {
+                showAlert(context);
+              },
+              child: Text(
+                'Edit',
+                style: TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),
           ),
+
+          // CachedNetworkImage(
+          //   imageUrl: "https://picsum.photos/250?image=9",
+          //   imageBuilder: (context, imageProvider) => Container(
+          //     height:300,
+          //     decoration: BoxDecoration(
+          //       image: DecorationImage(
+          //           image: imageProvider,
+          //           fit: BoxFit.fitWidth,
+          //           colorFilter:
+          //           ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+          // ),
+          // ),
+          // ),
+          // placeholder: (context, url) => CircularProgressIndicator(),
+          // errorWidget: (context, url, error) => Icon(Icons.error),
+          // ),
+          // SizedBox(height: 100,),
+          // CachedNetworkImage(
+          //   width: MediaQuery.of(context).size.width,
+          //   imageUrl: "https://picsum.photos/250?image=9",
+          //   placeholder: (context, url) => CircularProgressIndicator(),
+          //   errorWidget: (context, url, error) => Icon(Icons.error),
+          // ),
         ],
       ),
     );
   }
 
+  void showAlert(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InkWell(
+                      onTap: ()=> _pickImage(ImageSource.camera),
+                        // if (_pickerImage != null) {
+                        //   Navigator.pop(context);
+                        //   Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //           builder: (BuildContext context) =>
+                        //               ManageSelectedImage(image: _pickerImage,)));
+                        // }
+                      // },
+                      child: Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Take New Profile Picture ',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      )),
+                  Divider(
+                    height: 1,
+                    thickness: 1,
+                    indent: 10,
+                    endIndent: 10,
+                  ),
+                  InkWell(
+                      onTap: () => _pickImage(ImageSource.gallery),
+
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Select Picture From Gallery',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      )),
+                  Divider(
+                    height: 1,
+                    thickness: 1,
+                    indent: 10,
+                    endIndent: 10,
+                  ),
+                ],
+              ),
+            ));
+  }
+
+  snackBarr({text, color}) {
+    final snackBar = SnackBar(
+      content: Text(
+        text,
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+      backgroundColor: color,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+}
+
+class ManageSelectedImage extends StatefulWidget {
+  final image;
+  ManageSelectedImage({this.image});
+
+  @override
+  _ManageSelectedImageState createState() => _ManageSelectedImageState();
+}
+
+class _ManageSelectedImageState extends State<ManageSelectedImage> {
+
+  @override
+  Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        // title: Text("Move and Scale"),
+        leading: IconButton(
+          icon: Icon(
+            Icons.close_rounded,
+            color: Colors.white,
+            size: 30,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: (){},
+            child: Text('Save',style: TextStyle(color: Colors.white,fontSize: 19,fontWeight: FontWeight.bold),),
+          )
+        ],
+      ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        alignment: Alignment.center,
+        color: Colors.black,
+        width: MediaQuery.of(context).size.width,
+        child: Image.file(
+          widget.image,
+          width: MediaQuery.of(context).size.width,
+          alignment: Alignment.center,
+          fit: BoxFit.contain,
+        ),
+      ),
+    );
+  }
+  void showAlert(BuildContext context,{text}) {
+    showDialog(
+        context: context,
+        builder: (context) => Stack(
+          children: [
+            Positioned(
+              bottom: 25,
+              left: 45,
+              child: AlertDialog(
+                shape:  RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                backgroundColor: Colors.redAccent,
+                contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                content: Row(
+                  children: [
+                    Expanded(child: Text(text.toString(),style: TextStyle(color: Colors.white),)),
+                    MaterialButton(onPressed: (){Navigator.pop(context);},child: Icon(Icons.close,color: Colors.white,size: 20,),height: 25,minWidth: 25,padding: EdgeInsets.all(3),materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,shape:  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),)
+                  ],
+                )
+              ),
+            ),
+          ],
+        ));
+  }
+
+}
+
+
+
+class SimpleCropRoute extends StatefulWidget {
+  final image;
+
+  SimpleCropRoute({Key? key, this.image}) : super(key: key);
+  @override
+  _SimpleCropRouteState createState() => _SimpleCropRouteState();
+}
+
+class _SimpleCropRouteState extends State<SimpleCropRoute> {
+  final cropKey = GlobalKey<ImgCropState>();
+
+  Future<Null> showImage(BuildContext context, File file) async {
+    new FileImage(file)
+        .resolve(new ImageConfiguration())
+        .addListener(ImageStreamListener((ImageInfo info, bool _) {
+      print('-------------------------------------------$info');
+    }));
+    return showDialog<Null>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: Text(
+                'Current screenshot：',
+                style: TextStyle(
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w300,
+                    color: Theme.of(context).primaryColor,
+                    letterSpacing: 1.1),
+              ),
+              content: Image.file(file));
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     // key: _scaffoldKey,
-      backgroundColor: Colors.white,
-      body: DefaultTabController(
-        length: 2,
-        child:  FutureBuilder<dynamic>(
-            future: _getSessionData(),
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              if (!snapshot.hasData && !snapshot.hasError) {
-                return Container(
-                    height: 222,
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator());
-              } else {
-                if (snapshot.hasError) {
-                  return SizedBox(
-                    height: 222,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AppBar(
-                          elevation: 0.0,
-                          leading: IconButton(
-                            icon: Icon(
-                              Icons.arrow_back_outlined,
-                              color: primaryColor,
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context, [true]);
-                            },
-                          ),
-                          centerTitle: true,
-                          title: Text(
-                            "Meeting",
-                            style: TextStyle(color: primaryColor, fontSize: 16),
-                          ),
-                        ),
-                        IconButton(
-                            icon: Icon(
-                              Icons.refresh,
-                              color: primaryColor,
-                              size: 40,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _getSessionData();
-                              });
-                            }),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          'Failed To Load',
-                          style: TextStyle(color: subTextColor, fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  return  NestedScrollView(
-                      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                    return [
-                      SliverAppBar(
-                        elevation: 0.0,
-                        leading: IconButton(
-                          icon: Icon(
-                            Icons.arrow_back_outlined,
-                            color: primaryColor,
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context, [true]);
-                          },
-                        ),
-                        pinned: true,
-                        snap: false,
-                        floating: true,
-                        expandedHeight: 300.0,
-                        flexibleSpace: FlexibleSpaceBar(
-                          //title: Text(
-                           // "Meeting",
-                          //  style: TextStyle(color: primaryColor, fontSize: 16),
-                         // ),
-                          centerTitle: true,
-                          background:  _profilePicCard(context,snapshot.data.session.patientAvatar.toString().toString(),snapshot.data.session.name.toString()),
-
-                        ),
-                      ),
-                      SliverPersistentHeader(
-                        delegate: SliverAppBarDelegate(
-                          TabBar(
-                            indicatorPadding:
-                            EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-                            indicatorColor: primaryColor,
-                            unselectedLabelColor: subTextColor,
-                            indicatorSize: TabBarIndicatorSize.tab,
-                            labelColor: primaryColor,
-                            indicator: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white),
-                            tabs: [
-                              tapBarWidget(
-                                  label: "Session Info"
-                              ),
-                              tapBarWidget(
-                                  label:"Patient Info"
-                              )
-                            ],
-                          ),
-                        ),
-                        pinned: true,
-                      ),
-                    ];
-                  }, body: TabBarView(
-                    children: [
-                      patientInfo(),
-                      sessionInfo(),
-                    ],
-                  )
-                 );
-                    //TabBarView(
-                   // children: [
-                    //  patientInfo(),
-                     // sessionInfo(),
-                   // ],
-                //  );
-                }
-              }
-            }),
-          /*FutureBuilder<dynamic>(
-              future: _getSessionData(),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (!snapshot.hasData && !snapshot.hasError) {
-                  return Container(
-                      height: 222,
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator());
-                } else {
-                  if (snapshot.hasError) {
-                    return SizedBox(
-                      height: 222,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                              icon: Icon(
-                                Icons.refresh,
-                                color: primaryColor,
-                                size: 40,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _getSessionData();
-                                });
-                              }),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Text(
-                            'Failed To Load',
-                            style: TextStyle(color: subTextColor, fontSize: 16),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    return TabBarView(
-                      children: [
-                        patientInfo(),
-                        sessionInfo(),
-                      ],
-                    );
-                  }
-                }
-              }),*/
-
-
-
-    ));
-  }
-
-  Widget tapBarWidget({required String label}) {
-    return Container(
-      child: Text(label),
-      alignment: Alignment.center,
-    );
-  }
-  Widget patientInfo(){
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              height: 110,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: lightGreyColor,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "About",
-                    style: TextStyle(
-                        color: darkBlueColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10,),
-                  Text(
-                    "Lorem Ipsum is simply dummy text the printing typesetting and  industry Lorem Ipsum has been the industry's standard dummy text  ever since the 1500s.",
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: subTextColor,
-                    ),
-                  ),
-
-                ],
-              ),
-            ),
-            MeetingInfo(
-              color: lightGreyColor,
-              width: MediaQuery.of(context).size.width,
-              text: "alia12@example.com",
-              widget: Icon(Icons.email, color: primaryColor),
-            ),
-
-            MeetingInfo(
-                color: lightGreyColor,
-                width: MediaQuery.of(context).size.width,
-                text: info.session.phone.toString(),
-                widget: Icon(Icons.phone, color: primaryColor)),
-            Row(
-              children: [
-                MeetingInfo(
-                  color: lightGreyColor,
-                  width: MediaQuery.of(context).size.width * .4,
-                  text: info.session.gender.toString(),
-                  widget: Icon(Icons.wc, color: primaryColor),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Expanded(
-                    child: MeetingInfo(
-                      color: lightGreyColor,
-                      width: null,
-                      text: "21 / 02 / 1999",
-                      widget: Icon(
-                        Icons.calendar_today_rounded,
-                        color: primaryColor,
-                      ),
-                    ))
-              ],
-            ),
-
-          ],
+        appBar: AppBar(
+          elevation: 0,
+          title: Text(
+            'Zoom and Crop',
+            style: TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Colors.white,
+          leading: new IconButton(
+            icon:
+            new Icon(Icons.navigate_before, color: Colors.black, size: 40),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
-      ),
-    );
-
-  }
-  Widget sessionInfo(){
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              height: 110,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: lightGreyColor,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Comment",
-                    style: TextStyle(
-                        color: darkBlueColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10,),
-                  Text(
-                    info.session.comment.toString(),                    style: TextStyle(
-                      fontSize: 10,
-                      color: subTextColor,
-                    ),
-                  ),
-
-                ],
-              ),
-            ),
-            Text("Date"),
-            MeetingInfo(
-              color: lightGreyColor,
-              width: MediaQuery.of(context).size.width,
-              text: info.session.date.toString(),
-              widget: Icon(Icons.email, color: primaryColor),
-            ),
-            Text("Time"),
-            MeetingInfo(
-              color: lightGreyColor,
-              width: MediaQuery.of(context).size.width,
-              text: info.session.time.toString(),
-              widget: Icon(Icons.email, color: primaryColor),
-            ),
-            Text("Day"),
-            MeetingInfo(
-              color: lightGreyColor,
-              width: MediaQuery.of(context).size.width,
-              text: "day",
-              widget: Icon(Icons.email, color: primaryColor),
-            ),
-            Text("Name"),
-            MeetingInfo(
-              color: lightGreyColor,
-              width: MediaQuery.of(context).size.width,
-              text: "patient name",
-              widget: Icon(Icons.email, color: primaryColor),
-            ),
-            Text("phone"),
-            MeetingInfo(
-              color: lightGreyColor,
-              width: MediaQuery.of(context).size.width,
-              text: "patient phone",
-              widget: Icon(Icons.email, color: primaryColor),
-            ),
-            Text("gender"),
-            MeetingInfo(
-              color: lightGreyColor,
-              width: MediaQuery.of(context).size.width,
-              text: "gender",
-              widget: Icon(Icons.email, color: primaryColor),
-            ),
-
-          ],
+        body: Center(
+          child: ImgCrop(
+            key: cropKey,
+            chipRadius: 100,
+            chipShape: ChipShape.circle,
+            chipRatio: 2 / 1,
+            maximumScale: 3,
+            image: FileImage(widget.image),
+            // handleSize: 0.0,
+          ),
         ),
-      ),
-    ) ;
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            final crop = cropKey.currentState;
+            final croppedFile =
+            await crop!.cropCompleted(widget.image, preferredSize: 1000);
+            showImage(context, croppedFile);
+          },
+          tooltip: 'Increment',
+          child: Text('Crop'),
+        ));
   }
 }
-
-
-class _CustomTabBar extends Container implements PreferredSizeWidget {
-  _CustomTabBar(this._tabBar);
-
-  final TabBar _tabBar;
-
-  @override
-  Size get preferredSize => _tabBar.preferredSize;
-
-  @override
-  Widget build(BuildContext context) => Container(
-    height: _tabBar.preferredSize.height,
-    margin: EdgeInsets.symmetric(horizontal: 15),
-    child: _tabBar,
-    decoration: BoxDecoration(
-        color: backGroundColor, borderRadius: BorderRadius.circular(10)),
-  );
-}
-*/

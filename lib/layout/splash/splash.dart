@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
 import 'package:the_disease_fighter/layout/introduction/intro_page.dart';
+import 'package:the_disease_fighter/layout/patient_screens/patient_home/home.dart';
 import 'package:the_disease_fighter/layout/sign/sign_in/sign_in.dart';
 
 class Splash extends StatefulWidget {
@@ -16,11 +18,23 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
 
   Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool _intro = (prefs.getBool('intro') ?? false);
+    final _intro = (prefs.getBool('intro') ?? false);
+    final _isDoctor = (prefs.getBool('isDoctor') ?? false);
+    final _token = prefs.getString('access_token') ?? '';
 
     if (_intro) {
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => SignIn()));
+      if(_token != ''){
+        if(_isDoctor){
+          Navigator.of(context)
+              .pushReplacement(MaterialPageRoute(builder: (context) => DoctorHome()));
+        }else{
+          Navigator.of(context)
+              .pushReplacement(MaterialPageRoute(builder: (context) => Home()));
+        }
+      }else{
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (context) => SignIn()));
+      }
     } else {
       await prefs.setBool('intro', true);
       Navigator.of(context).pushReplacement(

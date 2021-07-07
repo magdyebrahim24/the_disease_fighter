@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:the_disease_fighter/models/ApiCookies.dart';
+import 'package:the_disease_fighter/services/base_url/ApiCookies.dart';
 
 class UpdateSessionController {
   Dio _dio = Dio();
@@ -37,18 +37,20 @@ class UpdateSessionController {
     Map data = {
       "day": day.toString(),
       "time": time.toString(),
-      "period_id": selectedPeriodId,
-      "previous_period_id": previousPeriodId
+      "period_id":int.parse(selectedPeriodId!)  ,
+      "previous_period_id": int.parse(previousPeriodId!) ,
     };
     try {
-      var response = await _dio.patch('/sessions/$sessionId', data: data);
+      var response = await _dio.patch('/sessions/${ int.parse(sessionId!)}', data: data);
 
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
         response.data.putIfAbsent('success', () => true);
 
+        print(response.data);
         return response.data;
       } else {
         response.data.putIfAbsent('success', () => false);
+        print(response.data);
         return response.data;
       }
     } on DioError catch (e) {

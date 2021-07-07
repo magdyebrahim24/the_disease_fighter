@@ -5,6 +5,7 @@ class ArcIndicator extends StatelessWidget {
   final progressValue;
   final Widget child;
   final dimensions;
+  final label;
 
   final Color bgColor;
 
@@ -12,26 +13,40 @@ class ArcIndicator extends StatelessWidget {
       {this.progressValue,
       required this.child,
       this.dimensions,
-      required this.bgColor});
+      required this.bgColor, this.label});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(5),
-      child: Stack(
-        clipBehavior: Clip.hardEdge,
-        alignment: Alignment.center,
-        fit: StackFit.loose,
+      child: Column(
         children: [
-          CustomPaint(
-            size: Size(dimensions.toDouble(), dimensions.toDouble()),
-            foregroundPainter: ArcIndicatorPainter(
-                width: 6,
-                percent: progressValue,
-                lineColor: Color(0xff9ADFF7),
-                bgColor: bgColor),
+          Stack(
+            clipBehavior: Clip.hardEdge,
+            alignment: Alignment.center,
+            fit: StackFit.loose,
+            children: [
+              CustomPaint(
+                size: Size(dimensions.toDouble(), dimensions.toDouble()),
+                foregroundPainter: ArcIndicatorPainter(
+                    width: 6,
+                    percent: 1,
+                    lineColor: Colors.blueAccent.withOpacity(0.1),
+                    bgColor: bgColor),
+              ),
+              CustomPaint(
+                size: Size(dimensions.toDouble(), dimensions.toDouble()),
+                foregroundPainter: ArcIndicatorPainter(
+                    width: 6,
+                    percent: progressValue,
+                    lineColor: Color(0xff9ADFF7),
+                    bgColor: Colors.transparent),
+              ),
+              child
+            ],
           ),
-          child
+          SizedBox(height: 15,),
+          Text('$label',style: TextStyle(color: Color(0xff9ADFF7),fontWeight: FontWeight.bold,fontSize: 15),),
         ],
       ),
     );

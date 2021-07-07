@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/my_appointments/my_appointments.dart';
+import 'package:the_disease_fighter/layout/patient_screens/my_appointments/my_appointments.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
@@ -53,17 +53,19 @@ class _ShowAppointmentState extends State<ShowAppointment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      // extendBodyBehindAppBar: true,
+
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Colors.transparent,
         leading: MaterialButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => MyAppointments())),
           child: Icon(
             Icons.arrow_back,
             color: darkBlueColor,
           ),
-          color: primaryColor.withOpacity(.2),
+          // color: primaryColor.withOpacity(.2),
           elevation: 0.0,
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           shape: RoundedRectangleBorder(
@@ -77,76 +79,84 @@ class _ShowAppointmentState extends State<ShowAppointment> {
                 children: [
                   Column(
                     children: [
-                      Container(
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.only(bottom: 25),
-                          padding: EdgeInsets.only(top: 25),
-                          width: MediaQuery.of(context).size.width,
-                          height: 240,
-                          decoration: BoxDecoration(
-                              color: primaryColor.withOpacity(.8),
-                              borderRadius: BorderRadius.only(
-                                bottomRight: Radius.circular(40),
-                                bottomLeft: Radius.circular(40),
-                              )),
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: subTextColor,
-                                          offset: Offset(1.0, 2.0),
-                                          blurRadius: 6.0,
-                                          spreadRadius: 1),
-                                    ],
-                                    image: DecorationImage(
-                                        image: NetworkImage(widget
-                                            .data.doctorAvatar
-                                            .toString()),
-                                        fit: BoxFit.cover),
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        color: Color(0xffFDFDFD), width: 2),
-                                    color: backGroundColor),
-                                margin: EdgeInsets.all(10),
-                                height: 120,
-                                width: 120,
-                              ),
-                              Text(
-                                widget.data.doctorName,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: darkBlueColor,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 7,
-                              ),
-                              Text(
-                                'doc Specialist need',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          )),
-                      _item(context,
-                          labelText: Languages.of(context)!
-                              .bookAppointment['appointmentDateLabel'],
-                          data: widget.data.date.toString()),
-                      _item(context,
-                          labelText: Languages.of(context)!
-                              .bookAppointment['appointmentTimeLabel'],
-                          data:
-                              '${widget.data.time.toString()} ${widget.data.amPm.toString()}'),
+                      // Container(
+                      //     alignment: Alignment.center,
+                      //     margin: EdgeInsets.only(bottom: 25),
+                      //     padding: EdgeInsets.only(top: 25),
+                      //     width: MediaQuery.of(context).size.width,
+                      //     height: 240,
+                      //     decoration: BoxDecoration(
+                      //         color: primaryColor.withOpacity(.8),
+                      //         borderRadius: BorderRadius.only(
+                      //           bottomRight: Radius.circular(40),
+                      //           bottomLeft: Radius.circular(40),
+                      //         )),
+                      //     child: Column(
+                      //       children: [
+                      //         Container(
+                      //           decoration: BoxDecoration(
+                      //               boxShadow: [
+                      //                 BoxShadow(
+                      //                     color: subTextColor,
+                      //                     offset: Offset(1.0, 2.0),
+                      //                     blurRadius: 6.0,
+                      //                     spreadRadius: 1),
+                      //               ],
+                      //               image: DecorationImage(
+                      //                   image: NetworkImage(widget
+                      //                       .data.doctorAvatar
+                      //                       .toString()),
+                      //                   fit: BoxFit.cover),
+                      //               shape: BoxShape.circle,
+                      //               border: Border.all(
+                      //                   color: Color(0xffFDFDFD), width: 2),
+                      //               color: backGroundColor),
+                      //           margin: EdgeInsets.all(10),
+                      //           height: 120,
+                      //           width: 120,
+                      //         ),
+                      //         Text(
+                      //           widget.data.doctorName,
+                      //           maxLines: 1,
+                      //           overflow: TextOverflow.ellipsis,
+                      //           style: TextStyle(
+                      //             fontWeight: FontWeight.bold,
+                      //             color: darkBlueColor,
+                      //             fontSize: 20,
+                      //           ),
+                      //         ),
+                      //         SizedBox(
+                      //           height: 7,
+                      //         ),
+                      //         Text(
+                      //           '${widget.data.docSpecialization.toString()} Specialist',
+                      //           maxLines: 1,
+                      //           overflow: TextOverflow.ellipsis,
+                      //           style: TextStyle(
+                      //             fontWeight: FontWeight.bold,
+                      //             color: Colors.white,
+                      //             fontSize: 16,
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     )),
+
+                      Padding(
+                        padding: EdgeInsets.only(top: 15,bottom: 30),
+                        child: _appointCard(),
+                      ),
+
+
+                      // _item(context,
+                      //     labelText: Languages.of(context)!
+                      //         .bookAppointment['appointmentDateLabel'],
+                      //     data:
+                      //         '${widget.data.day.toString()} - ${widget.data.date.toString()}'),
+                      // _item(context,
+                      //     labelText: Languages.of(context)!
+                      //         .bookAppointment['appointmentTimeLabel'],
+                      //     data:
+                      //         '${widget.data.time.toString()} ${widget.data.amPm.toString()}'),
                       _item(context,
                           labelText: Languages.of(context)!
                               .bookAppointment['nameLabel'],
@@ -224,7 +234,7 @@ class _ShowAppointmentState extends State<ShowAppointment> {
 
   Widget _item(BuildContext context, {labelText, data}) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 7, horizontal: 15),
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -233,16 +243,20 @@ class _ShowAppointmentState extends State<ShowAppointment> {
             style: TextStyle(fontSize: 15, color: subTextColor),
           ),
           Container(
-              // alignment: Alignment.centerLeft,
               margin: EdgeInsets.symmetric(
                 vertical: 7,
               ),
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(horizontal: 14, vertical: 15),
               decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: subTextColor.withOpacity(.5),
+                      offset: Offset(1.0, 2.0),
+                      blurRadius: 4.0,
+                      spreadRadius: .4),
+                ],
                 color: backGroundColor,
-                border: Border.all(
-                    width: 1, color: Color(0xff707070).withOpacity(.15)),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
@@ -286,4 +300,99 @@ class _ShowAppointmentState extends State<ShowAppointment> {
       },
     );
   }
+  Widget _appointCard() {
+    return Container(
+      padding: EdgeInsets.all(15),
+      margin: EdgeInsets.all(10),
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+              color: subTextColor.withOpacity(.5),
+              offset: Offset(1.0, 2.0),
+              blurRadius: 4.0,
+              spreadRadius: .4),
+        ],
+          color: backGroundColor, borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(.5),
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                        image:
+                        NetworkImage(widget.data.doctorAvatar.toString()),
+                        fit: BoxFit.cover)),
+              ),
+              SizedBox(
+                width: 15,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.data.doctorName.toString(),
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: darkBlueColor,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    '${widget.data.docSpecialization.toString()} Specialist',
+                    style: TextStyle(
+                      color: subTextColor,
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 30),
+            padding: EdgeInsets.all(13),
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Color(0xffBCBBBB),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.access_time,
+                  color: Colors.white,
+                  // size: 15,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  child: Text(
+                    '${widget.data.day.toString()}, ${widget.data.date.toString()} , ${widget.data.time.toString()} ${widget.data.amPm.toString()}',
+                    style: TextStyle(color: Colors.white),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
 }

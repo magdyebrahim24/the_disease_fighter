@@ -1,17 +1,13 @@
-import 'dart:io';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/patient_profile/patient_profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:the_disease_fighter/layout/patient_screens/patient_profile/patient_profile.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
-import 'package:the_disease_fighter/material/widgets/bottom_sheet_item.dart';
 import 'package:the_disease_fighter/material/widgets/materialBanner.dart';
-import 'package:the_disease_fighter/services/logged_user/controllers/update_avatar.dart';
 import 'package:the_disease_fighter/services/logged_user/controllers/update_patient_profile.dart';
 
 // ignore: must_be_immutable
@@ -32,11 +28,9 @@ class _EditPatientProfileState extends State<EditPatientProfile> {
   String? address;
   String? name;
   String? about;
-  File? _pickerImage;
   String? errorMessage;
   String? _bannerMessage;
   bool _showBanner = false;
-  UpdateAvatarController _updateAvatar = UpdateAvatarController();
 
   Future _updatePatientProfile() async {
     _formKey.currentState!.validate();
@@ -52,27 +46,19 @@ class _EditPatientProfileState extends State<EditPatientProfile> {
         gender: widget.data.gender.toString(),
       );
       if (await data['success']) {
-        Navigator.of(context).pop();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('userName', name.toString());
+
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => PatientProfile()));
       } else {
+        Navigator.of(context).pop();
         setState(() {
           _bannerMessage = data['message'].toString();
           _showBanner = true;
           errorMessage = data['message'].toString();
         });
-
-        // Navigator.of(context).pop();
-
       }
-    }
-  }
-
-  Future _updateAvatarFun() async {
-    if (_pickerImage != null) {
-      final data = await _updateAvatar.updateAvatar(
-        file: _pickerImage,
-      );
     }
   }
 
@@ -86,18 +72,6 @@ class _EditPatientProfileState extends State<EditPatientProfile> {
     setState(() {
       this.address = value;
     });
-  }
-
-  final ImagePicker _picker = ImagePicker();
-  void _pickImage(ImageSource src) async {
-    final pickedImageFile = await _picker.getImage(source: src);
-    if (pickedImageFile != null) {
-      setState(() {
-        _pickerImage = File(pickedImageFile.path);
-      });
-    } else {
-      print('No Image Selected');
-    }
   }
 
   @override
@@ -117,9 +91,10 @@ class _EditPatientProfileState extends State<EditPatientProfile> {
             backgroundColor: Colors.white,
             appBar: AppBar(
                 elevation: 0.0,
-                backgroundColor: primaryColor.withOpacity(.1),
+                title: Text('Update Profile',style: TextStyle(color: darkBlueColor),),
+                centerTitle: true,
                 leading: CircleButton(
-                  color: primaryColor,
+                  color: darkBlueColor,
                   fun: () => Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -130,69 +105,22 @@ class _EditPatientProfileState extends State<EditPatientProfile> {
                 child: Form(
               key: _formKey,
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _profilePicCard(
-                      context,
-                      imgUrl: widget.data.avatar.toString(),
-                    ),
                     SizedBox(
                       height: 20,
                     ),
-                    item(
-                      validateFun: (value) {},
-                      label: "About",
-                      initialValue: widget.data.about.toString(),
-                      hintText: "add a new information about you",
-                      fun: (value) {
-                        setState(() {
-                          about = value;
-                        });
-                      },
-                      textInputType: TextInputType.name,
-                      readOnly: false,
-                    ),
-                    /* Container(
-                      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                      padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 40),
-                      //padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                      //height: 110,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: backGroundColor,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "About",
-                            //style: TextStyle(
-                            //   color: darkBlueColor,
-                            //  fontSize: 12,
-                            //  fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 10,),
-                          Text(
-                            widget.data.about.toString(),
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: subTextColor,
-                            ),
-                          ),
 
-                        ],
-                      ),
-                    ),*/
                     item(
                       validateFun: (value) {
                         if (value.toString().isEmpty) {
                           return 'Name Required';
                         }
                       },
-                      label: "Name",
+                      label: Languages.of(context)!
+                          .patientProfile['name'].toString(),
                       initialValue: widget.data.name.toString(),
                       hintText: "Enter your Name",
                       fun: (value) {
@@ -232,6 +160,25 @@ class _EditPatientProfileState extends State<EditPatientProfile> {
                         fun: _getAddress,
                         readOnly: false,
                         textInputType: TextInputType.streetAddress),
+                    item(
+
+                      validateFun: (value) {
+                        if (value.toString().isEmpty) {
+                          return 'About Required';
+                        }
+                      },
+                      label: Languages.of(context)!
+                          .patientProfile['about'].toString(),
+                      initialValue: widget.data.about.toString(),
+                      hintText: "add a new information about you",
+                      fun: (value) {
+                        setState(() {
+                          about = value;
+                        });
+                      },
+                      textInputType: TextInputType.text,
+                      readOnly: false,
+                    ),
                   ]),
             )),
             bottomNavigationBar: BottomAppBar(
@@ -265,13 +212,7 @@ class _EditPatientProfileState extends State<EditPatientProfile> {
                     ),
                     RoundedButton(
                       minWdthRatio: .5,
-                      fun: () {
-                        if (_pickerImage != null) {
-                          _updateAvatarFun();
-                        }
-                        _updatePatientProfile();
-                        // Navigator.pop(context);
-                      },
+                      fun: _updatePatientProfile,
                       text: Languages.of(context)!.patientProfile['saveBtn'],
                       borderRadious: 50,
                     ),
@@ -282,7 +223,7 @@ class _EditPatientProfileState extends State<EditPatientProfile> {
             )),
         _showBanner
             ? SizedBox(
-                height: 150,
+                height: 135,
                 child: ErrorMaterialBanner(
                   fun: () {
                     setState(() {
@@ -310,6 +251,13 @@ class _EditPatientProfileState extends State<EditPatientProfile> {
       padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 10),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+              color: subTextColor.withOpacity(.5),
+              offset: Offset(1.0, 2.0),
+              blurRadius: 4.0,
+              spreadRadius: .4),
+        ],
         borderRadius: BorderRadius.circular(10),
         color: backGroundColor,
       ),
@@ -358,127 +306,5 @@ class _EditPatientProfileState extends State<EditPatientProfile> {
         ],
       ),
     );
-  }
-
-  Widget _profilePicCard(BuildContext context, {imgUrl}) {
-    return Stack(
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: 85,
-          decoration: BoxDecoration(
-              color: primaryColor.withOpacity(.1),
-              borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(40),
-                bottomLeft: Radius.circular(40),
-              )),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 10.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              InkWell(
-                onTap: () {
-                  _showModalBottomSheet();
-                },
-                child: Stack(
-                  fit: StackFit.loose,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: subTextColor,
-                                offset: Offset(0.0, 1.0),
-                                blurRadius: 6.0,
-                                spreadRadius: 1),
-                          ],
-                          image: DecorationImage(
-                              image:
-                                  // ignore: unnecessary_null_comparison
-                                  (_pickerImage == null
-                                          ? NetworkImage(imgUrl.toString())
-                                          : FileImage(_pickerImage!))
-                                      as ImageProvider<Object>,
-                              fit: BoxFit.cover),
-                          shape: BoxShape.circle,
-                          border:
-                              Border.all(color: Color(0xffFDFDFD), width: 2),
-                          color: backGroundColor),
-                      height: 145,
-                      width: 145,
-                    ),
-                    Positioned(
-                      bottom: 25,
-                      right: 4,
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: backGroundColor),
-                        child: Icon(
-                          Icons.add_a_photo_rounded,
-                          size: 13,
-                          color: darkBlueColor,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  _showModalBottomSheet() {
-    return showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.transparent,
-        builder: (builder) {
-          return Container(
-            height: 250,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25.0),
-                    topRight: Radius.circular(25.0))),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  BottomSheetItem(
-                      label: 'Take New Profile Picture',
-                      icon: Icons.camera_alt_rounded,
-                      fun: () {
-                        _pickImage(ImageSource.camera);
-                        Navigator.pop(context);
-                      }),
-                  BottomSheetItem(
-                      label: 'Select Picture From Gallery',
-                      icon: Icons.photo_library_outlined,
-                      fun: () {
-                        _pickImage(ImageSource.gallery);
-                        Navigator.pop(context);
-                      }),
-                  BottomSheetItem(
-                    label: 'Delete Profile Picture',
-                    icon: FontAwesomeIcons.solidTrashAlt,
-                    fun: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
   }
 }
