@@ -10,6 +10,7 @@ import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
 import 'package:the_disease_fighter/material/widgets/bottom_sheet_item.dart';
 import 'package:the_disease_fighter/material/widgets/materialBanner.dart';
 import 'package:the_disease_fighter/material/widgets/time-date-field.dart';
+import 'package:the_disease_fighter/services/logged_user/controllers/deleteUserImg.dart';
 import 'package:the_disease_fighter/services/logged_user/controllers/updateDoctorProfile.dart';
 import 'package:the_disease_fighter/services/logged_user/controllers/update_avatar.dart';
 import '../doctor_profile.dart';
@@ -25,10 +26,13 @@ class EditDoctorProfile extends StatefulWidget {
 }
 
 class _EditDoctorProfileState extends State<EditDoctorProfile> {
+
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   UpdateAvatarController _updateAvatar = UpdateAvatarController();
   UpdateDoctorProfileController _updateDoctorProfileController =
       UpdateDoctorProfileController();
+  DeleteUserImageController _deleteUserImageController = DeleteUserImageController();
+
   String? phone;
   String? email;
   String? clinicLocation;
@@ -684,7 +688,10 @@ class _EditDoctorProfileState extends State<EditDoctorProfile> {
                     label: 'Delete Profile Picture',
                     icon: FontAwesomeIcons.solidTrashAlt,
                     fun: () {
-                      Navigator.pop(context);
+                      _deleteUserImageController.updateDoctorProfile();
+                      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (
+                      //     (ctx)=> EditDoctorProfile(data: widget.data,)
+                      // )));
                     },
                   ),
                 ],
@@ -695,37 +702,3 @@ class _EditDoctorProfileState extends State<EditDoctorProfile> {
   }
 }
 
-/*class BottomSheetItem extends StatelessWidget {
-  final label;
-  final icon;
-  final fun;
-
-  const BottomSheetItem({
-    this.label,
-    this.icon,
-    this.fun,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.only(left: 40, bottom: 10),
-      onTap: fun,
-      leading: Container(
-        width: 45,
-        height: 45,
-        decoration: BoxDecoration(
-            color: backGroundColor, borderRadius: BorderRadius.circular(10)),
-        child: Icon(
-          icon,
-          color: darkBlueColor,
-        ),
-      ),
-      title: Text(
-        label,
-        style: TextStyle(
-            color: darkBlueColor, fontSize: 16, fontWeight: FontWeight.w700),
-      ),
-    );
-  }
-}*/

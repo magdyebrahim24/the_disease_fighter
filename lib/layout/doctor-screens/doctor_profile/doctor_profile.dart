@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_profile/edit_doctor_info/edit_doctor_info.dart';
 import 'package:the_disease_fighter/layout/drawer/drawer_screens/doctor/doctor_profile/widgets/previous_appointments.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/my_appointments/my_appointments.dart';
+import 'package:the_disease_fighter/layout/patient_screens/my_appointments/my_appointments.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';

@@ -1,27 +1,21 @@
-import 'package:dio/dio.dart';
 import 'package:cookie_jar/cookie_jar.dart';
+import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/models/ApiCookies.dart';
 
-class UpdateUserInfoController {
+class AddToFavoriteController {
   Dio _dio = Dio();
+  var cookieJar = CookieJar();
 
-  late PersistCookieJar persistentCookies;
-
-  Future updateUserInfo({
-    String? phone,
-    String? location,
-    String? gender,
-    String? dob,
-  }) async {
+  Future addToFavorite({bool? isFavorite,docId}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final _token = prefs.getString('access_token') ?? '';
 
     _dio.options
       ..baseUrl = BaseUrl.url
-      ..connectTimeout = 20000
-      ..receiveTimeout = 20000
+      ..connectTimeout = 10000 //5s
+      ..receiveTimeout = 10000
       ..validateStatus = (int? status) {
         return status != null && status > 0;
       }
@@ -34,24 +28,20 @@ class UpdateUserInfoController {
     _dio.interceptors.add(CookieManager(await ApiCookies.cookieJar));
 
     Map data = {
-      "phone": phone,
-      "location": location,
-      "gender": gender,
-      "about": 'Hey Iam Eng/ Magdy',
-      "dob": dob,
+      'is_in_favorite_list': isFavorite,
     };
-
-    var response = await _dio.patch('/user', data: data);
-
+    try{
+    var response = await _dio.post('/doctors/$docId/favorite', data: data);
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
-      response.data.putIfAbsent('success', () => true);
-
+      print(response.data.toString());
       return response.data;
     } else {
-      // throw Exception('Failed to Log In');
-      response.data.putIfAbsent('success', () => false);
-
+      print(response.toString());
       return response.data;
+    }}on DioError catch (e) {
+    print(e);
+    Map error = {'success': false, 'message': 'Fail , check your internet'};
+    return error;
     }
   }
 }

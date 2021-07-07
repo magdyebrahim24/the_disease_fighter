@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_disease_fighter/material/inductors/loader_dialog.dart';
 import 'package:the_disease_fighter/material/widgets/materialBanner.dart';
 import 'package:the_disease_fighter/services/basicData/controllers/logOutController.dart';
@@ -37,6 +38,8 @@ class _SettingState extends State<Setting> {
     });
     final data = await _logOut.userLogOut();
     if (await data['success']) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('access_token','');
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(

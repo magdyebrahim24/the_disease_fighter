@@ -3,23 +3,26 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:the_disease_fighter/layout/doctor-screens/doctor_home/doctor_home.dart';
 import 'package:the_disease_fighter/material/bottons/circleBtn.dart';
 import 'package:the_disease_fighter/material/bottons/roundedBtn.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 import 'package:the_disease_fighter/material/widgets/bottom_sheet_item.dart';
 import 'package:the_disease_fighter/material/widgets/model_result.dart';
+import 'package:the_disease_fighter/services/ml_models/ml_controller.dart';
 
-class ModelScreen extends StatefulWidget {
+class MlModelScreen extends StatefulWidget {
+  final data;
+  const MlModelScreen({this.data});
   @override
-  _ModelScreenState createState() => _ModelScreenState();
+  _MlModelScreenState createState() => _MlModelScreenState();
 }
 
-class _ModelScreenState extends State<ModelScreen> {
+class _MlModelScreenState extends State<MlModelScreen> {
   int _show = 0;
   File? _pickerImage;
   final ImagePicker _picker = ImagePicker();
 
+  var _modelResult ;
   void _pickImage(ImageSource src) async {
     final pickedImageFile = await _picker.getImage(source: src);
     if (pickedImageFile != null) {
@@ -32,39 +35,29 @@ class _ModelScreenState extends State<ModelScreen> {
     }
   }
 
-  int _dotsValue = 0;
+  String? _errorMessage;
 
-  void _updateDots() {
-    const dotTime = const Duration(milliseconds: 500); //850 second
-    Timer.periodic(dotTime, (Timer t) {
-      if (_show != 3) {
-        setState(() {
-          if (!mounted) return;
-          _dotsValue += 1;
-        });
-        if (_dotsValue == 3) {
-          if (!mounted) return;
-          setState(() {
-            _dotsValue = 0;
-          });
-          return;
-        }
-      } else {
-        t.cancel();
-      }
-      return;
-    });
-  }
-
-  void _updateAnalysis() {
-    const dotTime = const Duration(seconds: 3); //850 second
-    Timer.periodic(dotTime, (Timer t) {
-      if (!mounted) return;
+  MlModelController _mlModelController = MlModelController();
+  Future _uploadXRayImage() async {
+    if (_pickerImage != null) {
       setState(() {
-        _show = 3;
+        _errorMessage = null;
+        _show = 2;
       });
-      t.cancel();
-    });
+      final response = await _mlModelController.mlModel(
+          file: _pickerImage, modelName: 'brain');
+      if (response['success']) {
+        setState(() {
+          _modelResult = response ;
+          _show = 3;
+        });
+      } else {
+        setState(() {
+          _errorMessage = response['message'];
+          _show = 1;
+        });
+      }
+    }
   }
 
   @override
@@ -85,7 +78,7 @@ class _ModelScreenState extends State<ModelScreen> {
             CircleButton(
               color: primaryColor,
               icn: Icons.info_outline,
-              fun: () => _showMyDialog(),
+              fun: () => _modelDialog(),
             )
           ],
         ),
@@ -99,8 +92,8 @@ class _ModelScreenState extends State<ModelScreen> {
               children: [
                 Text(
                   _show == 3
-                      ? 'Thank You For Using Brain Tumor Model'
-                      : 'Brain Tumor Model',
+                      ? 'Thank You For Using ${widget.data['name']}'
+                      : widget.data['name'],
                   style: TextStyle(
                       fontSize: 22,
                       color: darkBlueColor,
@@ -127,37 +120,37 @@ class _ModelScreenState extends State<ModelScreen> {
                   height: MediaQuery.of(context).size.height * .1,
                   width: MediaQuery.of(context).size.width,
                 ),
-                SizedBox(
-                  height: 200,
-                  width: MediaQuery.of(context).size.width < 380
-                      ? MediaQuery.of(context).size.width
-                      : 380,
-                  child: _show == 1 && _pickerImage != null
-                      ? imagePreview()
+                 _show == 1 && _pickerImage != null
+                      ? Padding(
+                        padding: const EdgeInsets.only(bottom: 30),
+                        child: PreviewPickedImage(
+                   image: _pickerImage,showModelButtonFun: _showModalBottomSheet,
+                 ),
+                      )
                       : _show == 2 && _pickerImage != null
-                          ? analysis()
+                          ? AnalysisLoader()
                           : _show == 3
                               ? ModelResult(
-                                  firstDiseaseValue: 0.81,
-                                  secondDiseaseValue: .48,
-                                  thirdDiseaseValue: .22,
+                    result: _modelResult ,
                                 )
                               : Center(child: takeImg),
-                ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .1,
+                ),
+                _errorMessage != null
+                    ? Text(
+                        _errorMessage.toString(),
+                        style: TextStyle(color: Colors.red.withOpacity(.8)),
+                      )
+                    : SizedBox(),
+                SizedBox(
+                  height: 15,
                 ),
                 _show == 1 && _pickerImage != null
                     ? Column(
                         children: [
                           RoundedButton(
-                            fun: () {
-                              setState(() {
-                                _updateDots();
-                                _updateAnalysis();
-                                _show = 2;
-                              });
-                            },
+                            fun: _uploadXRayImage,
                             text: 'Analysis',
                             borderRadious: 10.0,
                             minWdthRatio: .8,
@@ -175,6 +168,8 @@ class _ModelScreenState extends State<ModelScreen> {
                             onPressed: () {
                               setState(() {
                                 _show = 0;
+                                _errorMessage = null ;
+                                _pickerImage = null;
                               });
                             },
                             child: Text(
@@ -186,30 +181,15 @@ class _ModelScreenState extends State<ModelScreen> {
                         ],
                       )
                     : _show == 2 && _pickerImage != null
-                        ? MaterialButton(
-                            minWidth: MediaQuery.of(context).size.width * .5,
-                            height: 50,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(color: primaryColor),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _show = 0;
-                              });
-                            },
-                            child: Text(
-                              'Cancel',
-                              style:
-                                  TextStyle(fontSize: 16, color: primaryColor),
-                            ),
-                          )
+                        ? SizedBox()
                         : _show == 3
                             ? RoundedButton(
-                                fun: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => DoctorHome())),
+                                fun: () {
+                                  setState(() {
+                                    _show = 0;
+                                    _pickerImage = null;
+                                  });
+                                },
                                 text: 'End',
                                 borderRadious: 10.0,
                                 minWdthRatio: .8,
@@ -221,28 +201,28 @@ class _ModelScreenState extends State<ModelScreen> {
         ));
   }
 
-  Stack analysis() {
-    return Stack(
-      clipBehavior: Clip.hardEdge,
-      alignment: Alignment.center,
-      fit: StackFit.loose,
-      children: [
-        SizedBox(
-          child: CircularProgressIndicator(
-            strokeWidth: 5,
-            valueColor: AlwaysStoppedAnimation(primaryColor),
-          ),
-          height: 150.0,
-          width: 150.0,
-        ),
-        Text(
-          "Analysing ${_dotsValue == 0 ? '.  ' : _dotsValue == 1 ? '.. ' : '...'}",
-          style: TextStyle(
-              color: primaryColor, fontWeight: FontWeight.bold, fontSize: 16),
-        )
-      ],
-    );
-  }
+  // Stack analysis() {
+  //   return Stack(
+  //     clipBehavior: Clip.hardEdge,
+  //     alignment: Alignment.center,
+  //     fit: StackFit.loose,
+  //     children: [
+  //       SizedBox(
+  //         child: CircularProgressIndicator(
+  //           strokeWidth: 5,
+  //           valueColor: AlwaysStoppedAnimation(primaryColor),
+  //         ),
+  //         height: 150.0,
+  //         width: 150.0,
+  //       ),
+  //       Text(
+  //         "Analysing ...",
+  //         style: TextStyle(
+  //             color: primaryColor, fontWeight: FontWeight.bold, fontSize: 15),
+  //       )
+  //     ],
+  //   );
+  // }
 
   Padding imagePreview() {
     return Padding(
@@ -372,21 +352,33 @@ class _ModelScreenState extends State<ModelScreen> {
         });
   }
 
-  Future<void> _showMyDialog() async {
+  Future<void> _modelDialog() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Explain Brain Tumor Model',
+            'Explain ${widget.data['name']}',
             style: TextStyle(color: darkBlueColor),
           ),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('This is a demo alert dialog.'),
-                Text('Would you like to approve of this message?'),
+                for (int i = 0; i < 2; i++)
+                  Text(
+                    '- ${widget.data['note'][i]}',
+                    // style: styleForText,
+                  ),
+                for (int i = 0; i < 3; i++)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 2),
+                    child: Text(
+                      '▪ ${widget.data['diseases'][i]}',
+                      // style: styleForText,
+                    ),
+                  ),
               ],
             ),
           ),
@@ -402,11 +394,81 @@ class _ModelScreenState extends State<ModelScreen> {
       },
     );
   }
+}
 
+class AnalysisLoader extends StatelessWidget {
   @override
-  void dispose() {
-    super.dispose();
-    _updateAnalysis();
-    _updateDots();
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.hardEdge,
+      alignment: Alignment.center,
+      fit: StackFit.loose,
+      children: [
+        SizedBox(
+          child: CircularProgressIndicator(
+            strokeWidth: 5,
+            valueColor: AlwaysStoppedAnimation(primaryColor),
+          ),
+          height: 150.0,
+          width: 150.0,
+        ),
+        Text(
+          "Analysing ...",
+          style: TextStyle(
+              color: primaryColor, fontWeight: FontWeight.bold, fontSize: 15),
+        )
+      ],
+    );
+  }
+}
+
+class PreviewPickedImage extends StatelessWidget {
+
+  final image;final showModelButtonFun;
+
+  const PreviewPickedImage({this.image, this.showModelButtonFun});
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(25, 5, 25, 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.file(
+              image!,
+              fit: BoxFit.fill,
+              gaplessPlayback: true,
+              scale: 1.0,
+              width: 100,
+              height: 100,
+            ),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Expanded(
+              child: Column(
+                children: [
+                  Text(
+                    '${image!.path.split('/').last}',
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: IconButton(
+                      icon: Icon(Icons.add_photo_alternate_outlined),
+                      onPressed: showModelButtonFun,
+                      color: primaryColor,
+                    ),
+                  )
+                ],
+              )),
+        ],
+      ),
+    );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_disease_fighter/layout/drawer/drawer_screens/patient/my_appointments/appointments_screens/previous_appointment_details.dart';
+import 'package:the_disease_fighter/layout/patient_screens/my_appointments/appointments_screens/previous_appointment_details.dart';
 import 'package:the_disease_fighter/localizations/localization/language/languages.dart';
 import 'package:the_disease_fighter/material/constants.dart';
 

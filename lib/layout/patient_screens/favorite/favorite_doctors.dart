@@ -56,7 +56,7 @@ class _FavoriteDoctorsState extends State<FavoriteDoctors> {
                     deleteFun: () async {
                       await _deleteFromFavorite
                           .deleteFromFavorite(
-                          index: snapshot.data.doctors[index].id)
+                          docId: snapshot.data.doctors[index].id)
                           .whenComplete(() {
                         setState(() {
                           snapshot.data.doctors.removeAt(index);
