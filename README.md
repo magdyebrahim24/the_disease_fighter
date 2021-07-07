@@ -1,4 +1,4 @@
-<img src="/app_secreens/poster.jpg" alt="image 2" width="600" height="400">
+<img src="/app_secreens/poster.jpg" alt="image 2" width="1000" height="500">
 # <b >  The Disease Fighter </b>
 <br>
 
