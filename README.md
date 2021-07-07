@@ -25,12 +25,12 @@
 
 ## Some Application Screens 
 <div>
-<img src="/app_secreens/1.jpg" alt="image 1" width="200" height="400">
-<img src="/app_secreens/2.jpg" alt="image 2" width="200" height="400">
-<img src="/app_secreens/3.jpg" alt="image 3" width="200" height="400">
-<img src="/app_secreens/4.jpg" alt="image 4" width="200" height="400">
-<img src="/app_secreens/5.jpg" alt="image 5" width="200" height="400">
-<img src="/app_secreens/6.jpg" alt="image 6" width="200" height="400">
+<img src="/app_secreens/1.jpg" alt="image 1" width="150" height="250">
+<img src="/app_secreens/2.jpg" alt="image 2" width="150" height="250">
+<img src="/app_secreens/3.jpg" alt="image 3" width="150" height="250">
+<img src="/app_secreens/4.jpg" alt="image 4" width="150" height="250">
+<img src="/app_secreens/5.jpg" alt="image 5" width="150" height="250">
+<!-- <img src="/app_secreens/6.jpg" alt="image 6" width="200" height="400">  -->
 <br><hr><br>
 </div>
 ## Application Features
