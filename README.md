@@ -1,16 +1,78 @@
-# the_disease_fighter
+# <b >  The Disease Fighter </b>
+<br>
 
-A new Flutter project.
+<b>An Application that enables its users to </b>
+ - Obtain the appropriate or most close diagnosis of the symptoms of their disease using AI .
+ - <b>Book an appointment</b> for the detection and knowledge of the results of a ray .
+ - <b>Keeping </b>all patient records Thus the doctor can see the patient's records .
+ - <b>Helping the patient</b> based on the diagnosis of the disease and suggesting some drugs .
+ - <b>Recommendation</b> system for the most close clinic to the patient .
+- Doctor can provide medical <b>Consulting Online </b>without going to the clinic .
 
-## Getting Started
+<br><hr><br>
+## <b> Important Links </b> <br>
 
-This project is a starting point for a Flutter application.
+- ### <b> Project Video YouTube Link </b><br>
+    https://youtu.be/qJrBe8SO5uU
+    <hr>
+- ### <b> Application Apk Download Link </b><br>
+    https://drive.google.com/file/d/183tZlrJGMfcrZMk0ZeRXVJwtLE-Ch3iS/view?usp=sharing
+    <hr>
+- ### <b> Project WebSite Link </b> <br>
+    https://mariam-wael22.github.io/disease-fighter/#/
+    
+<br><hr><br>
 
-A few resources to get you started if this is your first Flutter project:
+## Some Application Screens 
+<div>
+<img src="/app_secreens/1.jpg" alt="image 1" width="300" height="500">
+<img src="/app_secreens/2.jpg" alt="image 2" width="300" height="500">
+<img src="/app_secreens/3.jpg" alt="image 3" width="300" height="500">
+<img src="/app_secreens/4.jpg" alt="image 4" width="300" height="500">
+<img src="/app_secreens/5.jpg" alt="image 5" width="300" height="500">
+<img src="/app_secreens/6.jpg" alt="image 6" width="300" height="500">
+<br><hr><br>
+</div>
+## Application Features
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- Application have two AI Models like Covid-19 and Brain Tumer Model .
+- Application produced with two language ( Arabic , English ).
+- User can sign up and make his uniq account .
+- User can update his picture and crop or edit it to be suitable .
+- user can update his information like name , about , phone ......
+- user can update his own password .
+- Every user can add/update his avatar .
+- every user can have his own setting .
+- user can contact to app developers if any problem happen .
+- Application Divided Into Two Sides 
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  - <b> Patient Side </b> :
+    - patients can use AI to symptoms of their disease using X-Ray image .
+    - patient can book any doctor from any clinic of 13 clinic like ( brain clinic , chest clinic , heart clinic ....) .
+    - Patient home have top best 10 rated doctors . 
+    - Can see doctor information like his name , image , clinic available dates , rate on our application and previous patient reviews about him .
+    - Can call him via his phone number .
+    - Can show his booked appointments details .
+    - Can delay/delete any appointment .
+    - Can show his previous sessions like his diagnose , medicines and files (x-ray images) .
+    - Have Favorite List ( can add/delete any doctor to/from it .) .
+    - After every session patient deliver notification enables him to rate doctor and write a review about him . 
+    - Can Search for any doctor using his name .
+    
+
+  - <b> Doctor Side : </b> 
+
+    - Use ML to to symptoms of the disease using X-Ray image .
+    - doctor can see his today appointments or all appointments .
+    - Can filter to get specific day appointments .
+    - have backup for every previous patient session .
+    - Can delay any upcoming appointment .
+    - Can upload patient session data like his diagnose , medicines and files .
+
+<br><hr><br>
+
+## Project Framework Repositories 
+ - <b>UI / UX</b> <br> https://github.com/mohamedebrahim4399/api_documention
+ - <b>Back End</b> <br> https://github.com/mohamedebrahim4399/api_documention
+- <b>Machine Learning</b> <br> https://github.com/alaahendam/AI-project
+- <b>WebSite</b> <br> https://github.com/Mariam-wael22/code.git
