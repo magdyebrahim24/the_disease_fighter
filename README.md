@@ -12,7 +12,7 @@
 <br><hr><br>
 ## <b> Important Links </b> <br>
 
-- ### <b> Project Video YouTube Link </b><br>
+- ### <b> Project Promo Video YouTube Link </b><br>
     https://youtu.be/qJrBe8SO5uU
     <hr>
 - ### <b> Application Apk Download Link </b><br>
