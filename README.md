@@ -33,6 +33,7 @@
 <!-- <img src="/app_secreens/6.jpg" alt="image 6" width="200" height="400">  -->
 <br><hr><br>
 </div>
+
 ## Application Features
 
 - Application have two AI Models like Covid-19 and Brain Tumer Model .
