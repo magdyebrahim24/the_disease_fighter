@@ -78,6 +78,6 @@
 
 ## Project Framework Repositories 
  - <b>UI / UX</b> <br> https://github.com/mohamedebrahim4399/api_documention
- - <b>Back End</b> <br> https://github.com/mohamedebrahim4399/api_documention
-- <b>Machine Learning</b> <br> https://github.com/alaahendam/AI-project
-- <b>WebSite</b> <br> https://github.com/Mariam-wael22/code.git
+ - <b>Back End</b> <br> https://github.com/mohamedebrahim4399/the_disease_fighter
+ - <b>Machine Learning</b> <br> https://github.com/alaahendam/AI-project
+ - <b>WebSite</b> <br> https://github.com/Mariam-wael22/code.git
